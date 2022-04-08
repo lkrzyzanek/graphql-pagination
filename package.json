@@ -14,7 +14,7 @@
     "npm": "8.x"
   },
   "dependencies": {
-    "graphql-pagination-core": "file:packages/graphql-pagination-core"
+    "graphql-pagination-core": "file:packages/core"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",

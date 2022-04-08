@@ -1,4 +1,4 @@
-# GraphQL Pagination
+# GraphQL Pagination [![codecov](https://codecov.io/gh/lkrzyzanek/graphql-pagination/branch/main/graph/badge.svg?token=8PZ27JTJLI)](https://codecov.io/gh/lkrzyzanek/graphql-pagination)
 
 Library to easily wrap data to [GraphQL Pagination](https://graphql.org/learn/pagination/).
 

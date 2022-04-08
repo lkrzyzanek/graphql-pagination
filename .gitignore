@@ -1,0 +1,21 @@
+# Ignore the compiled output.
+dist/
+
+# TypeScript incremental compilation cache
+*.tsbuildinfo
+
+# Coverage (from Jest)
+coverage/
+
+# JUnit Reports (used mainly in CircleCI)
+reports/
+junit.xml
+
+# Node modules
+node_modules/
+
+# Mac OS
+.DS_Store
+
+# Intellij Configuration Files
+.idea/

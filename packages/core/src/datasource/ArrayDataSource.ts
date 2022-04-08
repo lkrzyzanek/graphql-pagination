@@ -8,7 +8,7 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
 
     protected nodes: NodeType[]
 
-    protected constructor(nodes: NodeType[], idFieldName?: string, getIdFn?: (node: any) => number | Date) {
+    constructor(nodes: NodeType[], idFieldName?: string, getIdFn?: (node: any) => number | Date) {
         super(idFieldName, getIdFn);
         this.nodes = nodes;
     }

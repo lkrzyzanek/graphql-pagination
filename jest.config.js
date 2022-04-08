@@ -8,4 +8,9 @@ module.exports = {
         "default",
         "jest-junit",
     ],
+    coverageReporters: [
+        "text",
+        "text-summary",
+        "cobertura",
+    ],
 };

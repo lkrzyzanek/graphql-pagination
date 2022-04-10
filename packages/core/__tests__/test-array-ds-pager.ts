@@ -10,7 +10,7 @@ const data = Array.from(Array(100)).map((e, i) => ({
 describe("array-ds-by-id", () => {
     let pagerById: DataSourcePager;
     beforeAll(() => {
-        pagerById = new DataSourcePager(new ArrayDataSource(data));
+        pagerById = new DataSourcePager({dataSource: new ArrayDataSource(data)});
     });
 
     test("forward-totalCount", () => {
@@ -85,7 +85,7 @@ describe("array-ds-by-id", () => {
 describe("array-ds-by-date", () => {
     let pager: DataSourcePager;
     beforeAll(() => {
-        pager = new DataSourcePager(new ArrayDataSource(data, "published"));
+        pager = new DataSourcePager({dataSource: new ArrayDataSource(data)});
     });
 
     test("forward-totalCount", () => {

@@ -11,26 +11,34 @@ import type {DataSource} from "./datasource/DataSource";
 import {DefaultCursorEncoderDecoder} from "./DefaultCursorEncoderDecoder";
 import {createConnectionTypeDef, createEdgeTypeDef, pageInfoTypeDef} from "./TypeDefs";
 
+/** DataSourcePager Configuration */
+export interface DataSourcePagerConfig {
+    /** DataSource */
+    dataSource: DataSource<any, any>
+    /** Type Name. If not provided GraphQL TypeNames are not generated */
+    typeName?: string
+    /** Cursor encoder/decoder. If not provided DefaultCursorEncoderDecoder used */
+    cursor?: CursorEncoderDecoder<string | number | Date>
+}
+
 /**
  * CursorPager implementation backed by DataSource
  */
 export class DataSourcePager implements CursorPager<any, string | number | Date> {
 
-    ds: DataSource<any, any>;
+    dataSource: DataSource<any, any>;
 
     cursor: CursorEncoderDecoder<string | number | Date>;
 
     typeDefs: string[] = [pageInfoTypeDef];
 
-    constructor(ds: DataSource<any, any>,
-                typeName?: string,
-                cursorEncoderDecoder?: CursorEncoderDecoder<string | number | Date>) {
-        this.ds = ds;
-        this.cursor = cursorEncoderDecoder || new DefaultCursorEncoderDecoder();
+    constructor(config: DataSourcePagerConfig) {
+        this.dataSource = config.dataSource;
+        this.cursor = config.cursor || new DefaultCursorEncoderDecoder();
 
-        if (typeName) {
-            this.typeDefs.push(createEdgeTypeDef(typeName));
-            this.typeDefs.push(createConnectionTypeDef(typeName));
+        if (config.typeName) {
+            this.typeDefs.push(createEdgeTypeDef(config.typeName));
+            this.typeDefs.push(createConnectionTypeDef(config.typeName));
         }
     }
 
@@ -38,24 +46,24 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
         let afterId;
         if (args.after) afterId = this.cursor.decode(args.after);
 
-        const resultPlusOne = this.ds.after(afterId, args.first + 1);
+        const resultPlusOne = this.dataSource.after(afterId, args.first + 1);
 
         const hasNextPage = resultPlusOne?.length > args.first;
         const hasPreviousPage = !!args.after;
 
-        return this.connectionObject(resultPlusOne.slice(0, args.first), args, this.ds.totalCount(), hasNextPage, hasPreviousPage);
+        return this.connectionObject(resultPlusOne.slice(0, args.first), args, this.dataSource.totalCount(), hasNextPage, hasPreviousPage);
     }
 
     backwardResolver(args: ArgsBackward): Connection {
         let beforeId;
         if (args.before) beforeId = this.cursor.decode(args.before);
 
-        const resultPlusOne = this.ds.before(beforeId, args.last + 1);
+        const resultPlusOne = this.dataSource.before(beforeId, args.last + 1);
 
         const hasNextPage = resultPlusOne?.length > args.last;
         const hasPreviousPage = !!args.before;
 
-        return this.connectionObject(resultPlusOne.slice(0, args.last), args, this.ds.totalCount(), hasNextPage, hasPreviousPage);
+        return this.connectionObject(resultPlusOne.slice(0, args.last), args, this.dataSource.totalCount(), hasNextPage, hasPreviousPage);
     }
 
     connectionObject(nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number, hasNextPage: boolean, hasPreviousPage: boolean): Connection {
@@ -73,7 +81,7 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
     }
 
     edgeObject(node: any): Edge {
-        const plainId = this.ds.getId(node);
+        const plainId = this.dataSource.getId(node);
         return {
             cursor: this.cursor.encode(plainId),
             node

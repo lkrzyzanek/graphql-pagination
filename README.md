@@ -39,10 +39,10 @@ const typeDefs = gql`
 const books = [];
 
 const ds = new ArrayDataSource(books);
-const pagerById = new DataSourcePager(ds, "Book");
+const pagerById = new DataSourcePager({ dataSource: ds, typeName: "Book" });
 
 const dsPublished = new ArrayDataSource(books, "published");
-const pagerPublished = new DataSourcePager(dsPublished, "Book");
+const pagerPublished = new DataSourcePager({ dataSource: dsPublished, typeName: "Book" });
 
 const resolvers = {
     Query: {

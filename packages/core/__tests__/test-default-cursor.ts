@@ -19,7 +19,7 @@ describe("cursor", () => {
         expect(decoded).toBe("test-string");
     });
 
-    test("decode-string", () => {
+    test("decode-number", () => {
         const decoded = cursor.decode(Buffer.from("n_123").toString("base64"));
         expect(decoded).toBe(123);
     });

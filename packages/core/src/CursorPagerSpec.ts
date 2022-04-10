@@ -67,11 +67,12 @@ export interface CursorPager<NodeType, IdType> {
 
     // Return Objects Helpers
 
-    connectionObject: (nodes: NodeType[], args: ArgsForward | ArgsBackward | any, totalCount: number) => Connection;
+    connectionObject: (nodes: NodeType[], args: ArgsForward | ArgsBackward | any, totalCount: number,
+                       hasNextPage: boolean, hasPreviousPage: boolean) => Connection;
 
     edgeObject: (node: NodeType) => Edge;
 
-    pageInfoObject: (connection: Connection) => PageInfo;
+    pageInfoObject: (connection: Connection, hasNextPage: boolean, hasPreviousPage: boolean) => PageInfo;
 
     // Cursor Helper
 

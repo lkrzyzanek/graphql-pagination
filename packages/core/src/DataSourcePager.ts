@@ -29,7 +29,10 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
 
         const result = this.ds.after(afterId, args.first);
 
-        return this.connectionObject(result, args, this.ds.totalCount());
+        const hasNextPage = result?.length >= args.first;
+        const hasPreviousPage = !!args.after;
+
+        return this.connectionObject(result, args, this.ds.totalCount(), hasNextPage, hasPreviousPage);
     }
 
     backwardResolver(args: ArgsBackward): Connection {
@@ -38,17 +41,20 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
 
         const result = this.ds.before(beforeId, args.last);
 
-        return this.connectionObject(result, args, this.ds.totalCount());
+        const hasNextPage = result?.length >= args.last;
+        const hasPreviousPage = !!args.before;
+
+        return this.connectionObject(result, args, this.ds.totalCount(), hasNextPage, hasPreviousPage);
     }
 
-    connectionObject(nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number): Connection {
+    connectionObject(nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number, hasNextPage: boolean, hasPreviousPage: boolean): Connection {
         const edges = nodes.map(node => this.edgeObject(node))
         const connection = {
             totalCount: totalCount,
             edges,
             args,
         }
-        const pageInfo = this.pageInfoObject(connection);
+        const pageInfo = this.pageInfoObject(connection, hasNextPage, hasPreviousPage);
         return {
             ...connection,
             pageInfo
@@ -63,23 +69,9 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
         };
     }
 
-    pageInfoObject(connection: Connection): PageInfo {
+    pageInfoObject(connection: Connection, hasNextPage: boolean, hasPreviousPage: boolean): PageInfo {
         const startCursor = this.startCursor(connection.edges);
         const endCursor = this.endCursor(connection.edges);
-        // TODO: Improve how hasNextPage & hasPreviousPage is determined
-        let hasNextPage = false;
-        let hasPreviousPage = false;
-        if (connection.args.first) {
-            // forward paging
-            hasNextPage = connection.edges?.length >= connection.args.first;
-            hasPreviousPage = !!connection.args.after;
-        }
-        if (connection.args.last) {
-            // backward paging
-            hasNextPage = connection.edges?.length >= connection.args.last;
-            hasPreviousPage = !!connection.args.before;
-        }
-
         return {
             startCursor,
             endCursor,

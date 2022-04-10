@@ -17,6 +17,10 @@ describe("array-ds-by-id", () => {
         const connection = pagerById.forwardResolver({"first": 10});
         expect(connection.totalCount).toBe(100);
     });
+    test("forward-out-of-range", () => {
+        const connection = pagerById.forwardResolver({"first": 10, "after": pagerById.cursor.encode(100)});
+        expect(connection.edges).toHaveLength(0);
+    });
 
     test("forward-first-only", () => {
         const connection = pagerById.forwardResolver({"first": 10});
@@ -36,7 +40,7 @@ describe("array-ds-by-id", () => {
         expect(connection.pageInfo.hasNextPage).toBe(true);
         expect(connection.pageInfo.hasPreviousPage).toBe(true);
     });
-    test.skip("forward-first-after-last", () => {
+    test("forward-first-after-last", () => {
         const connection = pagerById.forwardResolver({"first": 10, "after": pagerById.cursor.encode(90)});
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(91);
@@ -46,9 +50,15 @@ describe("array-ds-by-id", () => {
         expect(connection.pageInfo.hasPreviousPage).toBe(true);
     });
 
+    /* Backward Tests */
+
     test("backward-totalCount", () => {
         const connection = pagerById.backwardResolver({"last": 10});
         expect(connection.totalCount).toBe(100);
+    });
+    test("backward-out-of-range", () => {
+        const connection = pagerById.backwardResolver({"last": 10, "before": pagerById.cursor.encode(1)});
+        expect(connection.edges).toHaveLength(0);
     });
 
     test("backward-last-after", () => {
@@ -60,7 +70,15 @@ describe("array-ds-by-id", () => {
         expect(connection.pageInfo.hasNextPage).toBe(true);
         expect(connection.pageInfo.hasPreviousPage).toBe(true);
     });
+    test("backward-last-after-last", () => {
+        const connection = pagerById.backwardResolver({"last": 10, "before": pagerById.cursor.encode(11)});
+        expect(connection.edges).toHaveLength(10);
+        expect(connection.edges[0].node.id).toBe(10);
+        expect(connection.edges[9].node.id).toBe(1);
 
+        expect(connection.pageInfo.hasNextPage).toBe(false);
+        expect(connection.pageInfo.hasPreviousPage).toBe(true);
+    });
 });
 
 
@@ -83,15 +101,6 @@ describe("array-ds-by-date", () => {
 
         expect(connection.pageInfo.hasNextPage).toBe(true);
         expect(connection.pageInfo.hasPreviousPage).toBe(false);
-    });
-    test.skip("forward-first-after-last", () => {
-        const connection = pager.forwardResolver({"first": 10, "after": pager.cursor.encode(90)});
-        expect(connection.edges).toHaveLength(10);
-        expect(connection.edges[0].node.id).toBe(91);
-        expect(connection.edges[9].node.id).toBe(100);
-
-        expect(connection.pageInfo.hasNextPage).toBe(false);
-        expect(connection.pageInfo.hasPreviousPage).toBe(true);
     });
 
     test("backward-last-only", () => {

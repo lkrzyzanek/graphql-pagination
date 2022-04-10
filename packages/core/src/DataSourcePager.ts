@@ -10,7 +10,9 @@ import type {
 import type {DataSource} from "./datasource/DataSource";
 import {DefaultCursorEncoderDecoder} from "./DefaultCursorEncoderDecoder";
 
-
+/**
+ * CursorPager implementation backed by DataSource
+ */
 export class DataSourcePager implements CursorPager<any, string | number | Date> {
 
     ds: DataSource<any, any>;
@@ -27,24 +29,24 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
         let afterId;
         if (args.after) afterId = this.cursor.decode(args.after);
 
-        const result = this.ds.after(afterId, args.first);
+        const resultPlusOne = this.ds.after(afterId, args.first + 1);
 
-        const hasNextPage = result?.length >= args.first;
+        const hasNextPage = resultPlusOne?.length > args.first;
         const hasPreviousPage = !!args.after;
 
-        return this.connectionObject(result, args, this.ds.totalCount(), hasNextPage, hasPreviousPage);
+        return this.connectionObject(resultPlusOne.slice(0, args.first), args, this.ds.totalCount(), hasNextPage, hasPreviousPage);
     }
 
     backwardResolver(args: ArgsBackward): Connection {
         let beforeId;
         if (args.before) beforeId = this.cursor.decode(args.before);
 
-        const result = this.ds.before(beforeId, args.last);
+        const resultPlusOne = this.ds.before(beforeId, args.last + 1);
 
-        const hasNextPage = result?.length >= args.last;
+        const hasNextPage = resultPlusOne?.length > args.last;
         const hasPreviousPage = !!args.before;
 
-        return this.connectionObject(result, args, this.ds.totalCount(), hasNextPage, hasPreviousPage);
+        return this.connectionObject(resultPlusOne.slice(0, args.last), args, this.ds.totalCount(), hasNextPage, hasPreviousPage);
     }
 
     connectionObject(nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number, hasNextPage: boolean, hasPreviousPage: boolean): Connection {

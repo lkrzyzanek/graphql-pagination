@@ -9,6 +9,7 @@ import type {
 } from "./CursorPagerSpec";
 import type {DataSource} from "./datasource/DataSource";
 import {DefaultCursorEncoderDecoder} from "./DefaultCursorEncoderDecoder";
+import {createConnectionTypeDef, createEdgeTypeDef, pageInfoTypeDef} from "./TypeDefs";
 
 /**
  * CursorPager implementation backed by DataSource
@@ -19,10 +20,18 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
 
     cursor: CursorEncoderDecoder<string | number | Date>;
 
+    typeDefs: string[] = [pageInfoTypeDef];
+
     constructor(ds: DataSource<any, any>,
-                cursorEncoderDecoder: CursorEncoderDecoder<string | number | Date> = new DefaultCursorEncoderDecoder()) {
+                typeName?: string,
+                cursorEncoderDecoder?: CursorEncoderDecoder<string | number | Date>) {
         this.ds = ds;
-        this.cursor = cursorEncoderDecoder;
+        this.cursor = cursorEncoderDecoder || new DefaultCursorEncoderDecoder();
+
+        if (typeName) {
+            this.typeDefs.push(createEdgeTypeDef(typeName));
+            this.typeDefs.push(createConnectionTypeDef(typeName));
+        }
     }
 
     forwardResolver(args: ArgsForward): Connection {

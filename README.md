@@ -22,11 +22,27 @@ Or implement your own by implementing the [DataSource](packages/core/src/datasou
 ### Example
 
 ```js
+const typeDefs = gql`
+    type Book {
+        id: ID!
+        title: String
+        published: DateTime
+    }
+    type Query {
+        booksAsc(first: Int = 10 after: String): BookConnection
+        booksDesc(last: Int = 10 before: String): BookConnection
+        booksPublishedAsc(first: Int = 10 after: String): BookConnection
+        booksPublishedDesc(last: Int = 10 before: String): BookConnection
+    }
+`;
+
+const books = [];
+
 const ds = new ArrayDataSource(books);
-const pagerById = new DataSourcePager(ds);
+const pagerById = new DataSourcePager(ds, "Book");
 
 const dsPublished = new ArrayDataSource(books, "published");
-const pagerPublished = new DataSourcePager(dsPublished);
+const pagerPublished = new DataSourcePager(dsPublished, "Book");
 
 const resolvers = {
     Query: {
@@ -36,4 +52,16 @@ const resolvers = {
         booksPublishedDesc: (_, args) => pagerPublished.backwardResolver(args),
     },
 };
+
+return new ApolloServer({
+    typeDefs: [
+        typeDefs,
+        pagerById.typeDefs, // BookConnection, BookEdge, PageInfo typeDefs
+        scalarTypeDefs,     // for DateTime
+    ],
+    resolvers: [
+        resolvers,
+        scalarResolvers,     // for DateTime
+    ],
+});
 ```

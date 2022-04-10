@@ -30,5 +30,8 @@
       "require": "./dist/*.js",
       "import": "./dist/*.mjs"
     }
+  },
+  "peerDependencies": {
+    "graphql": "*"
   }
 }

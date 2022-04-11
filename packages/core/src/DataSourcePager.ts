@@ -42,28 +42,32 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
         }
     }
 
-    forwardResolver(args: ArgsForward): Connection {
+    forwardResolver(args: ArgsForward | any): Connection {
         let afterId;
         if (args.after) afterId = this.cursor.decode(args.after);
 
-        const resultPlusOne = this.dataSource.after(afterId, args.first + 1);
+        const resultPlusOne = this.dataSource.after(afterId, args.first + 1, args);
 
         const hasNextPage = resultPlusOne?.length > args.first;
         const hasPreviousPage = !!args.after;
 
-        return this.connectionObject(resultPlusOne.slice(0, args.first), args, this.dataSource.totalCount(), hasNextPage, hasPreviousPage);
+        const totalCount = this.dataSource.totalCount(args);
+
+        return this.connectionObject(resultPlusOne.slice(0, args.first), args, totalCount, hasNextPage, hasPreviousPage);
     }
 
-    backwardResolver(args: ArgsBackward): Connection {
+    backwardResolver(args: ArgsBackward | any): Connection {
         let beforeId;
         if (args.before) beforeId = this.cursor.decode(args.before);
 
-        const resultPlusOne = this.dataSource.before(beforeId, args.last + 1);
+        const resultPlusOne = this.dataSource.before(beforeId, args.last + 1, args);
 
         const hasNextPage = resultPlusOne?.length > args.last;
         const hasPreviousPage = !!args.before;
 
-        return this.connectionObject(resultPlusOne.slice(0, args.last), args, this.dataSource.totalCount(), hasNextPage, hasPreviousPage);
+        const totalCount = this.dataSource.totalCount(args);
+
+        return this.connectionObject(resultPlusOne.slice(0, args.last), args, totalCount, hasNextPage, hasPreviousPage);
     }
 
     connectionObject(nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number, hasNextPage: boolean, hasPreviousPage: boolean): Connection {

@@ -3,9 +3,15 @@ import {ArrayDataSource, DataSourcePager} from "../src";
 const january = new Date("2022-01-01");
 const data = Array.from(Array(100)).map((e, i) => ({
     id: i + 1,
+    title: `Title ${i + 1}`,
+    author: `Author ${(i + 1) % 10}`,
     published: new Date(january.setDate(i + 1)),
 }));
-
+const filter = (books, args) => {
+    if (args.title) return books.filter(b => b.title === args.title);
+    if (args.author) return books.filter(b => b.author === args.author);
+    return books;
+};
 
 describe("array-ds-by-id", () => {
     let pagerById: DataSourcePager;
@@ -111,5 +117,27 @@ describe("array-ds-by-date", () => {
 
         expect(connection.pageInfo.hasNextPage).toBe(true);
         expect(connection.pageInfo.hasPreviousPage).toBe(false);
+    });
+});
+
+describe("array-ds-filter", () => {
+    let pager: DataSourcePager;
+
+    beforeAll(() => {
+        pager = new DataSourcePager({dataSource: new ArrayDataSource(data, "id", filter)});
+    });
+
+    test("title", () => {
+        const connection = pager.forwardResolver({"first": 10, "title": "Title 5"});
+        expect(connection.totalCount).toBe(1);
+        expect(connection.edges[0].node.id).toBe(5);
+    });
+    test("author", () => {
+        const desiredAuthor = "Author 5";
+        const connection = pager.forwardResolver({"first": 10, "author": "Author 5"});
+        expect(connection.totalCount).toBe(10);
+        connection.edges.forEach((edge) => {
+            expect(edge.node.author).toBe(desiredAuthor);
+        })
     });
 });

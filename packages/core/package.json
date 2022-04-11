@@ -1,7 +1,7 @@
 {
   "name": "@graphql-pagination/core",
   "version": "0.1.0",
-  "description": "Core module",
+  "description": "GraphQL Pagination Core module",
   "author": "Libor Krzyzanek",
   "license": "MIT",
   "main": "dist/index.js",

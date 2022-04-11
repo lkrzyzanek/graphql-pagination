@@ -7,14 +7,14 @@ import type {
     Edge,
     PageInfo
 } from "./CursorPagerSpec";
-import type {DataSource} from "./datasource/DataSource";
+import type {PagerDataSource} from "./datasource/DataSource";
 import {DefaultCursorEncoderDecoder} from "./DefaultCursorEncoderDecoder";
 import {createConnectionTypeDef, createEdgeTypeDef, pageInfoTypeDef} from "./TypeDefs";
 
 /** DataSourcePager Configuration */
 export interface DataSourcePagerConfig {
     /** DataSource */
-    dataSource: DataSource<any, any>
+    dataSource: PagerDataSource<any, any>
     /** Type Name. If not provided GraphQL TypeNames are not generated */
     typeName?: string
     /** Cursor encoder/decoder. If not provided DefaultCursorEncoderDecoder used */
@@ -26,7 +26,7 @@ export interface DataSourcePagerConfig {
  */
 export class DataSourcePager implements CursorPager<any, string | number | Date> {
 
-    dataSource: DataSource<any, any>;
+    dataSource: PagerDataSource<any, any>;
 
     cursor: CursorEncoderDecoder<string | number | Date>;
 

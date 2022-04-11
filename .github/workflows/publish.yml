@@ -19,13 +19,15 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: "Version and Publish"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
+      - name: "Git Config"
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor}}@users.noreply.github.com"
+      - name: "Lerna Version & Publish"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm set //registry.npmjs.org/:_authToken=${{ secrets.NPMJS_TOKEN }}
           npm whoami
           npx lerna version --conventional-commits --yes
           npx lerna publish from-git --yes

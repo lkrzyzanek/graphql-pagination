@@ -8,12 +8,19 @@ const createBook = (i) => {
     return {
         id: i + 1,
         title: `Book ${i + 1}`,
+        author: `Author ${(i + 1) % 10}`,
         published: new Date(january.setDate(i + 1)),
     };
 };
 const books = Array.from(Array(100)).map((e, i) => createBook(i));
+// Filter is applied only in booksByTitle query
+const filter = (books, args) => {
+    if (args.title) return books.filter(b => b.title === args.title);
+    if (args.author) return books.filter(b => b.author === args.author);
+    return books;
+};
 
-const ds = new ArrayDataSource(books);
+const ds = new ArrayDataSource(books, "id", filter);
 const pagerById = new DataSourcePager({ dataSource: ds, typeName: "Book" });
 
 const dsPublished = new ArrayDataSource(books, "published");
@@ -24,6 +31,7 @@ const typeDefs = gql`
     type Book {
         id: ID!
         title: String
+        author: String
         published: DateTime
     }
     type Query {
@@ -31,6 +39,8 @@ const typeDefs = gql`
         booksDesc(last: Int = 10 before: String): BookConnection
         booksPublishedAsc(first: Int = 10 after: String): BookConnection
         booksPublishedDesc(last: Int = 10 before: String): BookConnection
+        booksByTitle(first: Int = 10 after: String title: String): BookConnection
+        booksByAuthor(first: Int = 10 after: String author: String): BookConnection
     }
 `;
 
@@ -40,6 +50,8 @@ const resolvers = {
         booksDesc: (_, args) => pagerById.backwardResolver(args),
         booksPublishedAsc: (_, args) => pagerPublished.forwardResolver(args),
         booksPublishedDesc: (_, args) => pagerPublished.backwardResolver(args),
+        booksByTitle: (_, args) => pagerById.forwardResolver(args),
+        booksByAuthor: (_, args) => pagerById.forwardResolver(args),
     },
 };
 

@@ -1,31 +1,48 @@
 import {DataSourceBase} from "./DataSource";
+import type {ArgsBackward, ArgsForward} from "../CursorPagerSpec";
 
 /**
  * Array backed DataSource.
  * ID field can be either `number` or `Date`
+ * transformNodesFn can be used to filter / transform the original nodes
  */
 export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number | Date> {
 
     protected nodes: NodeType[]
 
-    constructor(nodes: NodeType[], idFieldName?: string, getIdFn?: (node: any) => number | Date) {
-        super(idFieldName, getIdFn);
+    transformNodes: (nodes: NodeType[], originalArgs: ArgsForward | ArgsBackward) => NodeType[];
+
+    /**
+     * Create new ArrayDataSource
+     * @param nodes array of your nodes (data)
+     * @param idFieldName name of the field. Default is "id"
+     * @param transformNodesFn additional transformation / filtration based on original arguments
+     */
+    constructor(nodes: NodeType[],
+                idFieldName: string = "id",
+                transformNodesFn?: (nodes: NodeType[], originalArgs: ArgsForward | ArgsBackward) => NodeType[]) {
+        super(idFieldName);
         this.nodes = nodes;
+        this.transformNodes = transformNodesFn || ((nodes) => nodes);
     }
 
-    totalCount(): number {
-        return this.nodes.length;
+    getNodes(nodes: NodeType[], originalArgs: ArgsForward | ArgsBackward): NodeType[] {
+        return this.transformNodes(nodes, originalArgs);
     }
 
-    after(afterId: number | Date | undefined, size: number): NodeType[] {
-        return this.nodes
+    totalCount(originalArgs: ArgsForward | ArgsBackward): number {
+        return this.getNodes(this.nodes, originalArgs).length;
+    }
+
+    after(afterId: number | Date | undefined, size: number, originalArgs: ArgsForward): NodeType[] {
+        return this.getNodes(this.nodes, originalArgs)
             .sort((a, b) => this.compareNodesId(a, b, true))
             .filter(node => !afterId ? true : this.getId(node) > afterId)
             .slice(0, size);
     }
 
-    before(beforeId: number | Date | undefined, size: number): NodeType[] {
-        return this.nodes
+    before(beforeId: number | Date | undefined, size: number, originalArgs: ArgsBackward): NodeType[] {
+        return this.getNodes(this.nodes, originalArgs)
             .sort((a, b) => this.compareNodesId(a, b, false))
             .filter(node => !beforeId ? true : this.getId(node) < beforeId)
             .slice(0, size);

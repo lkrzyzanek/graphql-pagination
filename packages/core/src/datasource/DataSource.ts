@@ -1,7 +1,7 @@
 /**
  * DataSource Spec
  */
-export interface DataSource<NodeType, IdType> {
+export interface PagerDataSource<NodeType, IdType> {
 
     getId: (node: NodeType) => IdType;
 
@@ -16,7 +16,7 @@ export interface DataSource<NodeType, IdType> {
 /**
  * Simple DataSource Page implementing `getId` method based on either defining the id field name or getId function
  */
-export abstract class DataSourceBase<NodeType, IdType> implements DataSource<NodeType, IdType> {
+export abstract class DataSourceBase<NodeType, IdType> implements PagerDataSource<NodeType, IdType> {
 
     getIdFn: ((node: any) => IdType) | undefined;
 

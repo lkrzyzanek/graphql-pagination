@@ -19,15 +19,21 @@ jobs:
         with:
           node-version: '16.x'
 
+      # Build and test
+      - run: npm install
+      - run: npm run compile
+      - run: npm test
+
       - name: "Git Config"
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor}}@users.noreply.github.com"
+
       - name: "Lerna Version & Publish"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm set //registry.npmjs.org/:_authToken=${{ secrets.NPMJS_TOKEN }}
           npm whoami
-          npx lerna version --conventional-commits --yes
+          npx lerna version --conventional-commits --yes --no-verify-access
           npx lerna publish from-git --yes

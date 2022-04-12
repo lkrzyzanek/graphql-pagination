@@ -19,7 +19,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lkrzyzanek/graphql-pagination"
+    "url": "https://github.com/lkrzyzanek/graphql-pagination",
+    "directory": "packages/core"
   },
   "bugs": {
     "url": "https://github.com/lkrzyzanek/graphql-pagination/issues"

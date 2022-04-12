@@ -1,0 +1,43 @@
+{
+  "name": "@graphql-pagination/apollo-datasource",
+  "version": "0.1.0",
+  "description": "GraphQL Pagination - Apollo Datasource integration",
+  "author": "Libor Krzyzanek",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "typings": "dist/index.d.ts",
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
+  "keywords": [
+    "graphql",
+    "pagination",
+    "apollo-datasource"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lkrzyzanek/graphql-pagination",
+    "directory": "packages/apollo-datasource"
+  },
+  "bugs": {
+    "url": "https://github.com/lkrzyzanek/graphql-pagination/issues"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./*": {
+      "require": "./dist/*.js",
+      "import": "./dist/*.mjs"
+    }
+  },
+  "dependencies": {
+    "apollo-datasource": "^3.3.1",
+    "@graphql-pagination/core": "file:../core"
+  }
+}

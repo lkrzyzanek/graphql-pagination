@@ -81,4 +81,7 @@ export interface CursorPager<NodeType, IdType> {
      */
     cursor: CursorEncoderDecoder<IdType>;
 
+    /** GraphQL Type Defs - PageInfo, <TName>Connection, <TName>Edge, */
+    typeDefs: string[];
+
 }

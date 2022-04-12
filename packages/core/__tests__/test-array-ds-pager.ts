@@ -95,7 +95,7 @@ describe("array-ds-by-id", () => {
 describe("array-ds-by-date", () => {
     let pager: DataSourcePager;
     beforeAll(() => {
-        pager = new DataSourcePager({dataSource: new ArrayDataSource(data)});
+        pager = new DataSourcePager({dataSource: new ArrayDataSource(data, "published")});
     });
 
     test("forward-totalCount", () => {

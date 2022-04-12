@@ -1,6 +1,6 @@
 {
   "name": "@graphql-pagination/apollo-datasource",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "GraphQL Pagination - Apollo Datasource integration",
   "author": "Libor Krzyzanek",
   "license": "MIT",
@@ -37,7 +37,7 @@
     }
   },
   "dependencies": {
-    "apollo-datasource": "^3.3.1",
-    "@graphql-pagination/core": "file:../core"
+    "@graphql-pagination/core": "file:../core",
+    "apollo-datasource": "^3.3.1"
   }
 }

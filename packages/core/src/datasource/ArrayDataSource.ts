@@ -57,7 +57,7 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
         if (idA instanceof Date && idB instanceof Date) {
             return asc ? idA.getTime() - idB.getTime() : idB.getTime() - idA.getTime();
         }
-        throw Error("Unknown type of id");
+        throw Error(`Type ${typeof idA} is not supported`);
     }
 
 }

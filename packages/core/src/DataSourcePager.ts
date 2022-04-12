@@ -11,6 +11,8 @@ import type {PagerDataSource} from "./datasource/DataSource";
 import {DefaultCursorEncoderDecoder} from "./DefaultCursorEncoderDecoder";
 import {createConnectionTypeDef, createEdgeTypeDef, pageInfoTypeDef} from "./TypeDefs";
 
+type validationArgFn = ((args: ArgsForward | any) => void);
+
 /** DataSourcePager Configuration */
 export interface DataSourcePagerConfig {
     /** DataSource */
@@ -19,6 +21,10 @@ export interface DataSourcePagerConfig {
     typeName?: string
     /** Cursor encoder/decoder. If not provided DefaultCursorEncoderDecoder used */
     cursor?: CursorEncoderDecoder<string | number | Date>
+    /** Validation forward args function(s) */
+    validateForwardArgs?: validationArgFn | [validationArgFn];
+    /** Validation backward args function(s) */
+    validateBackwardArgs?: validationArgFn | [validationArgFn];
 }
 
 /**
@@ -40,9 +46,21 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
             this.typeDefs.push(createEdgeTypeDef(config.typeName));
             this.typeDefs.push(createConnectionTypeDef(config.typeName));
         }
+        if (config.validateForwardArgs) {
+            if (Array.isArray(config.validateForwardArgs)) this.validateForwardArgs = config.validateForwardArgs;
+            else this.validateForwardArgs = [config.validateForwardArgs];
+        }
+        if (config.validateBackwardArgs) {
+            if (Array.isArray(config.validateBackwardArgs)) this.validateBackwardArgs = config.validateBackwardArgs;
+            else this.validateBackwardArgs = [config.validateBackwardArgs];
+        }
     }
 
+    validateForwardArgs?: [validationArgFn];
+
     forwardResolver(args: ArgsForward | any): Connection {
+        if (this.validateForwardArgs) this.validateForwardArgs.forEach(validation => validation(args));
+
         let afterId;
         if (args.after) afterId = this.cursor.decode(args.after);
 
@@ -56,7 +74,11 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
         return this.connectionObject(resultPlusOne.slice(0, args.first), args, totalCount, hasNextPage, hasPreviousPage);
     }
 
+    validateBackwardArgs?: [validationArgFn];
+
     backwardResolver(args: ArgsBackward | any): Connection {
+        if (this.validateBackwardArgs) this.validateBackwardArgs.forEach(validation => validation(args));
+
         let beforeId;
         if (args.before) beforeId = this.cursor.decode(args.before);
 

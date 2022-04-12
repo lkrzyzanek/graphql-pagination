@@ -12,6 +12,10 @@ const filter = (books, args) => {
     if (args.author) return books.filter(b => b.author === args.author);
     return books;
 };
+const validation = (args) => {
+    if (args.title && !data.find(b => b.title === args.title)) throw Error(`Title ${args.title} not exists`);
+    if (args.author && !data.find(b => b.author === args.author)) throw Error(`Author ${args.author} not exists`);
+}
 
 describe("array-ds-by-id", () => {
     let pagerById: DataSourcePager;
@@ -124,7 +128,10 @@ describe("array-ds-filter", () => {
     let pager: DataSourcePager;
 
     beforeAll(() => {
-        pager = new DataSourcePager({dataSource: new ArrayDataSource(data, "id", filter)});
+        pager = new DataSourcePager({
+            dataSource: new ArrayDataSource(data, "id", filter),
+            validateForwardArgs: validation
+        });
     });
 
     test("title", () => {
@@ -134,10 +141,58 @@ describe("array-ds-filter", () => {
     });
     test("author", () => {
         const desiredAuthor = "Author 5";
-        const connection = pager.forwardResolver({"first": 10, "author": "Author 5"});
+        const connection = pager.forwardResolver({"first": 10, "author": desiredAuthor});
         expect(connection.totalCount).toBe(10);
         connection.edges.forEach((edge) => {
             expect(edge.node.author).toBe(desiredAuthor);
         })
+    });
+    test("validation-author", () => {
+        const desiredAuthor = "Author 5";
+        const connection = pager.forwardResolver({"first": 10, "author": desiredAuthor});
+        expect(connection.totalCount).toBe(10);
+        connection.edges.forEach((edge) => {
+            expect(edge.node.author).toBe(desiredAuthor);
+        })
+    });
+});
+
+describe("array-ds-validation", () => {
+    let pager: DataSourcePager;
+
+    beforeAll(() => {
+        pager = new DataSourcePager({
+            dataSource: new ArrayDataSource(data, "id", filter),
+            validateForwardArgs: validation,
+            validateBackwardArgs: validation,
+        });
+    });
+
+    test("validation-disabled", () => {
+        const pagerNoValidation = new DataSourcePager({dataSource: new ArrayDataSource(data, "id", filter)});
+        const connection = pagerNoValidation.forwardResolver({"first": 10, "title": "BAD-TITLE"});
+        expect(connection.edges).toHaveLength(0);
+        const connectionBack = pagerNoValidation.backwardResolver({"last": 10, "title": "BAD-TITLE"});
+        expect(connectionBack.edges).toHaveLength(0);
+    });
+
+    test("validation-title", () => {
+        const tested = () => pager.forwardResolver({"first": 10, "title": "BAD-TITLE"});
+        expect(tested).toThrow("Title BAD-TITLE not exists");
+    });
+    test("validation-array-title", () => {
+        const pagerValidationArray = new DataSourcePager({
+            dataSource: new ArrayDataSource(data, "id", filter),
+            validateForwardArgs: [validation],
+            validateBackwardArgs: [validation]
+        });
+        const tested = () => pagerValidationArray.forwardResolver({"first": 10, "title": "BAD-TITLE"});
+        expect(tested).toThrow("Title BAD-TITLE not exists");
+        const testedBack = () => pagerValidationArray.backwardResolver({"last": 10, "title": "BAD-TITLE"});
+        expect(testedBack).toThrow("Title BAD-TITLE not exists");
+    });
+    test("validation-author", () => {
+        const tested = () => pager.backwardResolver({"last": 10, "author": "BAD-AUTHOR"});
+        expect(tested).toThrow("Author BAD-AUTHOR not exists");
     });
 });

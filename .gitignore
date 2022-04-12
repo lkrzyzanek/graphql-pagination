@@ -19,3 +19,6 @@ node_modules/
 
 # Intellij Configuration Files
 .idea/
+
+# Ignore package-lock for easier upgrades
+package-lock.json

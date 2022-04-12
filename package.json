@@ -14,7 +14,8 @@
     "npm": "8.x"
   },
   "dependencies": {
-    "graphql-pagination-core": "file:packages/core"
+    "graphql-pagination-core": "file:packages/core",
+    "graphql-pagination-apollo-datasource": "file:packages/apollo-datasource"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",

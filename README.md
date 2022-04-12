@@ -19,6 +19,13 @@ You can use one of these provided:
 
 Or implement your own by implementing the [DataSource](packages/core/src/datasource/DataSource.ts) interface.
 
+### Apollo DataSource integration
+
+The package [apollo-datasource](packages/apollo-datasource) provides wrapper which extends Apollo's DataSource class
+so you can easily construct the pager in same way but using `ApolloDataSourcePager` class.
+
+See [apollo-datasource](examples/apollo-datasource/index.js) example.
+
 ### Example
 
 ```js

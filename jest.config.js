@@ -13,4 +13,9 @@ module.exports = {
         "text-summary",
         "cobertura",
     ],
+    coveragePathIgnorePatterns: [
+        "node_modules",
+        "dist",
+        "examples",
+    ],
 };

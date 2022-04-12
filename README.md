@@ -8,12 +8,12 @@ Designed in modular and extendable way.
 
 ## Getting Started
 
-You can use built-in `DataSourcePager` which provides GraphQL Resolver for your Graph.
+You can use built-in [`DataSourcePager`](packages/core/README.md#datasourcepager) which provides GraphQL Resolver for your Graph.
 By implementing / using DataSource you have full control how data are provided to the Pager.
 
 You can use one of these provided:
 
-1. [ArrayDataSource](packages/core/src/datasource/ArrayDataSource.ts) - bundled in `core` module
+1. [ArrayDataSource](packages/core/README.md#arraydatasource) - bundled in `core` module
 2. MongoDB - TBD
 3. SQL - TBD
 
@@ -65,3 +65,5 @@ return new ApolloServer({
     ],
 });
 ```
+
+For more examples go to [core package](packages/core).

@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, gql, UserInputError } = require("apollo-server");
 const { ArrayDataSource, DataSourcePager } = require("@graphql-pagination/core");
 const { typeDefs: scalarTypeDefs, resolvers: scalarResolvers } = require("graphql-scalars");
 
@@ -19,9 +19,22 @@ const filter = (books, args) => {
     if (args.author) return books.filter(b => b.author === args.author);
     return books;
 };
+// Validation input args functions
+const validateTitle = (args) => {
+    if (args.title && !books.find(b => b.title === args.title)) throw new UserInputError(`Title ${args.title} not exists`);
+};
+const validateAuthor = (args) => {
+    if (args.author && !books.find(b => b.author === args.author)) throw new UserInputError(`Author ${args.author} not exists`);
+};
+
 
 const ds = new ArrayDataSource(books, "id", filter);
-const pagerById = new DataSourcePager({ dataSource: ds, typeName: "Book" });
+const pagerById = new DataSourcePager({
+    dataSource: ds,
+    typeName: "Book",
+    validateForwardArgs: [validateAuthor, validateTitle],
+    validateBackwardArgs: [validateAuthor, validateTitle],
+});
 
 const dsPublished = new ArrayDataSource(books, "published");
 const pagerPublished = new DataSourcePager({ dataSource: dsPublished, typeName: "Book" });

@@ -6,6 +6,7 @@
   "include": [],
   "references": [
     { "path": "./packages/core" },
-    { "path": "./packages/apollo-datasource" }
+    { "path": "./packages/apollo-datasource" },
+    { "path": "./packages/sql-knex" }
   ]
 }

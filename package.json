@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "graphql-pagination-core": "file:packages/core",
-    "graphql-pagination-apollo-datasource": "file:packages/apollo-datasource"
+    "graphql-pagination-apollo-datasource": "file:packages/apollo-datasource",
+    "graphql-pagination-sql-knex": "file:packages/sql-knex"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
@@ -25,6 +26,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "graphql": "^15.8.0",
+    "better-sqlite3": "^7.5.1",
     "jest": "^27.5.1",
     "jest-config": "^27.5.1",
     "jest-junit": "^13.0.0",

@@ -1,0 +1,46 @@
+{
+  "name": "@graphql-pagination/sql-knex",
+  "version": "0.1.0",
+  "description": "GraphQL Pagination - SQL Knex",
+  "author": "Libor Krzyzanek",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "typings": "dist/index.d.ts",
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
+  "keywords": [
+    "graphql",
+    "pagination",
+    "sql"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lkrzyzanek/graphql-pagination",
+    "directory": "packages/sql-knex"
+  },
+  "bugs": {
+    "url": "https://github.com/lkrzyzanek/graphql-pagination/issues"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./*": {
+      "require": "./dist/*.js",
+      "import": "./dist/*.mjs"
+    }
+  },
+  "dependencies": {
+    "@graphql-pagination/core": "file:../core",
+    "knex": "^1.0.6"
+  },
+  "devDependencies": {
+    "better-sqlite3": "^7.5.1"
+  }
+}

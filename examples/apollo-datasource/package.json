@@ -8,8 +8,8 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@graphql-pagination/apollo-datasource": "file:../../packages/apollo-datasource",
-    "@graphql-pagination/core": "file:../../packages/core",
+    "@graphql-pagination/apollo-datasource": "0.3.1",
+    "@graphql-pagination/core": "0.4.1",
     "apollo-server": "^3.6.7",
     "graphql": "^16.3.0",
     "graphql-scalars": "^1.17.0"

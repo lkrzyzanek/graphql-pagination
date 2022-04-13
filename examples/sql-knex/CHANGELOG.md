@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/lkrzyzanek/graphql-pagination/compare/sql-knex-example@1.0.0...sql-knex-example@1.0.1) (2022-04-13)
+
+**Note:** Version bump only for package sql-knex-example
+
+
+
+
+
 ## 0.1.1 (2022-04-13)
 
 **Note:** Version bump only for package sql-knex-example

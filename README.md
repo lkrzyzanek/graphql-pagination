@@ -13,9 +13,9 @@ By implementing / using DataSource you have full control how data are provided t
 
 You can use one of these provided:
 
-1. [ArrayDataSource](packages/core/README.md#arraydatasource) - bundled in `core` module
-2. MongoDB - TBD
-3. SQL - TBD
+1. [ArrayDataSource](packages/core/README.md#arraydatasource) - bundled in [core](https://www.npmjs.com/package/@graphql-pagination/core) module
+2. [SQL Knex](packages/sql-knex) - bundled in [sql-knex](https://www.npmjs.com/package/@graphql-pagination/sql-knex) module
+3. MongoDB - TBD
 
 Or implement your own by implementing the [DataSource](packages/core/src/datasource/DataSource.ts) interface.
 

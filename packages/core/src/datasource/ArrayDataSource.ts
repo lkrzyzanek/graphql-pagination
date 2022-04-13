@@ -30,18 +30,18 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
         return this.transformNodes(nodes, originalArgs);
     }
 
-    totalCount(originalArgs: ArgsForward | ArgsBackward): number {
+    async totalCount(originalArgs: ArgsForward | ArgsBackward): Promise<number> {
         return this.getNodes(this.nodes, originalArgs).length;
     }
 
-    after(afterId: number | Date | undefined, size: number, originalArgs: ArgsForward): NodeType[] {
+    async after(afterId: number | Date | undefined, size: number, originalArgs: ArgsForward): Promise<NodeType[]> {
         return this.getNodes(this.nodes, originalArgs)
             .sort((a, b) => this.compareNodesId(a, b, true))
             .filter(node => !afterId ? true : this.getId(node) > afterId)
             .slice(0, size);
     }
 
-    before(beforeId: number | Date | undefined, size: number, originalArgs: ArgsBackward): NodeType[] {
+    async before(beforeId: number | Date | undefined, size: number, originalArgs: ArgsBackward): Promise<NodeType[]> {
         return this.getNodes(this.nodes, originalArgs)
             .sort((a, b) => this.compareNodesId(a, b, false))
             .filter(node => !beforeId ? true : this.getId(node) < beforeId)

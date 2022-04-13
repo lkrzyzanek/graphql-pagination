@@ -16,22 +16,22 @@ describe("apollo-data-source", () => {
         pagerById = new ApolloDataSourcePager({dataSource: new ArrayDataSource(data)});
     });
 
-    test("forward-totalCount", () => {
-        const connection = pagerById.forwardResolver({"first": 10});
+    test("forward-totalCount", async () => {
+        const connection = await pagerById.forwardResolver({"first": 10});
         expect(connection.totalCount).toBe(100);
     });
 
-    test("backward-totalCount", () => {
-        const connection = pagerById.backwardResolver({"last": 10});
+    test("backward-totalCount", async () => {
+        const connection = await pagerById.backwardResolver({"last": 10});
         expect(connection.totalCount).toBe(100);
     });
-    test("backward-out-of-range", () => {
-        const connection = pagerById.backwardResolver({"last": 10, "before": pagerById.cursor.encode(1)});
+    test("backward-out-of-range", async () => {
+        const connection = await pagerById.backwardResolver({"last": 10, "before": pagerById.cursor.encode(1)});
         expect(connection.edges).toHaveLength(0);
     });
 
-    test("backward-last-after", () => {
-        const connection = pagerById.backwardResolver({"last": 10, "before": pagerById.cursor.encode(80)});
+    test("backward-last-after", async () => {
+        const connection = await pagerById.backwardResolver({"last": 10, "before": pagerById.cursor.encode(80)});
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(79);
         expect(connection.edges[9].node.id).toBe(70);

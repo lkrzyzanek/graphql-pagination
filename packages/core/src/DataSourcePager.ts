@@ -58,36 +58,36 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
 
     validateForwardArgs?: [validationArgFn];
 
-    forwardResolver(args: ArgsForward | any): Connection {
+    async forwardResolver(args: ArgsForward | any): Promise<Connection> {
         if (this.validateForwardArgs) this.validateForwardArgs.forEach(validation => validation(args));
 
         let afterId;
         if (args.after) afterId = this.cursor.decode(args.after);
 
-        const resultPlusOne = this.dataSource.after(afterId, args.first + 1, args);
+        const resultPlusOne = await this.dataSource.after(afterId, args.first + 1, args);
 
         const hasNextPage = resultPlusOne?.length > args.first;
         const hasPreviousPage = !!args.after;
 
-        const totalCount = this.dataSource.totalCount(args);
+        const totalCount = await this.dataSource.totalCount(args);
 
         return this.connectionObject(resultPlusOne.slice(0, args.first), args, totalCount, hasNextPage, hasPreviousPage);
     }
 
     validateBackwardArgs?: [validationArgFn];
 
-    backwardResolver(args: ArgsBackward | any): Connection {
+    async backwardResolver(args: ArgsBackward | any): Promise<Connection> {
         if (this.validateBackwardArgs) this.validateBackwardArgs.forEach(validation => validation(args));
 
         let beforeId;
         if (args.before) beforeId = this.cursor.decode(args.before);
 
-        const resultPlusOne = this.dataSource.before(beforeId, args.last + 1, args);
+        const resultPlusOne = await this.dataSource.before(beforeId, args.last + 1, args);
 
         const hasNextPage = resultPlusOne?.length > args.last;
         const hasPreviousPage = !!args.before;
 
-        const totalCount = this.dataSource.totalCount(args);
+        const totalCount = await this.dataSource.totalCount(args);
 
         return this.connectionObject(resultPlusOne.slice(0, args.last), args, totalCount, hasNextPage, hasPreviousPage);
     }

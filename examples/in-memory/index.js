@@ -27,7 +27,6 @@ const validateAuthor = (args) => {
     if (args.author && !books.find(b => b.author === args.author)) throw new UserInputError(`Author ${args.author} not exists`);
 };
 
-
 const ds = new ArrayDataSource(books, "id", filter);
 const pagerById = new DataSourcePager({
     dataSource: ds,

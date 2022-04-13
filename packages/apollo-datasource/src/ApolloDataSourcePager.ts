@@ -16,7 +16,7 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
         this.typeDefs = this.pager.typeDefs;
     }
 
-    backwardResolver(args: any): Connection {
+    async backwardResolver(args: any): Promise<Connection> {
         return this.pager.backwardResolver(args);
     }
 
@@ -30,7 +30,7 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
         return this.pager.edgeObject(node);
     }
 
-    forwardResolver(args: any): Connection {
+    async forwardResolver(args: any): Promise<Connection> {
         return this.pager.forwardResolver(args);
     }
 

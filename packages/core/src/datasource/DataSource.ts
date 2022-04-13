@@ -7,11 +7,11 @@ export interface PagerDataSource<NodeType, IdType> {
 
     getId: (node: NodeType) => IdType;
 
-    totalCount: (originalArgs: ArgsForward | ArgsBackward) => number
+    totalCount: (originalArgs: ArgsForward | ArgsBackward) => Promise<number>
 
-    after: (afterId: IdType | undefined, size: number, originalArgs: ArgsForward) => NodeType[]
+    after: (afterId: IdType | undefined, size: number, originalArgs: ArgsForward) => Promise<NodeType[]>
 
-    before: (beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward) => NodeType[]
+    before: (beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward) => Promise<NodeType[]>
 
 }
 
@@ -26,11 +26,11 @@ export abstract class DataSourceBase<NodeType, IdType> implements PagerDataSourc
         this.idFieldName = idFieldName;
     }
 
-    abstract totalCount(originalArgs: ArgsForward | ArgsBackward): number;
+    abstract totalCount(originalArgs: ArgsForward | ArgsBackward): Promise<number>;
 
-    abstract after(afterId: IdType | undefined, size: number, originalArgs: ArgsForward): any[];
+    abstract after(afterId: IdType | undefined, size: number, originalArgs: ArgsForward): Promise<any[]>;
 
-    abstract before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward): any[];
+    abstract before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward): Promise<any[]>;
 
     getId(node: any): IdType {
         return node[this.idFieldName];

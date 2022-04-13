@@ -61,9 +61,9 @@ export interface CursorPager<NodeType, IdType> {
 
     // Main Resolvers
 
-    forwardResolver: (args: ArgsForward | any) => Connection;
+    forwardResolver: (args: ArgsForward | any) => Promise<Connection>;
 
-    backwardResolver: (args: ArgsBackward | any) => Connection;
+    backwardResolver: (args: ArgsBackward | any) => Promise<Connection>;
 
     // Return Objects Helpers
 

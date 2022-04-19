@@ -19,8 +19,9 @@ export class DefaultCursorEncoderDecoder implements CursorEncoderDecoder<string 
 
         if (id.startsWith("d_")) return new Date(Number(value));
         if (id.startsWith("n_")) return Number(value);
+        if (id.startsWith("c_")) return value;
 
-        return value;
+        throw new Error("Invalid cursor value");
     }
 
 }

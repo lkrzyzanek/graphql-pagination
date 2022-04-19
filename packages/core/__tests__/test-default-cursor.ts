@@ -4,6 +4,11 @@ describe("cursor", () => {
 
     const cursor = new DefaultCursorEncoderDecoder();
 
+    test("decode-bad-input", () => {
+        expect(() => cursor.decode("bad_input")).toThrow(new Error("Invalid cursor value"));
+        expect(() => cursor.decode("a")).toThrow(new Error("Invalid cursor value"));
+    });
+
     test("encode-string", () => {
         const encoded = cursor.encode("test-string");
         expect(encoded).toBe(Buffer.from("c_test-string").toString("base64"));

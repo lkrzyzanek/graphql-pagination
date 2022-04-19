@@ -78,6 +78,10 @@ const createApolloServer = () => {
             resolvers,
             scalarResolvers, // for DateTime
         ],
+        formatError: error => {
+            if (error.message.startsWith("Invalid cursor value")) throw new UserInputError(error.message);
+            throw error;
+        },
     });
 };
 

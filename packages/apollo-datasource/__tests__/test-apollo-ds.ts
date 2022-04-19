@@ -1,5 +1,6 @@
 import {ApolloDataSourcePager} from "../src";
 import {ArrayDataSource} from "@graphql-pagination/core";
+import {UserInputError} from "apollo-server-errors";
 
 describe("apollo-data-source", () => {
 
@@ -53,6 +54,25 @@ describe("apollo-data-source", () => {
     test("connectionObject", () => {
         const result = pagerById.connectionObject([], {first: 10}, 0, false, false);
         expect(result).not.toBeNull();
+    });
+
+});
+
+describe("validation", () => {
+
+    let pager: ApolloDataSourcePager<any>;
+    beforeAll(() => {
+        pager = new ApolloDataSourcePager({dataSource: new ArrayDataSource([])});
+    });
+
+    test("after-invalid", async () => {
+        return expect(() => pager.forwardResolver({first: 10, after: "bad"}))
+            .rejects.toStrictEqual(new UserInputError("Invalid cursor value"));
+    });
+
+    test("before-invalid", async () => {
+        return expect(() => pager.backwardResolver({first: 10, before: "bad"}))
+            .rejects.toStrictEqual(new UserInputError("Invalid cursor value"));
     });
 
 });

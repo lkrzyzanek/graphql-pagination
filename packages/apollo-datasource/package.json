@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@graphql-pagination/core": "file:../core",
-    "apollo-datasource": "^3.3.1"
+    "apollo-datasource": "^3.3.1",
+    "apollo-server-errors": "^3.3.1"
   }
 }

@@ -1,6 +1,7 @@
 import {DataSource} from "apollo-datasource";
 import type {Connection, CursorEncoderDecoder, DataSourcePagerConfig, Edge, PageInfo} from "@graphql-pagination/core";
 import {CursorPager, DataSourcePager} from "@graphql-pagination/core";
+import {UserInputError} from "apollo-server-errors";
 
 /**
  * CursorPager extending Apollo DataSource class to be used as Apollo's datasource.
@@ -17,7 +18,13 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
     }
 
     async backwardResolver(args: any): Promise<Connection> {
-        return this.pager.backwardResolver(args);
+        return this.pager.backwardResolver(args)
+            .catch(e => {
+                if (e.message === "Invalid cursor value") {
+                    throw new UserInputError(e.message, {"argumentName": "before"})
+                }
+                throw e;
+            });
     }
 
     connectionObject(nodes: any[], args: any, totalCount: number, hasNextPage: boolean, hasPreviousPage: boolean): Connection {
@@ -31,7 +38,13 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
     }
 
     async forwardResolver(args: any): Promise<Connection> {
-        return this.pager.forwardResolver(args);
+        return this.pager.forwardResolver(args)
+            .catch(e => {
+                if (e.message === "Invalid cursor value") {
+                    throw new UserInputError(e.message, {"argumentName": "after"})
+                }
+                throw e;
+            });
     }
 
     pageInfoObject(connection: Connection, hasNextPage: boolean, hasPreviousPage: boolean): PageInfo {

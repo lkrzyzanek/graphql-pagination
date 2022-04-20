@@ -33,7 +33,9 @@ export abstract class DataSourceBase<NodeType, IdType> implements PagerDataSourc
     abstract before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward): Promise<any[]>;
 
     getId(node: any): IdType {
-        return node[this.idFieldName];
+        const result = node[this.idFieldName];
+        if (!result) throw new Error(`No value for node's field '${this.idFieldName}'. Pager is probably not correctly configured.`);
+        return result;
     }
 
 }

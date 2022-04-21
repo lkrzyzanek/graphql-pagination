@@ -3,7 +3,7 @@
  * @see https://relay.dev/graphql/connections.htm#sec-Connection-Types.Fields
  */
 export interface Connection {
-    totalCount: number;
+    totalCount: number | undefined;
     edges: Edge[];
     args: any;
     pageInfo?: PageInfo;
@@ -67,7 +67,7 @@ export interface CursorPager<NodeType, IdType> {
 
     // Return Objects Helpers
 
-    connectionObject: (nodes: NodeType[], args: ArgsForward | ArgsBackward | any, totalCount: number,
+    connectionObject: (nodes: NodeType[], args: ArgsForward | ArgsBackward | any, totalCount: number | undefined,
                        hasNextPage: boolean, hasPreviousPage: boolean) => Connection;
 
     edgeObject: (node: NodeType) => Edge;
@@ -83,5 +83,8 @@ export interface CursorPager<NodeType, IdType> {
 
     /** GraphQL Type Defs - PageInfo, <TName>Connection, <TName>Edge, */
     typeDefs: string[];
+
+    /** GraphQL Resolvers - <TName>Connection.totalCount */
+    resolvers: any[];
 
 }

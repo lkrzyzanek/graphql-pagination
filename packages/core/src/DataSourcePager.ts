@@ -25,6 +25,8 @@ export interface DataSourcePagerConfig {
     validateForwardArgs?: validationArgFn | [validationArgFn];
     /** Validation backward args function(s) */
     validateBackwardArgs?: validationArgFn | [validationArgFn];
+    /** Define if totalCount should be fetched as part of forward/backward resolver */
+    fetchTotalCountInResolver?: boolean;
 }
 
 /**
@@ -38,13 +40,23 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
 
     typeDefs: string[] = [pageInfoTypeDef];
 
+    resolvers: any[] = [];
+
+    fetchTotalCountInResolver: boolean = true;
+
     constructor(config: DataSourcePagerConfig) {
         this.dataSource = config.dataSource;
         this.cursor = config.cursor || new DefaultCursorEncoderDecoder();
+        if (config.fetchTotalCountInResolver !== undefined) this.fetchTotalCountInResolver = config.fetchTotalCountInResolver;
 
         if (config.typeName) {
             this.typeDefs.push(createEdgeTypeDef(config.typeName));
             this.typeDefs.push(createConnectionTypeDef(config.typeName));
+            this.resolvers[0] = {
+                [`${config.typeName}Connection`]: {
+                    totalCount: (_: Connection, args: ArgsForward | ArgsBackward) => config.dataSource.totalCount(args),
+                }
+            };
         }
         if (config.validateForwardArgs) {
             if (Array.isArray(config.validateForwardArgs)) this.validateForwardArgs = config.validateForwardArgs;
@@ -69,7 +81,8 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
         const hasNextPage = resultPlusOne?.length > args.first;
         const hasPreviousPage = !!args.after;
 
-        const totalCount = await this.dataSource.totalCount(args);
+        let totalCount;
+        if (this.fetchTotalCountInResolver) totalCount = await this.dataSource.totalCount(args);
 
         return this.connectionObject(resultPlusOne.slice(0, args.first), args, totalCount, hasNextPage, hasPreviousPage);
     }
@@ -87,12 +100,13 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
         const hasNextPage = resultPlusOne?.length > args.last;
         const hasPreviousPage = !!args.before;
 
-        const totalCount = await this.dataSource.totalCount(args);
+        let totalCount;
+        if (this.fetchTotalCountInResolver) totalCount = await this.dataSource.totalCount(args);
 
         return this.connectionObject(resultPlusOne.slice(0, args.last), args, totalCount, hasNextPage, hasPreviousPage);
     }
 
-    connectionObject(nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number, hasNextPage: boolean, hasPreviousPage: boolean): Connection {
+    connectionObject(nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number | undefined, hasNextPage: boolean, hasPreviousPage: boolean): Connection {
         const edges = nodes.map(node => this.edgeObject(node))
         const connection = {
             totalCount: totalCount,

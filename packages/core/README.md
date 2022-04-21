@@ -1,4 +1,4 @@
-# GraphQL Pagination / Core
+# GraphQL Pagination - Core
 
 Core module of GraphQL Pagination provides spec and base implementations.
 
@@ -7,6 +7,10 @@ Core module of GraphQL Pagination provides spec and base implementations.
 3. [DataSourcePager](src/DataSourcePager.ts) implementation
 4. [ArrayDataSource](src/datasource/ArrayDataSource.ts) implementation
 5. [GraphQL Type Defs](src/TypeDefs.ts)
+
+Check additional modules:
+1. [@graphql-pagination/apollo-datasource](https://www.npmjs.com/package/@graphql-pagination/apollo-datasource) - tighter integration with Apollo
+2. [@graphql-pagination/sql-knex](https://www.npmjs.com/package/@graphql-pagination/sql-knex) - SQL (Knex.js) DataSource
 
 ## DataSourcePager
 
@@ -20,6 +24,8 @@ Configuration:
 3. cursor (optional) - custom implementation how to encode/decode cursor
 4. validateForwardArgs (optional) - function (or array) to validate input args used by forward resolver
 5. validateBackwardArgs (optional) - function (or array) to validate input args used by backward resolver
+6. fetchTotalCountInResolver (optional) - if false then totalCount is not fetched as part of forward/backward resolvers
+   but totalCount resolver in Connection object needs to be defined separately. Pager provides `.resolvers` field for it.
 
 ### Basic Example
 

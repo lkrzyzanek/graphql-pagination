@@ -1,5 +1,5 @@
 const { ApolloServer, gql } = require("apollo-server");
-const { ArrayDataSource, DataSourcePager } = require("@graphql-pagination/core");
+const { ArrayDataSource } = require("@graphql-pagination/core");
 const { typeDefs: scalarTypeDefs, resolvers: scalarResolvers } = require("graphql-scalars");
 const { ApolloDataSourcePager } = require("@graphql-pagination/apollo-datasource");
 
@@ -39,6 +39,7 @@ const resolvers = {
 const apolloBooksPager = new ApolloDataSourcePager({
     dataSource: new ArrayDataSource(books, "id"),
     typeName: "Book",
+    fetchTotalCountInResolver: false,
 });
 
 const createApolloServer = () => {
@@ -50,6 +51,7 @@ const createApolloServer = () => {
         ],
         resolvers: [
             resolvers,
+            apolloBooksPager.resolvers,
             scalarResolvers, // for DateTime
         ],
         dataSources: () => {

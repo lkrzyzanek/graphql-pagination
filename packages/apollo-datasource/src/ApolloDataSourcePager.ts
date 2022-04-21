@@ -15,6 +15,7 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
         this.pager = new DataSourcePager(config);
         this.cursor = this.pager.cursor;
         this.typeDefs = this.pager.typeDefs;
+        this.resolvers = this.pager.resolvers;
     }
 
     async backwardResolver(args: any): Promise<Connection> {
@@ -27,7 +28,7 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
             });
     }
 
-    connectionObject(nodes: any[], args: any, totalCount: number, hasNextPage: boolean, hasPreviousPage: boolean): Connection {
+    connectionObject(nodes: any[], args: any, totalCount: number | undefined, hasNextPage: boolean, hasPreviousPage: boolean): Connection {
         return this.pager.connectionObject(nodes, args, totalCount, hasNextPage, hasPreviousPage);
     }
 
@@ -52,5 +53,7 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
     }
 
     typeDefs: string[];
+
+    resolvers: any[];
 
 }

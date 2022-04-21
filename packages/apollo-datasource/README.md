@@ -1,6 +1,6 @@
 # GraphQL Pagination / Apollo Datasource integration
 
-Module integrates GraphQL Pagination and [Apollo Datasources](https://www.apollographql.com/docs/apollo-server/data/data-sources/)
+Module integrates GraphQL Pagination and [Apollo Datasources](https://www.apollographql.com/docs/apollo-server/data/data-sources/).
 
 ## Usage
 

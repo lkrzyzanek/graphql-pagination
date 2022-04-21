@@ -40,7 +40,7 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
 
     typeDefs: string[] = [pageInfoTypeDef];
 
-    resolvers: any[] = [];
+    resolvers: Record<string, any> = {};
 
     fetchTotalCountInResolver: boolean = true;
 
@@ -52,9 +52,9 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
         if (config.typeName) {
             this.typeDefs.push(createEdgeTypeDef(config.typeName));
             this.typeDefs.push(createConnectionTypeDef(config.typeName));
-            this.resolvers[0] = {
+            this.resolvers = {
                 [`${config.typeName}Connection`]: {
-                    totalCount: (_: Connection, args: ArgsForward | ArgsBackward) => config.dataSource.totalCount(args),
+                    totalCount: (connection: Connection) => config.dataSource.totalCount(connection.args),
                 }
             };
         }

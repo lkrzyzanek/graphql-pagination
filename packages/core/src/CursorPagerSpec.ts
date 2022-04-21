@@ -85,6 +85,6 @@ export interface CursorPager<NodeType, IdType> {
     typeDefs: string[];
 
     /** GraphQL Resolvers - <TName>Connection.totalCount */
-    resolvers: any[];
+    resolvers: Record<string, any>;
 
 }

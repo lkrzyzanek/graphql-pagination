@@ -147,6 +147,21 @@ describe("array-ds-filter", () => {
             expect(edge.node.author).toBe(desiredAuthor);
         })
     });
+    test("totalCount-resolver", async () => {
+        const desiredAuthor = "Author 5";
+        const pagerNoTotalCount = new DataSourcePager({
+            dataSource: new ArrayDataSource(data, "id", filter),
+            typeName: "TEST",
+            validateForwardArgs: validation,
+            fetchTotalCountInResolver: false
+        });
+        const args = {"first": 10, "author": desiredAuthor};
+        const connection = await pagerNoTotalCount.forwardResolver(args);
+        expect(connection.totalCount).toBeUndefined();
+        const totalCount = await pagerNoTotalCount.resolvers.TESTConnection.totalCount({args});
+        expect(totalCount).toBe(10);
+
+    });
     test("validation-author", async () => {
         const desiredAuthor = "Author 5";
         const connection = await pager.forwardResolver({"first": 10, "author": desiredAuthor});

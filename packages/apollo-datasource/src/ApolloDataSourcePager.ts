@@ -54,6 +54,6 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
 
     typeDefs: string[];
 
-    resolvers: any[];
+    resolvers: Record<string, any>;
 
 }

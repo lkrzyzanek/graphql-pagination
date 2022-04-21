@@ -6,11 +6,10 @@ describe("pager-resolvers", () => {
         const pager = new DataSourcePager({dataSource: new ArrayDataSource([{"id": 1}]), typeName: "TEST"});
 
         const resolvers = pager.resolvers;
-        expect(resolvers).toHaveLength(1);
-        expect(resolvers[0]).not.toBeNull();
-        expect(resolvers[0].TESTConnection).not.toBeUndefined();
-        expect(resolvers[0].TESTConnection.totalCount).not.toBeUndefined();
-        return expect(resolvers[0].TESTConnection.totalCount(null, {})).resolves.toBe(1);
+        expect(resolvers).not.toBeNull();
+        expect(resolvers.TESTConnection).not.toBeUndefined();
+        expect(resolvers.TESTConnection.totalCount).not.toBeUndefined();
+        return expect(resolvers.TESTConnection.totalCount({first: 10})).resolves.toBe(1);
     });
 
     test("totalCount-in-resolver", async () => {

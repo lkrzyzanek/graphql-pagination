@@ -139,6 +139,15 @@ describe("array-ds-filter", () => {
         expect(connection.totalCount).toBe(1);
         expect(connection.edges[0].node.id).toBe(5);
     });
+    test("title-data-asyncfn", async () => {
+        const pager = new DataSourcePager({
+            dataSource: new ArrayDataSource(async () => data, "id", filter),
+            validateForwardArgs: validation
+        });
+        const connection = await pager.forwardResolver({"first": 10, "title": "Title 5"});
+        expect(connection.totalCount).toBe(1);
+        expect(connection.edges[0].node.id).toBe(5);
+    });
     test("author", async () => {
         const desiredAuthor = "Author 5";
         const connection = await pager.forwardResolver({"first": 10, "author": desiredAuthor});

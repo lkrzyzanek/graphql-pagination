@@ -1,11 +1,11 @@
 # GraphQL Pagination - Core
 
-Core module of GraphQL Pagination provides spec and base implementations.
+Core module of GraphQL Pagination provides spec and ready to use implementations.
 
 1. [CursorPager](src/CursorPagerSpec.ts) specification
 2. [DataSource](src/datasource/DataSource.ts) specification
 3. [DataSourcePager](src/DataSourcePager.ts) implementation
-4. [ArrayDataSource](src/datasource/ArrayDataSource.ts) implementation
+4. [ArrayDataSource](src/datasource/ArrayDataSource.ts) implementation as fixed array of data
 5. [GraphQL Type Defs](src/TypeDefs.ts)
 
 Check additional modules:
@@ -30,6 +30,8 @@ Configuration:
 ### Basic Example
 
 ```js
+const { ArrayDataSource, DataSourcePager } = require("@graphql-pagination/core");
+
 // Create Array Data Source from array of books
 const ds = new ArrayDataSource(books);
 const pager = new DataSourcePager({

@@ -124,6 +124,59 @@ describe("array-ds-by-date", () => {
     });
 });
 
+describe("array-ds-by-title", () => {
+    let pager: DataSourcePager;
+    beforeAll(() => {
+        pager = new DataSourcePager({dataSource: new ArrayDataSource(data, "title")});
+    });
+
+    test("forward-totalCount", async () => {
+        const connection = await pager.forwardResolver({"first": 10});
+        expect(connection.totalCount).toBe(100);
+    });
+
+    test("forward-first-only", async () => {
+        const connection = await pager.forwardResolver({"first": 10});
+        expect(connection.edges).toHaveLength(10);
+        expect(connection.edges[0].node.id).toBe(1);
+        expect(connection.edges[9].node.id).toBe(17);   // it's sorted by title. title1, title 11 ...
+
+        expect(connection.pageInfo.hasNextPage).toBe(true);
+        expect(connection.pageInfo.hasPreviousPage).toBe(false);
+    });
+
+    test("backward-last-only", async () => {
+        const connection = await pager.backwardResolver({"last": 10});
+        expect(connection.edges).toHaveLength(10);
+        expect(connection.edges[0].node.id).toBe(99);
+        expect(connection.edges[9].node.id).toBe(90);
+
+        expect(connection.pageInfo.hasNextPage).toBe(true);
+        expect(connection.pageInfo.hasPreviousPage).toBe(false);
+    });
+
+    test("forward-first-after", async () => {
+        const connection = await pager.forwardResolver({"first": 10, "after": pager.cursor.encode("Title 30")});
+        expect(connection.edges).toHaveLength(10);
+        expect(connection.edges[0].node.title).toBe("Title 31");
+        expect(connection.edges[9].node.title).toBe("Title 4");
+
+        expect(connection.pageInfo.hasNextPage).toBe(true);
+        expect(connection.pageInfo.hasPreviousPage).toBe(true);
+    });
+
+    test("backward-last-after", async () => {
+        const connection = await pager.backwardResolver({"last": 10, "before": pager.cursor.encode("Title 80")});
+        expect(connection.edges).toHaveLength(10);
+        expect(connection.edges[0].node.title).toBe("Title 8");
+        expect(connection.edges[9].node.title).toBe("Title 71");
+
+        expect(connection.pageInfo.hasNextPage).toBe(true);
+        expect(connection.pageInfo.hasPreviousPage).toBe(true);
+    });
+
+});
+
 describe("array-ds-filter", () => {
     let pager: DataSourcePager;
 

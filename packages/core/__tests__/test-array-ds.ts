@@ -43,6 +43,11 @@ describe("array-ds-input-nodes", () => {
         const ds = new ArrayDataSource(getData);
         return expect(ds.after(0, 10, {first: 10})).resolves.toStrictEqual([{"id": 1}]);
     })
+    test("promise-args", () => {
+        const getData = async (args): Promise<[any]> => [{"id": args.first}];
+        const ds = new ArrayDataSource(getData);
+        return expect(ds.after(0, 10, {first: 10})).resolves.toStrictEqual([{"id": 10}]);
+    })
 });
 
 describe("array-ds-transform", () => {

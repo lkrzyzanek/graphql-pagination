@@ -15,7 +15,7 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
      * @param idFieldName name of the field. Default is "id"
      * @param transformNodesFn additional transformation / filtration based on original arguments
      */
-    constructor(nodes: NodeType[] | (() => Promise<NodeType[]>),
+    constructor(nodes: NodeType[] | ((originalArgs: ArgsForward | ArgsBackward) => Promise<NodeType[]>),
                 idFieldName: string = "id",
                 transformNodesFn?: (nodes: NodeType[], originalArgs: ArgsForward | ArgsBackward) => NodeType[]) {
         super(idFieldName);
@@ -23,7 +23,7 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
             this.getNodes = (originalArgs) => Promise.resolve(nodes)
                 .then(nodes => transformNodesFn ? transformNodesFn(nodes, originalArgs) : nodes);
         } else {
-            this.getNodes = (originalArgs) => nodes()
+            this.getNodes = (originalArgs) => nodes(originalArgs)
                 .then(nodes => transformNodesFn ? transformNodesFn(nodes, originalArgs) : nodes);
         }
     }

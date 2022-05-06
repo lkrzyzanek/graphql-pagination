@@ -4,10 +4,10 @@ import type {ArgsBackward, ArgsForward} from "../CursorPagerSpec";
 /**
  * Array backed DataSource.
  * Array is passed directly or as async function
- * ID field can be either `number` or `Date`
+ * ID field can be either `number` or `Date` or `string`
  * transformNodesFn can be used to filter / transform the original nodes
  */
-export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number | Date> {
+export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number | Date | string> {
 
     /**
      * Create new ArrayDataSource
@@ -34,7 +34,7 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
         return this.getNodes(originalArgs).then(nodes => nodes.length);
     }
 
-    async after(afterId: number | Date | undefined, size: number, originalArgs: ArgsForward): Promise<NodeType[]> {
+    async after(afterId: number | Date | string | undefined, size: number, originalArgs: ArgsForward): Promise<NodeType[]> {
         const result = await this.getNodes(originalArgs);
         return result
             .sort((a, b) => this.compareNodesId(a, b, true))
@@ -42,7 +42,7 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
             .slice(0, size);
     }
 
-    async before(beforeId: number | Date | undefined, size: number, originalArgs: ArgsBackward): Promise<NodeType[]> {
+    async before(beforeId: number | Date | string | undefined, size: number, originalArgs: ArgsBackward): Promise<NodeType[]> {
         const result = await this.getNodes(originalArgs);
         return result
             .sort((a, b) => this.compareNodesId(a, b, false))
@@ -55,6 +55,9 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
         const idB = this.getId(b);
         if (typeof idA === "number" && typeof idB === "number") {
             return asc ? idA - idB : idB - idA;
+        }
+        if (typeof idA === "string" && typeof idB === "string") {
+            return asc ? (idA).localeCompare(idB) : (idB).localeCompare(idA);
         }
         if (idA instanceof Date && idB instanceof Date) {
             return asc ? idA.getTime() - idB.getTime() : idB.getTime() - idA.getTime();

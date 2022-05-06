@@ -3,46 +3,48 @@ import type {ArgsBackward, ArgsForward} from "../CursorPagerSpec";
 
 /**
  * Array backed DataSource.
+ * Array is passed directly or as async function
  * ID field can be either `number` or `Date`
  * transformNodesFn can be used to filter / transform the original nodes
  */
 export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number | Date> {
 
-    protected nodes: NodeType[]
-
-    transformNodes: (nodes: NodeType[], originalArgs: ArgsForward | ArgsBackward) => NodeType[];
-
     /**
      * Create new ArrayDataSource
-     * @param nodes array of your nodes (data)
+     * @param nodes array of your nodes (data) or async function to get them
      * @param idFieldName name of the field. Default is "id"
      * @param transformNodesFn additional transformation / filtration based on original arguments
      */
-    constructor(nodes: NodeType[],
+    constructor(nodes: NodeType[] | (() => Promise<NodeType[]>),
                 idFieldName: string = "id",
                 transformNodesFn?: (nodes: NodeType[], originalArgs: ArgsForward | ArgsBackward) => NodeType[]) {
         super(idFieldName);
-        this.nodes = nodes;
-        this.transformNodes = transformNodesFn || ((nodes) => nodes);
+        if (Array.isArray(nodes)) {
+            this.getNodes = (originalArgs) => Promise.resolve(nodes)
+                .then(nodes => transformNodesFn ? transformNodesFn(nodes, originalArgs) : nodes);
+        } else {
+            this.getNodes = (originalArgs) => nodes()
+                .then(nodes => transformNodesFn ? transformNodesFn(nodes, originalArgs) : nodes);
+        }
     }
 
-    getNodes(nodes: NodeType[], originalArgs: ArgsForward | ArgsBackward): NodeType[] {
-        return this.transformNodes(nodes, originalArgs);
-    }
+    getNodes: (originalArgs: ArgsForward | ArgsBackward) => Promise<NodeType[]>;
 
     async totalCount(originalArgs: ArgsForward | ArgsBackward): Promise<number> {
-        return this.getNodes(this.nodes, originalArgs).length;
+        return this.getNodes(originalArgs).then(nodes => nodes.length);
     }
 
     async after(afterId: number | Date | undefined, size: number, originalArgs: ArgsForward): Promise<NodeType[]> {
-        return this.getNodes(this.nodes, originalArgs)
+        const result = await this.getNodes(originalArgs);
+        return result
             .sort((a, b) => this.compareNodesId(a, b, true))
             .filter(node => !afterId ? true : this.getId(node) > afterId)
             .slice(0, size);
     }
 
     async before(beforeId: number | Date | undefined, size: number, originalArgs: ArgsBackward): Promise<NodeType[]> {
-        return this.getNodes(this.nodes, originalArgs)
+        const result = await this.getNodes(originalArgs);
+        return result
             .sort((a, b) => this.compareNodesId(a, b, false))
             .filter(node => !beforeId ? true : this.getId(node) < beforeId)
             .slice(0, size);

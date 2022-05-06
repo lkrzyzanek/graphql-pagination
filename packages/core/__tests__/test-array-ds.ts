@@ -1,6 +1,6 @@
 import {ArrayDataSource} from "../src";
 
-describe("array-ds", () => {
+describe("array-ds-id", () => {
 
     test("default", () => {
         const ds = new ArrayDataSource([]);
@@ -32,3 +32,22 @@ describe("array-ds", () => {
     })
 
 })
+
+describe("array-ds-input-nodes", () => {
+    test("array", async () => {
+        const ds = new ArrayDataSource([{"id": 1}]);
+        return expect(ds.after(0, 10, {first: 10})).resolves.toStrictEqual([{"id": 1}]);
+    })
+    test("promise", () => {
+        const getData = async (): Promise<[any]> => [{"id": 1}];
+        const ds = new ArrayDataSource(getData);
+        return expect(ds.after(0, 10, {first: 10})).resolves.toStrictEqual([{"id": 1}]);
+    })
+});
+
+describe("array-ds-transform", () => {
+    test("no-transform", async () => {
+        const ds = new ArrayDataSource(async () => [{"id": 1}], "id", null);
+        return expect(ds.after(0, 10, {first: 10})).resolves.toStrictEqual([{"id": 1}]);
+    })
+});

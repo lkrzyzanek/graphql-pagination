@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.2.1...@graphql-pagination/core@1.2.2) (2022-05-10)
+
+
+### Bug Fixes
+
+* DataSourceBase - getId value can be zero fixes [#47](https://github.com/lkrzyzanek/graphql-pagination/issues/47) ([2459271](https://github.com/lkrzyzanek/graphql-pagination/commit/2459271181254ff4d78e10ca16282e202c30d0ea))
+
+
+
+
+
 ## [1.2.1](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.2.0...@graphql-pagination/core@1.2.1) (2022-05-06)
 
 **Note:** Version bump only for package @graphql-pagination/core

@@ -17,6 +17,15 @@ describe("array-ds-id", () => {
         expect(ds.getId({"id2": 1})).toBe(1);
     })
 
+    test("id-zero-number", () => {
+        const ds = new ArrayDataSource([], "id2");
+        expect(ds.getId({"id2": 0})).toBe(0);
+    })
+    test("id-negative-number", () => {
+        const ds = new ArrayDataSource([], "id2");
+        expect(ds.getId({"id2": -1})).toBe(-1);
+    })
+
     test("id-mis-configured", () => {
         const ds = new ArrayDataSource([], "nid");
         expect(() => ds.getId({"id": 1})).toThrow(new Error("No value for node's field 'nid'. Pager is probably not correctly configured."));

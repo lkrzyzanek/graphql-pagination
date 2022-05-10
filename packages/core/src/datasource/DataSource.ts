@@ -34,7 +34,7 @@ export abstract class DataSourceBase<NodeType, IdType> implements PagerDataSourc
 
     getId(node: any): IdType {
         const result = node[this.idFieldName];
-        if (!result) throw new Error(`No value for node's field '${this.idFieldName}'. Pager is probably not correctly configured.`);
+        if (result == null) throw new Error(`No value for node's field '${this.idFieldName}'. Pager is probably not correctly configured.`);
         return result;
     }
 

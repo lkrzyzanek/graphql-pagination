@@ -27,11 +27,11 @@
     "eslint-plugin-promise": "^5.2.0",
     "graphql": "^16.0.0",
     "better-sqlite3": "^7.5.1",
-    "jest": "^27.5.1",
-    "jest-config": "^27.5.1",
+    "jest": "^28.0.0",
+    "jest-config": "^28.0.0",
     "jest-junit": "^13.0.0",
     "lerna": "4.0.0",
-    "ts-jest": "^27.1.4",
+    "ts-jest": "^28.0.0",
     "typescript": "^4.6.3"
   }
 }

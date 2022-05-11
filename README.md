@@ -2,7 +2,7 @@
 
 Library to easily wrap data to [GraphQL Pagination](https://graphql.org/learn/pagination/).
 
-Implements Relay's [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+Implements Relay's [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm) and supports Offset Pagination.
 
 Designed in modular and extendable way.
 
@@ -13,9 +13,9 @@ By implementing / using DataSource you have full control how data are provided t
 
 You can use one of these provided:
 
-1. [ArrayDataSource](packages/core/README.md#arraydatasource) - bundled in [core](https://www.npmjs.com/package/@graphql-pagination/core) module
-2. [SQL Knex](packages/sql-knex) - bundled in [sql-knex](https://www.npmjs.com/package/@graphql-pagination/sql-knex) module
-3. MongoDB - TBD
+1. [ArrayDataSource](packages/core/README.md) - bundled in [@graphql-pagination/core](https://www.npmjs.com/package/@graphql-pagination/core) module
+2. [OffsetDataSourceWrapper](packages/core/README.md) - bundled in [@graphql-pagination/core](https://www.npmjs.com/package/@graphql-pagination/core) module
+3. [SQL Knex](packages/sql-knex) - bundled in [sql-knex](https://www.npmjs.com/package/@graphql-pagination/sql-knex) module
 
 Or implement your own by implementing the [DataSource](packages/core/src/datasource/DataSource.ts) interface.
 

@@ -1,12 +1,13 @@
 # GraphQL Pagination - Core
 
-Core module of GraphQL Pagination provides spec and ready to use implementations.
+Core module of GraphQL Pagination providing spec and ready to use implementations.
 
 1. [CursorPager](src/CursorPagerSpec.ts) specification
 2. [DataSource](src/datasource/DataSource.ts) specification
 3. [DataSourcePager](src/DataSourcePager.ts) implementation
 4. [ArrayDataSource](src/datasource/ArrayDataSource.ts) implementation as fixed array of data
-5. [GraphQL Type Defs](src/TypeDefs.ts)
+5. [OffsetDataSourceWrapper](src/datasource/OffsetDataSourceWrapper.ts) Offset pagination wrapper
+6. [GraphQL Type Defs](src/TypeDefs.ts)
 
 Check additional modules:
 1. [@graphql-pagination/apollo-datasource](https://www.npmjs.com/package/@graphql-pagination/apollo-datasource) - tighter integration with Apollo
@@ -59,6 +60,32 @@ const resolvers = {
 };
 ```
 
+### Offset Data Source Paging
+
+If your DS / API provides offset pagination resp. slicing (start + size) and you want to use this pagination then it's supported as wrapper.
+
+You need to create your DS like any other but expect that Wrapper will store in encoded cursor the index value and not any field from your data.
+Then `afterId` / `beforeId` values in your DS will be index (start) value.
+
+#### Example
+
+```js
+class ArrayOffsetDs extends ArrayDataSource {
+
+   async after(offset, size, args) {
+      // No field data comparison involved. It's just offset slicing
+      return this.getNodes(args).then(data => data.slice(offset, offset + size));
+   }
+
+}
+
+const dsOffset = new ArrayOffsetDs(books, "_NOT_USED_");
+const pagerOffset = new DataSourcePager({
+   dataSource: new OffsetDataSourceWrapper(dsOffset),
+   typeName: "Book",
+});
+```
+
 ### Complete Example
 
 See fully working [examples/in-memory](../../examples/in-memory/index.js).
@@ -68,3 +95,4 @@ The complete example includes:
 1. Input validation
 2. Extra input args for data filtering
 3. DataSource using Date type
+4. OffsetDataSourceWrapper

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/lkrzyzanek/graphql-pagination/compare/in-memory-example@1.2.0...in-memory-example@1.2.1) (2022-05-11)
+
+
+### Bug Fixes
+
+* OffsetDataSourceWrapper export [#49](https://github.com/lkrzyzanek/graphql-pagination/issues/49) ([b7f0bce](https://github.com/lkrzyzanek/graphql-pagination/commit/b7f0bce3e54bc28c8627f004a918811a4533380e))
+
+
+
+
+
 # [1.2.0](https://github.com/lkrzyzanek/graphql-pagination/compare/in-memory-example@1.1.2...in-memory-example@1.2.0) (2022-05-11)
 
 

@@ -70,6 +70,8 @@ Then `afterId` / `beforeId` values in your DS will be index (start) value.
 #### Example
 
 ```js
+const { ArrayDataSource, DataSourcePager, OffsetDataSourceWrapper } = require("@graphql-pagination/core");
+
 class ArrayOffsetDs extends ArrayDataSource {
 
    async after(offset, size, args) {

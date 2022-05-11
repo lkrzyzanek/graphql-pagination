@@ -1,5 +1,4 @@
-import {ArrayDataSource} from "../src";
-import {OffsetDataSourceWrapper} from "../src/datasource/OffsetDataSourceWrapper";
+import {ArrayDataSource, OffsetDataSourceWrapper} from "../src";
 
 /* Offset DS */
 class ArrayOffsetDs extends ArrayDataSource<any> {

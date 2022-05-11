@@ -1,7 +1,6 @@
 const { ApolloServer, gql, UserInputError } = require("apollo-server");
-const { ArrayDataSource, DataSourcePager } = require("@graphql-pagination/core");
+const { ArrayDataSource, DataSourcePager, OffsetDataSourceWrapper } = require("@graphql-pagination/core");
 const { typeDefs: scalarTypeDefs, resolvers: scalarResolvers } = require("graphql-scalars");
-const { OffsetDataSourceWrapper } = require("@graphql-pagination/core/datasource/OffsetDataSourceWrapper");
 
 // generate 100 books { id : x, title: "Book x", published: "2022-01-01T14:17:11.929Z" }
 const january = new Date("2022-01-01");

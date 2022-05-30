@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.3.1...@graphql-pagination/core@1.3.2) (2022-05-30)
+
+
+### Bug Fixes
+
+* cursor decode fix on values with underscore [#53](https://github.com/lkrzyzanek/graphql-pagination/issues/53) ([98bbbe8](https://github.com/lkrzyzanek/graphql-pagination/commit/98bbbe8801e4ca183bdfd70f67a5aeeb8bb3af92))
+
+
+
+
+
 ## [1.3.1](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.3.0...@graphql-pagination/core@1.3.1) (2022-05-11)
 
 

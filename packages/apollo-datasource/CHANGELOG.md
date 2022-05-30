@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.6](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/apollo-datasource@1.1.5...@graphql-pagination/apollo-datasource@1.1.6) (2022-05-30)
+
+**Note:** Version bump only for package @graphql-pagination/apollo-datasource
+
+
+
+
+
 ## [1.1.5](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/apollo-datasource@1.1.4...@graphql-pagination/apollo-datasource@1.1.5) (2022-05-11)
 
 **Note:** Version bump only for package @graphql-pagination/apollo-datasource

@@ -15,7 +15,8 @@ export class DefaultCursorEncoderDecoder implements CursorEncoderDecoder<string 
 
     decode(encodedCursor: string): string | number | Date {
         const id = Buffer.from(encodedCursor, "base64").toString("utf-8");
-        const value = id.split("_")[1];
+        if (id.length <= 2) throw new Error("Invalid cursor value");
+        const value = id.substring(2);
 
         if (id.startsWith("d_")) return new Date(Number(value));
         if (id.startsWith("n_")) return Number(value);

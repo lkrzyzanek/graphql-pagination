@@ -23,10 +23,26 @@ describe("cursor", () => {
         const decoded = cursor.decode(Buffer.from("c_test-string").toString("base64"));
         expect(decoded).toBe("test-string");
     });
+    test("decode-string_underscore", () => {
+        const decoded = cursor.decode(Buffer.from("c_test_underscore").toString("base64"));
+        expect(decoded).toBe("test_underscore");
+    });
+    test("decode-string-empty", () => {
+        expect(() => cursor.decode(Buffer.from("c_").toString("base64"))).toThrow(new Error("Invalid cursor value"));
+    });
 
     test("decode-number", () => {
         const decoded = cursor.decode(Buffer.from("n_123").toString("base64"));
         expect(decoded).toBe(123);
+    });
+    test("decode-string-empty", () => {
+        expect(() => cursor.decode(Buffer.from("n_").toString("base64"))).toThrow(new Error("Invalid cursor value"));
+    });
+
+    test("encode-decode-date", () => {
+        const now = new Date();
+        const decoded = cursor.decode(cursor.encode(now));
+        expect(decoded).toStrictEqual(now);
     });
 
 });

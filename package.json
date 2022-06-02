@@ -7,7 +7,8 @@
     "compile": "tsc --build tsconfig.json",
     "compile:clean": "tsc --build tsconfig.json --clean",
     "watch": "tsc --build tsconfig.json --watch",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "lint": "eslint ."
   },
   "engines": {
     "node": ">=12",

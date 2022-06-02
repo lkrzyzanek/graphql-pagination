@@ -38,6 +38,11 @@
         "no-unused-expressions": "off",
         "no-undef": "off"
       }
+    }, {
+      "files": ["examples/**"],
+      "rules": {
+        "no-console": "off"
+      }
     }
   ]
 }

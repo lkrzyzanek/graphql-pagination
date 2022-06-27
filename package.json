@@ -30,7 +30,7 @@
     "better-sqlite3": "^7.5.1",
     "jest": "^28.0.0",
     "jest-config": "^28.0.0",
-    "jest-junit": "^13.0.0",
+    "jest-junit": "^14.0.0",
     "lerna": "5.1.6",
     "ts-jest": "^28.0.0",
     "typescript": "^4.6.3"

@@ -1,6 +1,6 @@
 {
   "name": "apollo-datasource",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "author": "Libor Krzyzanek",
   "license": "MIT",
   "private": true,
@@ -8,8 +8,8 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@graphql-pagination/apollo-datasource": "^1.2.0",
-    "@graphql-pagination/core": "^1.4.0",
+    "@graphql-pagination/apollo-datasource": "^1.2.1",
+    "@graphql-pagination/core": "^1.4.1",
     "apollo-server": "^3.10.3",
     "graphql": "^16.6.0",
     "graphql-scalars": "^1.19.0"

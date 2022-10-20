@@ -9,7 +9,7 @@ import type {
 } from "./CursorPagerSpec";
 import type {PagerDataSource} from "./datasource/DataSource";
 import {DefaultCursorEncoderDecoder} from "./DefaultCursorEncoderDecoder";
-import {createConnectionTypeDef, createEdgeTypeDef, pageInfoTypeDef} from "./TypeDefs";
+import {createConnectionTypeDef, createEdgeTypeDef, createPageInfoTypeDef} from "./TypeDefs";
 
 type validationArgFn = ((args: ArgsForward | any) => void);
 
@@ -17,8 +17,13 @@ type validationArgFn = ((args: ArgsForward | any) => void);
 export interface DataSourcePagerConfig {
     /** DataSource */
     dataSource: PagerDataSource<any, any>
-    /** Type Name. If not provided GraphQL TypeNames are not generated */
+    /** Type Name. If not provided GraphQL typeDefs are not generated */
     typeName?: string
+    typeDefDirectives?: {
+        pageInfo: string,
+        connection: string,
+        edge: string,
+    }
     /** Cursor encoder/decoder. If not provided DefaultCursorEncoderDecoder used */
     cursor?: CursorEncoderDecoder<string | number | Date>
     /** Validation forward args function(s) */
@@ -38,10 +43,10 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
 
     cursor: CursorEncoderDecoder<string | number | Date>;
 
-    typeDefs: string[] = [pageInfoTypeDef];
+    typeDefs: string[] = [];
 
     typeDef = {
-        PageInfoType: pageInfoTypeDef,
+        PageInfoType: "",
         EdgeType: "",
         ConnectionType: "",
     }
@@ -55,10 +60,12 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
         this.cursor = config.cursor || new DefaultCursorEncoderDecoder();
         if (config.fetchTotalCountInResolver !== undefined) this.fetchTotalCountInResolver = config.fetchTotalCountInResolver;
 
+        this.typeDef.PageInfoType = createPageInfoTypeDef(config.typeDefDirectives?.pageInfo);
+        this.typeDefs.push(this.typeDef.PageInfoType);
         if (config.typeName) {
-            this.typeDef.EdgeType = createEdgeTypeDef(config.typeName);
+            this.typeDef.EdgeType = createEdgeTypeDef(config.typeName, config.typeDefDirectives?.edge);
             this.typeDefs.push(this.typeDef.EdgeType);
-            this.typeDef.ConnectionType = createConnectionTypeDef(config.typeName);
+            this.typeDef.ConnectionType = createConnectionTypeDef(config.typeName, config.typeDefDirectives?.connection);
             this.typeDefs.push(this.typeDef.ConnectionType);
             this.resolvers = {
                 [`${config.typeName}Connection`]: {

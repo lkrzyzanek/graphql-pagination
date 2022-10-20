@@ -13,7 +13,7 @@ describe("apollo-pager-typedefs", () => {
         """
         TEST pagination edge object
         """
-        type TESTEdge {
+        type TESTEdge  {
             node: TEST!
             """Cursor of the node"""
             cursor: String!
@@ -22,7 +22,7 @@ describe("apollo-pager-typedefs", () => {
         """
         TEST pagination connection object
         """
-        type TESTConnection {
+        type TESTConnection  {
             totalCount: Int!
             edges: [TESTEdge!]
             pageInfo: PageInfo!

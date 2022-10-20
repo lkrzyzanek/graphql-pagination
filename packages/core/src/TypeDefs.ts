@@ -37,4 +37,3 @@ export function createConnectionTypeDef(typeName: string, directive: string = ""
         }
     `;
 }
-

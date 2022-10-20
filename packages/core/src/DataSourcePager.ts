@@ -40,6 +40,12 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
 
     typeDefs: string[] = [pageInfoTypeDef];
 
+    typeDef = {
+        PageInfoType: pageInfoTypeDef,
+        EdgeType: "",
+        ConnectionType: "",
+    }
+
     resolvers: Record<string, any> = {};
 
     fetchTotalCountInResolver: boolean = true;
@@ -50,8 +56,10 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
         if (config.fetchTotalCountInResolver !== undefined) this.fetchTotalCountInResolver = config.fetchTotalCountInResolver;
 
         if (config.typeName) {
-            this.typeDefs.push(createEdgeTypeDef(config.typeName));
-            this.typeDefs.push(createConnectionTypeDef(config.typeName));
+            this.typeDef.EdgeType = createEdgeTypeDef(config.typeName);
+            this.typeDefs.push(this.typeDef.EdgeType);
+            this.typeDef.ConnectionType = createConnectionTypeDef(config.typeName);
+            this.typeDefs.push(this.typeDef.ConnectionType);
             this.resolvers = {
                 [`${config.typeName}Connection`]: {
                     totalCount: (connection: Connection) => config.dataSource.totalCount(connection.args),

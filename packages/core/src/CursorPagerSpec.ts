@@ -84,6 +84,13 @@ export interface CursorPager<NodeType, IdType> {
     /** GraphQL Type Defs - PageInfo, <TName>Connection, <TName>Edge, */
     typeDefs: string[];
 
+    /** Individual GraphQL TypeDefs */
+    typeDef: {
+        PageInfoType: string;
+        EdgeType: string;
+        ConnectionType: string;
+    };
+
     /** GraphQL Resolvers - <TName>Connection.totalCount */
     resolvers: Record<string, any>;
 

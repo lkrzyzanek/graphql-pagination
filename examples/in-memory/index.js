@@ -94,7 +94,9 @@ const createApolloServer = () => {
     return new ApolloServer({
         typeDefs: [
             typeDefs,
-            pagerById.typeDefs, // BookConnection, BookEdge, PageInfo typeDefs
+            pagerById.typeDef.ConnectionType, // or pagerById.typeDefs to get them all
+            pagerById.typeDef.EdgeType,
+            pagerById.typeDef.PageInfoType,
             scalarTypeDefs, // for DateTime
         ],
         resolvers: [

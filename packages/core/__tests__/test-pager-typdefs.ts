@@ -16,15 +16,32 @@ describe("pager-typedefs", () => {
         const typeDefs = pager.typeDefs;
         expect(typeDefs).toHaveLength(3);
         expect(typeDefs[0]).not.toBeNull();
-        expect(typeDefs[1]).toContain(/* GraphQL */`type TESTEdge {
+        expect(typeDefs[1]).toContain(/* GraphQL */`
+        """
+        TEST pagination edge object
+        """
+        type TESTEdge {
             node: TEST!
+            """Cursor of the node"""
             cursor: String!
-        }`)
-        expect(typeDefs[2]).toContain(/* GraphQL */`type TESTConnection {
+        }`);
+        expect(typeDefs[2]).toContain(/* GraphQL */`
+        """
+        TEST pagination connection object
+        """
+        type TESTConnection {
             totalCount: Int!
             edges: [TESTEdge!]
             pageInfo: PageInfo!
-        }`)
+        }`);
+    });
+
+    test("typeDef", () => {
+        const pager = new DataSourcePager({dataSource: new ArrayDataSource([]), typeName: "TEST"});
+
+        expect(pager.typeDef.PageInfoType).not.toBeNull();
+        expect(pager.typeDef.EdgeType).not.toBeNull();
+        expect(pager.typeDef.ConnectionType).not.toBeNull();
     });
 
 });

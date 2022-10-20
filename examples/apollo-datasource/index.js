@@ -46,7 +46,10 @@ const createApolloServer = () => {
     return new ApolloServer({
         typeDefs: [
             typeDefs,
-            apolloBooksPager.typeDefs, // BookConnection, BookEdge, PageInfo typeDefs
+            // apolloBooksPager.typeDefs, // BookConnection, BookEdge, PageInfo typeDefs
+            apolloBooksPager.typeDef.PageInfoType,
+            apolloBooksPager.typeDef.ConnectionType,
+            apolloBooksPager.typeDef.EdgeType,
             scalarTypeDefs, // for DateTime
         ],
         resolvers: [

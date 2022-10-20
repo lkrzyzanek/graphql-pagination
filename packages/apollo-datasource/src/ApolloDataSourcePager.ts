@@ -15,6 +15,7 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
         this.pager = new DataSourcePager(config);
         this.cursor = this.pager.cursor;
         this.typeDefs = this.pager.typeDefs;
+        this.typeDef = this.pager.typeDef;
         this.resolvers = this.pager.resolvers;
     }
 
@@ -53,6 +54,12 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
     }
 
     typeDefs: string[];
+
+    typeDef: {
+        PageInfoType: string;
+        EdgeType: string;
+        ConnectionType: string;
+    };
 
     resolvers: Record<string, any>;
 

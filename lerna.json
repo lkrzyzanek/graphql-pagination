@@ -12,7 +12,8 @@
       "message": "Release",
       "ignoreChanges": [
         "**/*.md",
-        "examples/**"
+        "examples/**",
+        "**/package-lock.json"
       ],
       "includeMergedTags": true
     }

@@ -16,6 +16,11 @@
         "**/package-lock.json"
       ],
       "includeMergedTags": true
+    },
+    "publish": {
+      "ignoreChanges": [
+        "**/package-lock.json"
+      ]
     }
   }
 }

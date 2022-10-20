@@ -38,5 +38,6 @@ jobs:
         run: |
           npm set //registry.npmjs.org/:_authToken=${{ secrets.NPMJS_TOKEN }}
           npm whoami
+          rm package-lock.json
           npx lerna version --conventional-commits --yes
           npx lerna publish from-git --yes --no-verify-access

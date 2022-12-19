@@ -1,4 +1,4 @@
-import {ArrayDataSource, DataSourcePager} from "../src";
+import { ArrayDataSource, DataSourcePager } from "../src";
 
 const january = new Date("2022-01-01");
 const data = Array.from(Array(100)).map((e, i) => ({
@@ -20,20 +20,20 @@ const validation = (args) => {
 describe("array-ds-by-id", () => {
     let pagerById: DataSourcePager;
     beforeAll(() => {
-        pagerById = new DataSourcePager({dataSource: new ArrayDataSource(data)});
+        pagerById = new DataSourcePager({ dataSource: new ArrayDataSource(data) });
     });
 
     test("forward-totalCount", async () => {
-        const connection = await pagerById.forwardResolver({"first": 10});
+        const connection = await pagerById.forwardResolver({ "first": 10 });
         expect(connection.totalCount).toBe(100);
     });
     test("forward-out-of-range", async () => {
-        const connection = await pagerById.forwardResolver({"first": 10, "after": pagerById.cursor.encode(100)});
+        const connection = await pagerById.forwardResolver({ "first": 10, "after": pagerById.cursor.encode(100) });
         expect(connection.edges).toHaveLength(0);
     });
 
     test("forward-first-only", async () => {
-        const connection = await pagerById.forwardResolver({"first": 10});
+        const connection = await pagerById.forwardResolver({ "first": 10 });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(1);
         expect(connection.edges[9].node.id).toBe(10);
@@ -42,7 +42,7 @@ describe("array-ds-by-id", () => {
         expect(connection.pageInfo.hasPreviousPage).toBe(false);
     });
     test("forward-first-after", async () => {
-        const connection = await pagerById.forwardResolver({"first": 10, "after": pagerById.cursor.encode(20)});
+        const connection = await pagerById.forwardResolver({ "first": 10, "after": pagerById.cursor.encode(20) });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(21);
         expect(connection.edges[9].node.id).toBe(30);
@@ -51,7 +51,7 @@ describe("array-ds-by-id", () => {
         expect(connection.pageInfo.hasPreviousPage).toBe(true);
     });
     test("forward-first-after-last", async () => {
-        const connection = await pagerById.forwardResolver({"first": 10, "after": pagerById.cursor.encode(90)});
+        const connection = await pagerById.forwardResolver({ "first": 10, "after": pagerById.cursor.encode(90) });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(91);
         expect(connection.edges[9].node.id).toBe(100);
@@ -63,16 +63,16 @@ describe("array-ds-by-id", () => {
     /* Backward Tests */
 
     test("backward-totalCount", async () => {
-        const connection = await pagerById.backwardResolver({"last": 10});
+        const connection = await pagerById.backwardResolver({ "last": 10 });
         expect(connection.totalCount).toBe(100);
     });
     test("backward-out-of-range", async () => {
-        const connection = await pagerById.backwardResolver({"last": 10, "before": pagerById.cursor.encode(1)});
+        const connection = await pagerById.backwardResolver({ "last": 10, "before": pagerById.cursor.encode(1) });
         expect(connection.edges).toHaveLength(0);
     });
 
     test("backward-last-after", async () => {
-        const connection = await pagerById.backwardResolver({"last": 10, "before": pagerById.cursor.encode(80)});
+        const connection = await pagerById.backwardResolver({ "last": 10, "before": pagerById.cursor.encode(80) });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(79);
         expect(connection.edges[9].node.id).toBe(70);
@@ -81,7 +81,7 @@ describe("array-ds-by-id", () => {
         expect(connection.pageInfo.hasPreviousPage).toBe(true);
     });
     test("backward-last-after-last", async () => {
-        const connection = await pagerById.backwardResolver({"last": 10, "before": pagerById.cursor.encode(11)});
+        const connection = await pagerById.backwardResolver({ "last": 10, "before": pagerById.cursor.encode(11) });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(10);
         expect(connection.edges[9].node.id).toBe(1);
@@ -95,16 +95,16 @@ describe("array-ds-by-id", () => {
 describe("array-ds-by-date", () => {
     let pager: DataSourcePager;
     beforeAll(() => {
-        pager = new DataSourcePager({dataSource: new ArrayDataSource(data, "published")});
+        pager = new DataSourcePager({ dataSource: new ArrayDataSource(data, "published") });
     });
 
     test("forward-totalCount", async () => {
-        const connection = await pager.forwardResolver({"first": 10});
+        const connection = await pager.forwardResolver({ "first": 10 });
         expect(connection.totalCount).toBe(100);
     });
 
     test("forward-first-only", async () => {
-        const connection = await pager.forwardResolver({"first": 10});
+        const connection = await pager.forwardResolver({ "first": 10 });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(1);
         expect(connection.edges[9].node.id).toBe(10);
@@ -114,7 +114,7 @@ describe("array-ds-by-date", () => {
     });
 
     test("backward-last-only", async () => {
-        const connection = await pager.backwardResolver({"last": 10});
+        const connection = await pager.backwardResolver({ "last": 10 });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(100);
         expect(connection.edges[9].node.id).toBe(91);
@@ -127,16 +127,16 @@ describe("array-ds-by-date", () => {
 describe("array-ds-by-title", () => {
     let pager: DataSourcePager;
     beforeAll(() => {
-        pager = new DataSourcePager({dataSource: new ArrayDataSource(data, "title")});
+        pager = new DataSourcePager({ dataSource: new ArrayDataSource(data, "title") });
     });
 
     test("forward-totalCount", async () => {
-        const connection = await pager.forwardResolver({"first": 10});
+        const connection = await pager.forwardResolver({ "first": 10 });
         expect(connection.totalCount).toBe(100);
     });
 
     test("forward-first-only", async () => {
-        const connection = await pager.forwardResolver({"first": 10});
+        const connection = await pager.forwardResolver({ "first": 10 });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(1);
         expect(connection.edges[9].node.id).toBe(17);   // it's sorted by title. title1, title 11 ...
@@ -146,7 +146,7 @@ describe("array-ds-by-title", () => {
     });
 
     test("backward-last-only", async () => {
-        const connection = await pager.backwardResolver({"last": 10});
+        const connection = await pager.backwardResolver({ "last": 10 });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.id).toBe(99);
         expect(connection.edges[9].node.id).toBe(90);
@@ -156,7 +156,7 @@ describe("array-ds-by-title", () => {
     });
 
     test("forward-first-after", async () => {
-        const connection = await pager.forwardResolver({"first": 10, "after": pager.cursor.encode("Title 30")});
+        const connection = await pager.forwardResolver({ "first": 10, "after": pager.cursor.encode("Title 30") });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.title).toBe("Title 31");
         expect(connection.edges[9].node.title).toBe("Title 4");
@@ -166,7 +166,7 @@ describe("array-ds-by-title", () => {
     });
 
     test("backward-last-after", async () => {
-        const connection = await pager.backwardResolver({"last": 10, "before": pager.cursor.encode("Title 80")});
+        const connection = await pager.backwardResolver({ "last": 10, "before": pager.cursor.encode("Title 80") });
         expect(connection.edges).toHaveLength(10);
         expect(connection.edges[0].node.title).toBe("Title 8");
         expect(connection.edges[9].node.title).toBe("Title 71");
@@ -188,7 +188,7 @@ describe("array-ds-filter", () => {
     });
 
     test("title", async () => {
-        const connection = await pager.forwardResolver({"first": 10, "title": "Title 5"});
+        const connection = await pager.forwardResolver({ "first": 10, "title": "Title 5" });
         expect(connection.totalCount).toBe(1);
         expect(connection.edges[0].node.id).toBe(5);
     });
@@ -197,13 +197,13 @@ describe("array-ds-filter", () => {
             dataSource: new ArrayDataSource(async () => data, "id", filter),
             validateForwardArgs: validation
         });
-        const connection = await pager.forwardResolver({"first": 10, "title": "Title 5"});
+        const connection = await pager.forwardResolver({ "first": 10, "title": "Title 5" });
         expect(connection.totalCount).toBe(1);
         expect(connection.edges[0].node.id).toBe(5);
     });
     test("author", async () => {
         const desiredAuthor = "Author 5";
-        const connection = await pager.forwardResolver({"first": 10, "author": desiredAuthor});
+        const connection = await pager.forwardResolver({ "first": 10, "author": desiredAuthor });
         expect(connection.totalCount).toBe(10);
         connection.edges.forEach((edge) => {
             expect(edge.node.author).toBe(desiredAuthor);
@@ -217,16 +217,16 @@ describe("array-ds-filter", () => {
             validateForwardArgs: validation,
             fetchTotalCountInResolver: false
         });
-        const args = {"first": 10, "author": desiredAuthor};
+        const args = { "first": 10, "author": desiredAuthor };
         const connection = await pagerNoTotalCount.forwardResolver(args);
         expect(connection.totalCount).toBeUndefined();
-        const totalCount = await pagerNoTotalCount.resolvers.TESTConnection.totalCount({args});
+        const totalCount = await pagerNoTotalCount.resolvers.TESTConnection.totalCount({ args });
         expect(totalCount).toBe(10);
 
     });
     test("validation-author", async () => {
         const desiredAuthor = "Author 5";
-        const connection = await pager.forwardResolver({"first": 10, "author": desiredAuthor});
+        const connection = await pager.forwardResolver({ "first": 10, "author": desiredAuthor });
         expect(connection.totalCount).toBe(10);
         connection.edges.forEach((edge) => {
             expect(edge.node.author).toBe(desiredAuthor);
@@ -246,15 +246,15 @@ describe("array-ds-validation", () => {
     });
 
     test("validation-disabled", async () => {
-        const pagerNoValidation = new DataSourcePager({dataSource: new ArrayDataSource(data, "id", filter)});
-        const connection = await pagerNoValidation.forwardResolver({"first": 10, "title": "BAD-TITLE"});
+        const pagerNoValidation = new DataSourcePager({ dataSource: new ArrayDataSource(data, "id", filter) });
+        const connection = await pagerNoValidation.forwardResolver({ "first": 10, "title": "BAD-TITLE" });
         expect(connection.edges).toHaveLength(0);
-        const connectionBack = await pagerNoValidation.backwardResolver({"last": 10, "title": "BAD-TITLE"});
+        const connectionBack = await pagerNoValidation.backwardResolver({ "last": 10, "title": "BAD-TITLE" });
         expect(connectionBack.edges).toHaveLength(0);
     });
 
     test("validation-title", () => {
-        const tested = () => pager.forwardResolver({"first": 10, "title": "BAD-TITLE"});
+        const tested = () => pager.forwardResolver({ "first": 10, "title": "BAD-TITLE" });
         return expect(tested).rejects.toStrictEqual(new Error("Title BAD-TITLE not exists"));
     });
     test("validation-array-title", () => {
@@ -263,7 +263,7 @@ describe("array-ds-validation", () => {
             validateForwardArgs: [validation],
             validateBackwardArgs: [validation]
         });
-        const tested = () => pagerValidationArray.forwardResolver({"first": 10, "title": "BAD-TITLE"});
+        const tested = () => pagerValidationArray.forwardResolver({ "first": 10, "title": "BAD-TITLE" });
         return expect(tested).rejects.toStrictEqual(new Error("Title BAD-TITLE not exists"));
     });
     test("validation-array-title-back", () => {
@@ -272,11 +272,33 @@ describe("array-ds-validation", () => {
             validateForwardArgs: [validation],
             validateBackwardArgs: [validation]
         });
-        const testedBack = () => pagerValidationArray.backwardResolver({"last": 10, "title": "BAD-TITLE"});
+        const testedBack = () => pagerValidationArray.backwardResolver({ "last": 10, "title": "BAD-TITLE" });
         return expect(testedBack).rejects.toStrictEqual(new Error("Title BAD-TITLE not exists"));
     });
     test("validation-author", () => {
-        const tested = () => pager.backwardResolver({"last": 10, "author": "BAD-AUTHOR"});
+        const tested = () => pager.backwardResolver({ "last": 10, "author": "BAD-AUTHOR" });
         return expect(tested).rejects.toStrictEqual(new Error("Author BAD-AUTHOR not exists"));
+    });
+});
+
+describe("array-ds-dynanic", () => {
+    const pagerNoDs = new DataSourcePager({});
+    const dataSource = new ArrayDataSource(data)
+
+    test("forward-totalCount", async () => {
+        const connection = await pagerNoDs.forwardResolver({ "first": 10 }, dataSource);
+        expect(connection.totalCount).toBe(100);
+    });
+
+    /* Backward Tests */
+
+    test("backward-totalCount", async () => {
+        const connection = await pagerNoDs.backwardResolver({ "last": 10 }, dataSource);
+        expect(connection.totalCount).toBe(100);
+    });
+
+    test("no-ds", () => {
+        const tested = () => pagerNoDs.backwardResolver({ "last": 10 });
+        return expect(tested).rejects.toStrictEqual(new Error("No DataSource defined"));
     });
 });

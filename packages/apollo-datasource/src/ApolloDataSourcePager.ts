@@ -1,5 +1,5 @@
 import {DataSource} from "apollo-datasource";
-import type {Connection, CursorEncoderDecoder, DataSourcePagerConfig, Edge, PageInfo} from "@graphql-pagination/core";
+import type {Connection, CursorEncoderDecoder, DataSourcePagerConfig, Edge, PageInfo, PagerDataSource} from "@graphql-pagination/core";
 import {CursorPager, DataSourcePager} from "@graphql-pagination/core";
 import {UserInputError} from "apollo-server-errors";
 
@@ -29,14 +29,14 @@ export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implem
             });
     }
 
-    connectionObject(nodes: any[], args: any, totalCount: number | undefined, hasNextPage: boolean, hasPreviousPage: boolean): Connection {
-        return this.pager.connectionObject(nodes, args, totalCount, hasNextPage, hasPreviousPage);
+    connectionObject(nodes: any[], args: any, totalCount: number | undefined, hasNextPage: boolean, hasPreviousPage: boolean, dataSource: PagerDataSource<any, any>): Connection {
+        return this.pager.connectionObject(nodes, args, totalCount, hasNextPage, hasPreviousPage, dataSource);
     }
 
     cursor: CursorEncoderDecoder<string | number | Date>;
 
-    edgeObject(node: any): Edge {
-        return this.pager.edgeObject(node);
+    edgeObject(node: any, dataSource: PagerDataSource<any, any>): Edge {
+        return this.pager.edgeObject(node, dataSource);
     }
 
     async forwardResolver(args: any): Promise<Connection> {

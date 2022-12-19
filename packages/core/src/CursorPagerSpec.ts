@@ -1,3 +1,5 @@
+import type { PagerDataSource } from "./datasource/DataSource";
+
 /**
  * Connection object
  * @see https://relay.dev/graphql/connections.htm#sec-Connection-Types.Fields
@@ -61,18 +63,9 @@ export interface CursorPager<NodeType, IdType> {
 
     // Main Resolvers
 
-    forwardResolver: (args: ArgsForward | any) => Promise<Connection>;
+    forwardResolver: (args: ArgsForward | any, dataSource?: PagerDataSource<NodeType, IdType>) => Promise<Connection>;
 
-    backwardResolver: (args: ArgsBackward | any) => Promise<Connection>;
-
-    // Return Objects Helpers
-
-    connectionObject: (nodes: NodeType[], args: ArgsForward | ArgsBackward | any, totalCount: number | undefined,
-                       hasNextPage: boolean, hasPreviousPage: boolean) => Connection;
-
-    edgeObject: (node: NodeType) => Edge;
-
-    pageInfoObject: (connection: Connection, hasNextPage: boolean, hasPreviousPage: boolean) => PageInfo;
+    backwardResolver: (args: ArgsBackward | any, dataSource?: PagerDataSource<NodeType, IdType>) => Promise<Connection>;
 
     // Cursor Helper
 

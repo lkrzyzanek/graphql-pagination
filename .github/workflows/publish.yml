@@ -23,7 +23,7 @@ jobs:
 
       # Build and test
       - run: npm -v
-      - run: npm install
+      - run: npm install --no-package-lock
       - run: npm run build
       - run: npm test
 

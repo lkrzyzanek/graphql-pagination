@@ -24,7 +24,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm -v
-    - run: npm install
+    - run: npm install --no-package-lock
     - run: npm run lint
     - run: npm run build
     - run: npm test

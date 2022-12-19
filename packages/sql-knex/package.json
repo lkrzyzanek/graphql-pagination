@@ -42,7 +42,7 @@
     }
   },
   "dependencies": {
-    "@graphql-pagination/core": "file:../core",
+    "@graphql-pagination/core": "^1.4.1",
     "knex": "^2.1.0"
   },
   "devDependencies": {

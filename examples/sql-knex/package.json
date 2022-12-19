@@ -5,8 +5,6 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "clean": "tsc --build --clean && rm -rf coverage",
     "start": "node index.js"
   },
   "dependencies": {

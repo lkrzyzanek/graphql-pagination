@@ -61,7 +61,7 @@ describe("array-ds-input-nodes", () => {
 
 describe("array-ds-transform", () => {
     test("no-transform", async () => {
-        const ds = new ArrayDataSource(async () => [{"id": 1}], "id", null);
+        const ds = new ArrayDataSource(async () => [{"id": 1}], "id");
         return expect(ds.after(0, 10, {first: 10})).resolves.toStrictEqual([{"id": 1}]);
     })
 });

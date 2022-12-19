@@ -10,6 +10,11 @@
   "typescript": {
     "definition": "dist/index.d.ts"
   },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "clean": "tsc --build --clean && rm -rf coverage"
+  },
   "keywords": [
     "graphql",
     "pagination",

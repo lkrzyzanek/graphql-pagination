@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -23,9 +23,10 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install
+    - run: npm -v
+    - run: npm install --no-package-lock
     - run: npm run lint
-    - run: npm run compile
+    - run: npm run build
     - run: npm test
 
     - uses: codecov/codecov-action@v3

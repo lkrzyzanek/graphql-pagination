@@ -10,6 +10,11 @@
   "typescript": {
     "definition": "dist/index.d.ts"
   },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "clean": "tsc --build --clean && rm -rf coverage"
+  },
   "keywords": [
     "graphql",
     "pagination",
@@ -37,7 +42,7 @@
     }
   },
   "dependencies": {
-    "@graphql-pagination/core": "file:../core",
+    "@graphql-pagination/core": "^1.4.1",
     "knex": "^2.1.0"
   },
   "devDependencies": {

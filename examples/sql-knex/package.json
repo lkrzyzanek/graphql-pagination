@@ -1,10 +1,12 @@
 {
-  "name": "sql-knex-example",
+  "name": "@graphql-pagination/example-sql-knex",
   "version": "1.0.14",
   "author": "Libor Krzyzanek",
   "license": "MIT",
   "private": true,
   "scripts": {
+    "build": "tsc",
+    "clean": "tsc --build --clean && rm -rf coverage",
     "start": "node index.js"
   },
   "dependencies": {

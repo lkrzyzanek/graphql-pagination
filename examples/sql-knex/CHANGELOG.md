@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.1.0 (2022-12-19)
+
+
+### Features
+
+* Module sql-knex fixes [#18](https://github.com/lkrzyzanek/graphql-pagination/issues/18) ([c1233e9](https://github.com/lkrzyzanek/graphql-pagination/commit/c1233e9a014e195da46292971e1cf208ccca1a28))
+
+
+
+
+
 ## [1.0.14](https://github.com/lkrzyzanek/graphql-pagination/compare/sql-knex-example@1.0.13...sql-knex-example@1.0.14) (2022-10-20)
 
 **Note:** Version bump only for package sql-knex-example

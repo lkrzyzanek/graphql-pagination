@@ -1,66 +1,52 @@
-import {DataSource} from "apollo-datasource";
-import type {Connection, CursorEncoderDecoder, DataSourcePagerConfig, Edge, PageInfo} from "@graphql-pagination/core";
-import {CursorPager, DataSourcePager} from "@graphql-pagination/core";
-import {UserInputError} from "apollo-server-errors";
+import { DataSource } from "apollo-datasource";
+import type { Connection, CursorEncoderDecoder, DataSourcePagerConfig, PagerDataSource, PagerTypeDef } from "@graphql-pagination/core";
+import { CursorPager, dataSourcePager } from "@graphql-pagination/core";
+import { UserInputError } from "apollo-server-errors";
 
 /**
  * CursorPager extending Apollo DataSource class to be used as Apollo's datasource.
  */
 export class ApolloDataSourcePager<TContext> extends DataSource<TContext> implements CursorPager<any, string | number | Date> {
 
-    pager: DataSourcePager;
 
-    constructor(config: DataSourcePagerConfig) {
-        super();
-        this.pager = new DataSourcePager(config);
-        this.cursor = this.pager.cursor;
-        this.typeDefs = this.pager.typeDefs;
-        this.typeDef = this.pager.typeDef;
-        this.resolvers = this.pager.resolvers;
-    }
-
-    async backwardResolver(args: any): Promise<Connection> {
-        return this.pager.backwardResolver(args)
-            .catch(e => {
-                if (e.message === "Invalid cursor value") {
-                    throw new UserInputError(e.message, {"argumentName": "before"})
-                }
-                throw e;
-            });
-    }
-
-    connectionObject(nodes: any[], args: any, totalCount: number | undefined, hasNextPage: boolean, hasPreviousPage: boolean): Connection {
-        return this.pager.connectionObject(nodes, args, totalCount, hasNextPage, hasPreviousPage);
-    }
+    dataSource?: PagerDataSource<any, any>;
 
     cursor: CursorEncoderDecoder<string | number | Date>;
 
-    edgeObject(node: any): Edge {
-        return this.pager.edgeObject(node);
+    typeDefs: string[] = [];
+
+    typeDef: PagerTypeDef;
+
+    resolvers: Record<string, any> = {};
+
+    pager;
+
+    constructor(config: DataSourcePagerConfig) {
+        super();
+        this.pager = dataSourcePager(config);
+        this.cursor = this.pager.cursor;
+        this.typeDef = this.pager.typeDef();
+        this.typeDefs = this.pager.typeDefs();
+        this.resolvers = this.pager.resolvers(config.dataSource);
     }
 
-    async forwardResolver(args: any): Promise<Connection> {
-        return this.pager.forwardResolver(args)
+    async forwardResolver(args: any, dataSource?: PagerDataSource<any, string | number | Date>): Promise<Connection> {
+        return this.pager.forwardResolver(args, dataSource)
             .catch(e => {
                 if (e.message === "Invalid cursor value") {
-                    throw new UserInputError(e.message, {"argumentName": "after"})
+                    throw new UserInputError(e.message, { "argumentName": "after" })
                 }
                 throw e;
             });
     }
 
-    pageInfoObject(connection: Connection, hasNextPage: boolean, hasPreviousPage: boolean): PageInfo {
-        return this.pager.pageInfoObject(connection, hasNextPage, hasPreviousPage);
+    async backwardResolver(args: any, dataSource?: PagerDataSource<any, string | number | Date>): Promise<Connection> {
+        return this.pager.backwardResolver(args, dataSource)
+            .catch(e => {
+                if (e.message === "Invalid cursor value") {
+                    throw new UserInputError(e.message, { "argumentName": "before" })
+                }
+                throw e;
+            });
     }
-
-    typeDefs: string[];
-
-    typeDef: {
-        PageInfoType: string;
-        EdgeType: string;
-        ConnectionType: string;
-    };
-
-    resolvers: Record<string, any>;
-
 }

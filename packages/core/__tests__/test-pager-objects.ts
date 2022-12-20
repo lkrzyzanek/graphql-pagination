@@ -1,13 +1,13 @@
-import {ArrayDataSource, DataSourcePager} from "../src";
+import { ArrayDataSource, DefaultCursorEncoderDecoder, PagerObject } from "../src";
 
 describe("pager-objects", () => {
 
 
-    test("edge", () => {
-        const data = [{"id": 1}];
-        const pager = new DataSourcePager({dataSource: new ArrayDataSource(data)});
+    test("edge ds as param", () => {
+        const data = [{ "id": 1 }];
+        const dataSource = new ArrayDataSource(data);
 
-        const edge = pager.edgeObject({"id": 1});
+        const edge = PagerObject.edgeObject(data[0], dataSource, new DefaultCursorEncoderDecoder());
         expect(edge.cursor).not.toBeUndefined();
         expect(edge.node).not.toBeUndefined();
     });

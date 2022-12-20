@@ -1,3 +1,5 @@
+import type { PagerDataSource } from "./datasource/DataSource";
+
 /**
  * Connection object
  * @see https://relay.dev/graphql/connections.htm#sec-Connection-Types.Fields
@@ -53,6 +55,11 @@ export interface CursorEncoderDecoder<IdType> {
     decode: (encodedCursor: string) => IdType;
 }
 
+export interface PagerTypeDef {
+    PageInfoType: string;
+    EdgeType: string | undefined;
+    ConnectionType: string | undefined;
+}
 
 /**
  * Cursor Pager spec
@@ -61,18 +68,9 @@ export interface CursorPager<NodeType, IdType> {
 
     // Main Resolvers
 
-    forwardResolver: (args: ArgsForward | any) => Promise<Connection>;
+    forwardResolver: (args: ArgsForward | any, dataSource?: PagerDataSource<NodeType, IdType>) => Promise<Connection>;
 
-    backwardResolver: (args: ArgsBackward | any) => Promise<Connection>;
-
-    // Return Objects Helpers
-
-    connectionObject: (nodes: NodeType[], args: ArgsForward | ArgsBackward | any, totalCount: number | undefined,
-                       hasNextPage: boolean, hasPreviousPage: boolean) => Connection;
-
-    edgeObject: (node: NodeType) => Edge;
-
-    pageInfoObject: (connection: Connection, hasNextPage: boolean, hasPreviousPage: boolean) => PageInfo;
+    backwardResolver: (args: ArgsBackward | any, dataSource?: PagerDataSource<NodeType, IdType>) => Promise<Connection>;
 
     // Cursor Helper
 
@@ -85,13 +83,15 @@ export interface CursorPager<NodeType, IdType> {
     typeDefs: string[];
 
     /** Individual GraphQL TypeDefs */
-    typeDef: {
-        PageInfoType: string;
-        EdgeType: string;
-        ConnectionType: string;
-    };
+    typeDef: PagerTypeDef
 
     /** GraphQL Resolvers - <TName>Connection.totalCount */
     resolvers: Record<string, any>;
 
+}
+
+export interface CursorPagerFn<NodeType, IdType> extends Omit<CursorPager<NodeType, IdType>, "typeDefs" | "typeDef" | "resolvers"> {
+    typeDefs: () => string[]
+    typeDef: () => PagerTypeDef
+    resolvers: (dataSource?: PagerDataSource<NodeType, IdType>) => Record<string, any>
 }

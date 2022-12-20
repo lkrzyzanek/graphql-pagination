@@ -1,6 +1,6 @@
 {
   "name": "@graphql-pagination/example-in-memory",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "author": "Libor Krzyzanek",
   "license": "MIT",
   "private": true,
@@ -8,7 +8,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@graphql-pagination/core": "^1.4.4",
+    "@graphql-pagination/core": "^1.4.5",
     "apollo-server": "^3.10.3",
     "graphql": "^16.6.0",
     "graphql-scalars": "^1.19.0"

@@ -42,21 +42,6 @@ describe("apollo-data-source", () => {
         expect(connection.pageInfo.hasPreviousPage).toBe(true);
     });
 
-    test("edgeObject", () => {
-        const result = pagerById.edgeObject(data[0], dataSource);
-        expect(result).not.toBeNull();
-    });
-
-    test("pageInfoObject", () => {
-        const result = pagerById.pageInfoObject({ edges: [], totalCount: 0, args: { first: 10 } }, true, true);
-        expect(result).not.toBeNull();
-    });
-
-    test("connectionObject", () => {
-        const result = pagerById.connectionObject([], { first: 10 }, 0, false, false, dataSource);
-        expect(result).not.toBeNull();
-    });
-
 });
 
 describe("validation", () => {

@@ -55,6 +55,11 @@ export interface CursorEncoderDecoder<IdType> {
     decode: (encodedCursor: string) => IdType;
 }
 
+export interface PagerTypeDef {
+    PageInfoType: string;
+    EdgeType: string | undefined;
+    ConnectionType: string | undefined;
+}
 
 /**
  * Cursor Pager spec
@@ -78,13 +83,15 @@ export interface CursorPager<NodeType, IdType> {
     typeDefs: string[];
 
     /** Individual GraphQL TypeDefs */
-    typeDef: {
-        PageInfoType: string;
-        EdgeType: string;
-        ConnectionType: string;
-    };
+    typeDef: PagerTypeDef
 
     /** GraphQL Resolvers - <TName>Connection.totalCount */
     resolvers: Record<string, any>;
 
+}
+
+export interface CursorPagerFn<NodeType, IdType> extends Omit<CursorPager<NodeType, IdType>, "typeDefs" | "typeDef" | "resolvers"> {
+    typeDefs: () => string[]
+    typeDef: () => PagerTypeDef
+    resolvers: (dataSource?: PagerDataSource<NodeType, IdType>) => Record<string, any>
 }

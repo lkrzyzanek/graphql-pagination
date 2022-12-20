@@ -27,6 +27,9 @@ Configuration:
 5. `validateBackwardArgs` (optional) - function (or array) to validate input args used by backward resolver
 6. `fetchTotalCountInResolver` (optional) - if false then totalCount is not fetched as part of forward/backward resolvers
    but totalCount resolver in Connection object needs to be defined separately. Pager provides `.resolvers` field for it.
+7. `typeDefDirectives` (optional) - directives added to generated type definitions.
+
+See more details in [DataSourcePager.ts](./src/DataSourcePager.ts#19).
 
 ### Basic Example
 
@@ -106,3 +109,4 @@ The complete example includes:
 2. Extra input args for data filtering
 3. DataSource using Date type
 4. OffsetDataSourceWrapper
+5. Custom directives used in Type Objects

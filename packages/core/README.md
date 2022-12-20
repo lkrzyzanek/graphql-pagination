@@ -4,7 +4,7 @@ Core module of GraphQL Pagination providing spec and ready to use implementation
 
 1. [CursorPager](src/CursorPagerSpec.ts) specification
 2. [DataSource](src/datasource/DataSource.ts) specification
-3. [DataSourcePager](src/DataSourcePager.ts) implementation
+3. [DataSourcePager](src/DataSourcePager.ts) implementation as class or functional interface
 4. [ArrayDataSource](src/datasource/ArrayDataSource.ts) implementation as fixed array of data
 5. [OffsetDataSourceWrapper](src/datasource/OffsetDataSourceWrapper.ts) Offset pagination wrapper
 6. [GraphQL Type Defs](src/TypeDefs.ts)
@@ -20,12 +20,12 @@ or implement your own.
 
 Configuration:
 
-1. dataSource (required) - your datasource
-2. typeName (optional) - name to generate GraphQL Pagination type defs like `BookConnection`, `BookEdge`.
-3. cursor (optional) - custom implementation how to encode/decode cursor
-4. validateForwardArgs (optional) - function (or array) to validate input args used by forward resolver
-5. validateBackwardArgs (optional) - function (or array) to validate input args used by backward resolver
-6. fetchTotalCountInResolver (optional) - if false then totalCount is not fetched as part of forward/backward resolvers
+1. `dataSource` (optional) - pass your datasource at pager creation or pass on resolver level via `forwardResolver` or `backwardResolver`.
+2. `typeName` (optional) - name to generate GraphQL Pagination type defs like `BookConnection`, `BookEdge`.
+3. `cursor` (optional) - custom implementation how to encode/decode cursor
+4. `validateForwardArgs` (optional) - function (or array) to validate input args used by forward resolver
+5. `validateBackwardArgs` (optional) - function (or array) to validate input args used by backward resolver
+6. `fetchTotalCountInResolver` (optional) - if false then totalCount is not fetched as part of forward/backward resolvers
    but totalCount resolver in Connection object needs to be defined separately. Pager provides `.resolvers` field for it.
 
 ### Basic Example
@@ -41,7 +41,7 @@ const pager = dataSourcePager({
     typeName: "Book",
 });
 
-// Class way (deprecated)
+// Class way
 // const pager = new DataSourcePager({
 //     dataSource: ds,
 //     typeName: "Book",

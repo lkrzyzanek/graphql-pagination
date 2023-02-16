@@ -1,4 +1,5 @@
-import {DefaultCursorEncoderDecoder} from "../src";
+import { DefaultCursorEncoderDecoder } from "../src";
+import { GraphQLError } from "graphql";
 
 describe("cursor", () => {
 
@@ -27,8 +28,18 @@ describe("cursor", () => {
         const decoded = cursor.decode(Buffer.from("c_test_underscore").toString("base64"));
         expect(decoded).toBe("test_underscore");
     });
+    function validateInvalidCursor(e: Error) {
+        expect(e.message).toBe("Invalid cursor value");
+        const ex = e as GraphQLError;
+        expect(ex.extensions).toStrictEqual({ code: "BAD_USER_INPUT" });
+    }
     test("decode-string-empty", () => {
-        expect(() => cursor.decode(Buffer.from("c_").toString("base64"))).toThrow(new Error("Invalid cursor value"));
+        try {
+            cursor.decode(Buffer.from("c_").toString("base64"));
+            throw new Error("no error thrown");
+        } catch (e) {
+            validateInvalidCursor(e);
+        }
     });
 
     test("decode-number", () => {
@@ -36,7 +47,11 @@ describe("cursor", () => {
         expect(decoded).toBe(123);
     });
     test("decode-string-empty", () => {
-        expect(() => cursor.decode(Buffer.from("n_").toString("base64"))).toThrow(new Error("Invalid cursor value"));
+        try {
+            cursor.decode(Buffer.from("n_").toString("base64"));
+        } catch (e) {
+            validateInvalidCursor(e);
+        }
     });
 
     test("encode-decode-date", () => {

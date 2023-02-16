@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.4.5...@graphql-pagination/core@1.5.0) (2023-02-16)
+
+
+### Features
+
+* use GraphQLError with extensions [#73](https://github.com/lkrzyzanek/graphql-pagination/issues/73) ([6251df1](https://github.com/lkrzyzanek/graphql-pagination/commit/6251df12741ba586008839eeefba04bc78e27700))
+
+
+
+
+
 ## [1.4.5](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.4.4...@graphql-pagination/core@1.4.5) (2022-12-20)
 
 **Note:** Version bump only for package @graphql-pagination/core

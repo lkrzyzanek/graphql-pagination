@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.1](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.5.0...@graphql-pagination/core@1.5.1) (2023-02-16)
+
+
+### Bug Fixes
+
+* throw GraphQLError with bad_user_input in all cases of decoding cursor [#73](https://github.com/lkrzyzanek/graphql-pagination/issues/73) ([989594c](https://github.com/lkrzyzanek/graphql-pagination/commit/989594c00c4b8db13abb4424577a2bb50525ba76))
+
+
+
+
+
 # [1.5.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.4.5...@graphql-pagination/core@1.5.0) (2023-02-16)
 
 

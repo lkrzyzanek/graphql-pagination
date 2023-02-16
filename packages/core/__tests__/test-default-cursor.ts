@@ -5,9 +5,25 @@ describe("cursor", () => {
 
     const cursor = new DefaultCursorEncoderDecoder();
 
+    function validateInvalidCursor(e: Error) {
+        expect(e.message).toBe("Invalid cursor value");
+        const ex = e as GraphQLError;
+        expect(ex.extensions).toStrictEqual({ code: "BAD_USER_INPUT" });
+    }
+
     test("decode-bad-input", () => {
-        expect(() => cursor.decode("bad_input")).toThrow(new Error("Invalid cursor value"));
-        expect(() => cursor.decode("a")).toThrow(new Error("Invalid cursor value"));
+        try {
+            cursor.decode("bad_input");
+            throw new Error("no error thrown");
+        } catch (e) {
+            validateInvalidCursor(e);
+        }
+        try {
+            cursor.decode("a");
+            throw new Error("no error thrown");
+        } catch (e) {
+            validateInvalidCursor(e);
+        }
     });
 
     test("encode-string", () => {
@@ -28,11 +44,6 @@ describe("cursor", () => {
         const decoded = cursor.decode(Buffer.from("c_test_underscore").toString("base64"));
         expect(decoded).toBe("test_underscore");
     });
-    function validateInvalidCursor(e: Error) {
-        expect(e.message).toBe("Invalid cursor value");
-        const ex = e as GraphQLError;
-        expect(ex.extensions).toStrictEqual({ code: "BAD_USER_INPUT" });
-    }
     test("decode-string-empty", () => {
         try {
             cursor.decode(Buffer.from("c_").toString("base64"));

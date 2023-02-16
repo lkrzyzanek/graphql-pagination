@@ -23,7 +23,8 @@ export class DefaultCursorEncoderDecoder implements CursorEncoderDecoder<string 
         if (id.startsWith("n_")) return Number(value);
         if (id.startsWith("c_")) return value;
 
-        throw new Error("Invalid cursor value");
+        throw new GraphQLError("Invalid cursor value", { extensions: { code: "BAD_USER_INPUT" } });
     }
 
 }
+

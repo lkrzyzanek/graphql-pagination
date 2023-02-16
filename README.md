@@ -19,58 +19,9 @@ You can use one of these provided:
 
 Or implement your own by implementing the [DataSource](packages/core/src/datasource/DataSource.ts) interface.
 
-### Apollo DataSource integration
+### Apollo Integration
 
-The package [apollo-datasource](packages/apollo-datasource) provides wrapper which extends Apollo's DataSource class
-so you can easily construct the pager in same way but using `ApolloDataSourcePager` class.
-
-See [apollo-datasource](examples/apollo-datasource/index.js) example.
-
-### Example
-
-```js
-const typeDefs = gql`
-    type Book {
-        id: ID!
-        title: String
-        published: DateTime
-    }
-    type Query {
-        booksAsc(first: Int = 10 after: String): BookConnection
-        booksDesc(last: Int = 10 before: String): BookConnection
-        booksPublishedAsc(first: Int = 10 after: String): BookConnection
-        booksPublishedDesc(last: Int = 10 before: String): BookConnection
-    }
-`;
-
-const books = [];
-
-const ds = new ArrayDataSource(books);
-const pagerById = new DataSourcePager({ dataSource: ds, typeName: "Book" });
-
-const dsPublished = new ArrayDataSource(books, "published");
-const pagerPublished = new DataSourcePager({ dataSource: dsPublished, typeName: "Book" });
-
-const resolvers = {
-    Query: {
-        booksAsc: (_, args) => pagerById.forwardResolver(args),
-        booksDesc: (_, args) => pagerById.backwardResolver(args),
-        booksPublishedAsc: (_, args) => pagerPublished.forwardResolver(args),
-        booksPublishedDesc: (_, args) => pagerPublished.backwardResolver(args),
-    },
-};
-
-return new ApolloServer({
-    typeDefs: [
-        typeDefs,
-        pagerById.typeDefs, // BookConnection, BookEdge, PageInfo typeDefs
-        scalarTypeDefs,     // for DateTime
-    ],
-    resolvers: [
-        resolvers,
-        scalarResolvers,     // for DateTime
-    ],
-});
-```
+There is no need for any special integration or dependency. Just use core pager.
+In places where user's input is validated the proper `GraphQLError` is thrown with extensions object containing code `BAD_USER_INPUT`.
 
 For more examples go to [core package](packages/core).

@@ -1,6 +1,8 @@
-const { ApolloServer, gql, UserInputError } = require("apollo-server");
+const { ApolloServer } = require("@apollo/server");
+const gql = require("graphql-tag");
 const { ArrayDataSource, DataSourcePager, dataSourcePager, OffsetDataSourceWrapper } = require("@graphql-pagination/core");
 const { typeDefs: scalarTypeDefs, resolvers: scalarResolvers } = require("graphql-scalars");
+const { GraphQLError } = require("graphql");
 
 // generate 100 books { id : x, title: "Book x", published: "2022-01-01T14:17:11.929Z" }
 const january = new Date("2022-01-01");
@@ -21,10 +23,10 @@ const filter = (books, args) => {
 };
 // Validation input args functions
 const validateTitle = (args) => {
-  if (args.title && !books.find(b => b.title === args.title)) throw new UserInputError(`Title ${args.title} not exists`);
+  if (args.title && !books.find(b => b.title === args.title)) throw new GraphQLError(`Title ${args.title} not exists`, { extensions: { code: "BAD_USER_INPUT" } });
 };
 const validateAuthor = (args) => {
-  if (args.author && !books.find(b => b.author === args.author)) throw new UserInputError(`Author ${args.author} not exists`);
+  if (args.author && !books.find(b => b.author === args.author)) throw new GraphQLError(`Author ${args.author} not exists`, { extensions: { code: "BAD_USER_INPUT" } });
 };
 
 // create data source directly or via async function
@@ -124,10 +126,6 @@ const createApolloServer = () => {
       resolvers,
       scalarResolvers, // for DateTime
     ],
-    formatError: error => {
-      if (error.message.startsWith("Invalid cursor value")) return new UserInputError(error.message);
-      return error;
-    },
   });
 };
 

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "lerna run build",
     "clean": "lerna run clean && git clean -dfqX -- ./node_modules **/{dist,node_modules}/ **/tsconfig*tsbuildinfo",
-    "test": "jest --verbose",
+    "test": "jest --verbose ",
     "lint": "eslint ."
   },
   "engines": {
@@ -13,7 +13,8 @@
     "npm": "8.x"
   },
   "workspaces": [
-    "packages/*",
+    "packages/core",
+    "packages/sql-knex",
     "examples/*"
   ],
   "devDependencies": {

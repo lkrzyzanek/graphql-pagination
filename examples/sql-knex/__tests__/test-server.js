@@ -27,9 +27,9 @@ describe("example-sql-knex", () => {
           `,
     });
 
-    expect(response.errors).toBeUndefined();
-    expect(response.data.booksAsc.totalCount).toBe(100);
-    expect(response.data.booksAsc.edges[0].node.id).toBe("1");
+    expect(response.body.singleResult.errors).toBeUndefined();
+    expect(response.body.singleResult.data.booksAsc.totalCount).toBe(100);
+    expect(response.body.singleResult.data.booksAsc.edges[0].node.id).toBe("1");
   });
 
   it("booksDesc", async () => {
@@ -50,9 +50,9 @@ describe("example-sql-knex", () => {
           `,
     });
 
-    expect(response.errors).toBeUndefined();
-    expect(response.data.booksDesc.totalCount).toBe(100);
-    expect(response.data.booksDesc.edges[0].node.id).toBe("100");
+    expect(response.body.singleResult.errors).toBeUndefined();
+    expect(response.body.singleResult.data.booksDesc.totalCount).toBe(100);
+    expect(response.body.singleResult.data.booksDesc.edges[0].node.id).toBe("100");
   });
 
   it("booksAsc-author", async () => {
@@ -72,9 +72,9 @@ describe("example-sql-knex", () => {
           `,
     });
 
-    expect(response.errors).toBeUndefined();
-    expect(response.data.booksAsc.totalCount).toBe(10);
-    expect(response.data.booksAsc.edges[0].node.author).toBe("Author 5");
+    expect(response.body.singleResult.errors).toBeUndefined();
+    expect(response.body.singleResult.data.booksAsc.totalCount).toBe(10);
+    expect(response.body.singleResult.data.booksAsc.edges[0].node.author).toBe("Author 5");
   });
 
 });

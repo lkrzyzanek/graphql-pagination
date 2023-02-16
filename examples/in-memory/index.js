@@ -1,9 +1,8 @@
 const { createApolloServer } = require("./server");
+const { startStandaloneServer } = require("@apollo/server/standalone");
 
 const server = createApolloServer();
 
-
-// The `listen` method launches a web server.
-server.listen().then(({ url }) => {
+startStandaloneServer(server).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });

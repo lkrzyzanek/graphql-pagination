@@ -1,4 +1,5 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer } = require("@apollo/server");
+const gql = require("graphql-tag");
 const { DataSourcePager } = require("@graphql-pagination/core");
 const { typeDefs: scalarTypeDefs, resolvers: scalarResolvers } = require("graphql-scalars");
 const { SqlKnexDataSource } = require("@graphql-pagination/sql-knex");

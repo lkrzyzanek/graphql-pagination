@@ -1,5 +1,7 @@
 # GraphQL Pagination / Apollo Datasource integration
 
+:warning: This packages is no more maintained as Apollo 4 doesn't provide DataSource capabilities. Use directly `@graphql-pagination/core`.
+
 Module integrates GraphQL Pagination and [Apollo Datasources](https://www.apollographql.com/docs/apollo-server/data/data-sources/).
 
 ## Usage

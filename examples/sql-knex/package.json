@@ -10,7 +10,8 @@
   "dependencies": {
     "@graphql-pagination/core": "^1.4.5",
     "@graphql-pagination/sql-knex": "^1.0.19",
-    "apollo-server": "^3.10.3",
+    "@apollo/server": "^4.4.0",
+    "graphql-tag": "^2.12.6",
     "better-sqlite3": "^7.6.2",
     "graphql": "^16.6.0",
     "graphql-scalars": "^1.19.0",

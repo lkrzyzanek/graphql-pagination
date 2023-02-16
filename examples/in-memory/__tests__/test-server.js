@@ -27,8 +27,8 @@ describe("example-in-memory", () => {
         `,
     });
 
-    expect(response.errors).toBeUndefined();
-    const books = response.data.books;
+    expect(response.body.singleResult.errors).toBeUndefined();
+    const books = response.body.singleResult.data.books;
 
     expect(books.totalCount).toBe(100);
     expect(books.edges[0].cursor).not.toBeUndefined();
@@ -47,7 +47,8 @@ describe("example-in-memory", () => {
         `,
     });
 
-    expect(response.errors[0].message).toBe("Invalid cursor value");
+    expect(response.body.singleResult.errors[0].message).toBe("Invalid cursor value");
+    expect(response.body.singleResult.errors[0].extensions.code).toBe("BAD_USER_INPUT");
   });
   test("error-bad query", async () => {
     const response = await testServer.executeOperation({
@@ -59,7 +60,7 @@ describe("example-in-memory", () => {
         `,
     });
 
-    expect(response.errors[0].message).toBe("Cannot query field \"badquery\" on type \"Query\".");
+    expect(response.body.singleResult.errors[0].message).toBe("Cannot query field \"badquery\" on type \"Query\".");
   });
 
   test("error-bad author", async () => {
@@ -74,7 +75,7 @@ describe("example-in-memory", () => {
         `,
     });
 
-    expect(response.errors[0].message).toBe("Author bad name not exists");
+    expect(response.body.singleResult.errors[0].message).toBe("Author bad name not exists");
   });
 
   test("error-bad author", async () => {
@@ -89,7 +90,7 @@ describe("example-in-memory", () => {
         `,
     });
 
-    expect(response.errors[0].message).toBe("Title bad name not exists");
+    expect(response.body.singleResult.errors[0].message).toBe("Title bad name not exists");
   });
 
   test("filter-author", async () => {
@@ -104,8 +105,8 @@ describe("example-in-memory", () => {
         `,
     });
 
-    expect(response.errors).toBeUndefined();
-    expect(response.data.books.totalCount).toBe(10);
+    expect(response.body.singleResult.errors).toBeUndefined();
+    expect(response.body.singleResult.data.books.totalCount).toBe(10);
   });
 
   test("filter-author", async () => {
@@ -120,8 +121,8 @@ describe("example-in-memory", () => {
         `,
     });
 
-    expect(response.errors).toBeUndefined();
-    expect(response.data.books.totalCount).toBe(10);
+    expect(response.body.singleResult.errors).toBeUndefined();
+    expect(response.body.singleResult.data.books.totalCount).toBe(10);
   });
 
   test("filter-title", async () => {
@@ -136,8 +137,8 @@ describe("example-in-memory", () => {
         `,
     });
 
-    expect(response.errors).toBeUndefined();
-    expect(response.data.books.totalCount).toBe(1);
+    expect(response.body.singleResult.errors).toBeUndefined();
+    expect(response.body.singleResult.data.books.totalCount).toBe(1);
   });
 
 });

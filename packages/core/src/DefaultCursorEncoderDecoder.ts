@@ -1,4 +1,5 @@
 import type {CursorEncoderDecoder} from "./CursorPagerSpec";
+import { GraphQLError } from "graphql";
 
 /**
  * Default Cursor encoder / decoder.
@@ -15,7 +16,7 @@ export class DefaultCursorEncoderDecoder implements CursorEncoderDecoder<string 
 
     decode(encodedCursor: string): string | number | Date {
         const id = Buffer.from(encodedCursor, "base64").toString("utf-8");
-        if (id.length <= 2) throw new Error("Invalid cursor value");
+        if (id.length <= 2) throw new GraphQLError("Invalid cursor value", { extensions: { code: "BAD_USER_INPUT" } });
         const value = id.substring(2);
 
         if (id.startsWith("d_")) return new Date(Number(value));

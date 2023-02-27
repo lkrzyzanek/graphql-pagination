@@ -1,3 +1,5 @@
+import gql from "graphql-tag";
+
 import type {
     ArgsBackward,
     ArgsForward,
@@ -122,11 +124,17 @@ export function dataSourcePager(config?: DataSourcePagerConfig): CursorPagerFn<a
     }
 
     function typeDef(): PagerTypeDef {
-        return {
+        const typeDefs = {
             PageInfoType: createPageInfoTypeDef(config?.typeDefDirectives?.pageInfo),
             EdgeType: config?.typeName ? createEdgeTypeDef(config.typeName, config.typeDefDirectives?.edge) : undefined,
             ConnectionType: config?.typeName ? createConnectionTypeDef(config.typeName, config.typeDefDirectives?.connection) : undefined,
         };
+        return {
+            ...typeDefs,
+            PageInfoTypeObj: gql(typeDefs.PageInfoType),
+            EdgeTypeObj: typeDefs.EdgeType ? gql(typeDefs.EdgeType) : undefined,
+            ConnectionTypeObj: typeDefs?.ConnectionType ? gql(typeDefs.ConnectionType) : undefined,
+        }
     }
 
     function typeDefs(): string[] {

@@ -1,4 +1,6 @@
 import {ArrayDataSource, DataSourcePager} from "../src";
+import { strict as assert } from "node:assert";
+import { Kind, ObjectTypeDefinitionNode } from "graphql";
 
 describe("pager-typedefs", () => {
 
@@ -42,6 +44,9 @@ describe("pager-typedefs", () => {
         expect(pager.typeDef.PageInfoType).not.toBeNull();
         expect(pager.typeDef.EdgeType).not.toBeNull();
         expect(pager.typeDef.ConnectionType).not.toBeNull();
+        expect(pager.typeDef.PageInfoTypeObj).not.toBeNull();
+        expect(pager.typeDef.EdgeTypeObj).not.toBeNull();
+        expect(pager.typeDef.ConnectionTypeObj).not.toBeNull();
     });
 
     test("directives", () => {
@@ -57,7 +62,13 @@ describe("pager-typedefs", () => {
 
         expect(pager.typeDef.PageInfoType).toContain("PageInfo @testDirective1 {")
         expect(pager.typeDef.ConnectionType).toContain("TESTConnection @testDirective2 {")
-        expect(pager.typeDef.EdgeType).toContain("TESTEdge @testDirective3 {")
+        expect(pager.typeDef.EdgeType).toContain("TESTEdge @testDirective3 {");
+        assert(pager.typeDef.PageInfoTypeObj.definitions[0].kind === Kind.OBJECT_TYPE_DEFINITION);
+        expect(pager.typeDef.PageInfoTypeObj.definitions[0].directives?.[0].name.value).toContain("testDirective1")
+        assert(pager.typeDef.ConnectionTypeObj?.definitions[0].kind === Kind.OBJECT_TYPE_DEFINITION);
+        expect(pager.typeDef.ConnectionTypeObj?.definitions[0].directives?.[0].name.value).toContain("testDirective2")
+        assert(pager.typeDef.EdgeTypeObj?.definitions[0].kind === Kind.OBJECT_TYPE_DEFINITION);
+        expect(pager.typeDef.EdgeTypeObj.definitions[0].directives?.[0].name.value).toContain("testDirective3")
     });
 
 });

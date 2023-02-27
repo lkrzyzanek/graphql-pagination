@@ -1,3 +1,4 @@
+import type { DocumentNode } from "graphql";
 import type { PagerDataSource } from "./datasource/DataSource";
 
 /**
@@ -57,8 +58,11 @@ export interface CursorEncoderDecoder<IdType> {
 
 export interface PagerTypeDef {
     PageInfoType: string;
+    PageInfoTypeObj: DocumentNode;
     EdgeType: string | undefined;
+    EdgeTypeObj: DocumentNode | undefined;
     ConnectionType: string | undefined;
+    ConnectionTypeObj: DocumentNode | undefined;
 }
 
 /**

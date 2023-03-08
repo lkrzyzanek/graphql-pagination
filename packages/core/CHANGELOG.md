@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.3](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.5.2...@graphql-pagination/core@1.5.3) (2023-03-08)
+
+
+### Bug Fixes
+
+* Use primitive types in PageInfo object ([ed8d3fe](https://github.com/lkrzyzanek/graphql-pagination/commit/ed8d3fe7475a81d7abfb87204bffe50253935931))
+
+
+
+
+
 ## [1.5.2](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.5.1...@graphql-pagination/core@1.5.2) (2023-02-27)
 
 **Note:** Version bump only for package @graphql-pagination/core

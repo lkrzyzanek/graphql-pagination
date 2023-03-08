@@ -9,7 +9,7 @@ export interface Connection {
     totalCount: number | undefined;
     edges: Edge[];
     args: any;
-    pageInfo?: PageInfo;
+    pageInfo: PageInfo;
 }
 
 /**

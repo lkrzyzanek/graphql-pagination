@@ -189,7 +189,7 @@ export const PagerObject = {
         };
     },
 
-    pageInfoObject(connection: Connection, hasNextPage: boolean, hasPreviousPage: boolean): PageInfo {
+    pageInfoObject(connection: Omit<Connection, "pageInfo">, hasNextPage: boolean, hasPreviousPage: boolean): PageInfo {
         const startCursor = this.startCursor(connection.edges);
         const endCursor = this.endCursor(connection.edges);
         return {

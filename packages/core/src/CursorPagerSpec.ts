@@ -26,10 +26,10 @@ export interface Edge {
  * @see https://relay.dev/graphql/connections.htm#sec-undefined.PageInfo.Fields
  */
 export interface PageInfo {
-    hasPreviousPage: Boolean
-    hasNextPage: Boolean
-    startCursor?: String
-    endCursor?: String
+    hasPreviousPage: boolean
+    hasNextPage: boolean
+    startCursor?: string
+    endCursor?: string
 }
 
 /**

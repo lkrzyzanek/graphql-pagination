@@ -1,6 +1,6 @@
 {
   "name": "@graphql-pagination/sql-knex",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "GraphQL Pagination - SQL Knex",
   "author": "Libor Krzyzanek",
   "license": "MIT",
@@ -42,7 +42,7 @@
     }
   },
   "dependencies": {
-    "@graphql-pagination/core": "^1.5.4",
+    "@graphql-pagination/core": "^1.5.5",
     "knex": "^2.4.2"
   },
   "devDependencies": {

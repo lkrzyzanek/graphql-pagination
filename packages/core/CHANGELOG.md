@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.5](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.5.4...@graphql-pagination/core@1.5.5) (2023-03-15)
+
+
+### Bug Fixes
+
+* correct handling when ArrayDatasource's id is number starting with 0 fixes [#96](https://github.com/lkrzyzanek/graphql-pagination/issues/96) ([e306268](https://github.com/lkrzyzanek/graphql-pagination/commit/e30626805404b00452662b78f02588e63c275084))
+
+
+
+
+
 ## [1.5.4](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.5.3...@graphql-pagination/core@1.5.4) (2023-03-08)
 
 

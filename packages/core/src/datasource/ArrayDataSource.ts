@@ -38,7 +38,7 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
         const result = await this.getNodes(originalArgs);
         return result
             .sort((a, b) => this.compareNodesId(a, b, true))
-            .filter(node => !afterId ? true : this.getId(node) > afterId)
+            .filter(node => afterId === undefined ? true : this.getId(node) > afterId)
             .slice(0, size);
     }
 
@@ -46,7 +46,7 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
         const result = await this.getNodes(originalArgs);
         return result
             .sort((a, b) => this.compareNodesId(a, b, false))
-            .filter(node => !beforeId ? true : this.getId(node) < beforeId)
+            .filter(node => beforeId === undefined ? true : this.getId(node) < beforeId)
             .slice(0, size);
     }
 

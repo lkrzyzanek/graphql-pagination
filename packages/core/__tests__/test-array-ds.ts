@@ -39,6 +39,17 @@ describe("array-ds-id", () => {
         const ds = new ArrayDataSource([{"idboolean": true}, {"idboolean": true}, {"idboolean": true}], "idboolean");
         return expect(ds.before(1, 10, {last: 10})).rejects.toStrictEqual(new Error("Type boolean is not supported"));
     })
+    test("after-id-number-zero", async () => {
+        const ds = new ArrayDataSource([{ "id": 0 }, { "id": 1 }, { "id": 2 }], "id");
+        const afterOne = await ds.after(1, 10, { first: 10 });
+        expect(afterOne[0]).toStrictEqual({ id: 2 });
+
+        const after = await ds.after(0, 10, { first: 10 });
+        expect(after[0]).toStrictEqual({ id: 1 });
+
+        const afterUndefined = await ds.after(undefined, 10, { first: 10 });
+        expect(afterUndefined[0]).toStrictEqual({ id: 0 });
+    })
 
 })
 

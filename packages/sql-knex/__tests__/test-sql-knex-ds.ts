@@ -1,6 +1,13 @@
 import {SqlKnexDataSource} from "../src/SqlKnexDataSource";
 
 describe("sql-knex-ds", () => {
+    
+    type Book = {
+        id: number
+        title: string
+        author: string
+        published: Date
+    }
 
     const january = new Date("2022-01-01");
     const data = Array.from(Array(100)).map((e, i) => ({
@@ -37,7 +44,7 @@ describe("sql-knex-ds", () => {
     })
 
     describe("by-id", () => {
-        let ds: SqlKnexDataSource;
+        let ds: SqlKnexDataSource<Book, number>;
 
         beforeAll(() => {
             ds = new SqlKnexDataSource({tableName: "test", idColumnName: "id", knex: knex});
@@ -47,25 +54,25 @@ describe("sql-knex-ds", () => {
         });
 
         test("after", async () => {
-            const result = await ds.after(5, 10, null);
+            const result = await ds.after(5, 10, { first: 0});
             expect(result).toHaveLength(10);
             expect(result[0].id).toBe(6);
             expect(result[9].id).toBe(15);
         });
         test("after-from-begin", async () => {
-            const result = await ds.after(null, 5, null);
+            const result = await ds.after(undefined, 5, { first: 0});
             expect(result).toHaveLength(5);
             expect(result[0].id).toBe(1);
             expect(result[4].id).toBe(5);
         });
         test("before", async () => {
-            const result = await ds.before(90, 10, null);
+            const result = await ds.before(90, 10, { last: 0 });
             expect(result).toHaveLength(10);
             expect(result[0].id).toBe(89);
             expect(result[9].id).toBe(80);
         });
         test("before-from-begin", async () => {
-            const result = await ds.before(null, 5, null);
+            const result = await ds.before(undefined, 5, { last: 0});
             expect(result).toHaveLength(5);
             expect(result[0].id).toBe(100);
             expect(result[4].id).toBe(96);
@@ -73,7 +80,7 @@ describe("sql-knex-ds", () => {
     })
 
     describe("by-date", () => {
-        let ds: SqlKnexDataSource;
+        let ds: SqlKnexDataSource<Book, Date>;
 
         beforeAll(() => {
             ds = new SqlKnexDataSource({tableName: "test", idColumnName: "published", knex: knex});
@@ -83,13 +90,13 @@ describe("sql-knex-ds", () => {
         });
 
         test("after", async () => {
-            const result = await ds.after(new Date("2022-01-02"), 2, null);
+            const result = await ds.after(new Date("2022-01-02"), 2, { first: 0 });
             expect(result).toHaveLength(2);
             expect(result[0].id).toBe(3);
             expect(result[1].id).toBe(4);
         });
         test("after-from-begin", async () => {
-            const result = await ds.after(null, 5, null);
+            const result = await ds.after(undefined, 5, { first: 0 });
             expect(result).toHaveLength(5);
             expect(result[0].id).toBe(1);
             expect(result[4].id).toBe(5);
@@ -97,7 +104,7 @@ describe("sql-knex-ds", () => {
     })
 
     describe("filter", () => {
-        let ds: SqlKnexDataSource;
+        let ds: SqlKnexDataSource<Book, number>;
         const tableName = "test";
         const baseQuery = (args) => {
             return knex(tableName)

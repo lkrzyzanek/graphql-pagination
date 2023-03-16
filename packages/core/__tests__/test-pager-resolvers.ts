@@ -3,7 +3,7 @@ import {ArrayDataSource, DataSourcePager} from "../src";
 describe("pager-resolvers", () => {
 
     test("totalCount", () => {
-        const pager = new DataSourcePager({dataSource: new ArrayDataSource([{"id": 1}]), typeName: "TEST"});
+        const pager = new DataSourcePager<{ id: number }, number>({dataSource: new ArrayDataSource<{ id: number }, number>([{"id": 1}]), typeName: "TEST"});
 
         const resolvers = pager.resolvers;
         expect(resolvers).not.toBeNull();
@@ -13,7 +13,7 @@ describe("pager-resolvers", () => {
     });
 
     test("totalCount-in-resolver", async () => {
-        const pager = new DataSourcePager({
+        const pager = new DataSourcePager<{ id: number }, number>({
             dataSource: new ArrayDataSource([{"id": 1}]),
             typeName: "TEST",
             fetchTotalCountInResolver: true
@@ -24,7 +24,7 @@ describe("pager-resolvers", () => {
     });
 
     test("totalCount-not-expected", async () => {
-        const pager = new DataSourcePager({
+        const pager = new DataSourcePager<{ id: number }, number>({
             dataSource: new ArrayDataSource([{"id": 1}]),
             typeName: "TEST",
             fetchTotalCountInResolver: false

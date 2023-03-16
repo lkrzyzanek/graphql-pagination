@@ -5,7 +5,7 @@ describe("pager-objects", () => {
 
     test("edge ds as param", () => {
         const data = [{ "id": 1 }];
-        const dataSource = new ArrayDataSource(data);
+        const dataSource = new ArrayDataSource<{ id: number }, number>(data);
 
         const edge = PagerObject.edgeObject(data[0], dataSource, new DefaultCursorEncoderDecoder());
         expect(edge.cursor).not.toBeUndefined();

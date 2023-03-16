@@ -1,6 +1,6 @@
 import {ArrayDataSource, DataSourcePager} from "../src";
 import { strict as assert } from "node:assert";
-import { Kind, ObjectTypeDefinitionNode } from "graphql";
+import { Kind } from "graphql";
 
 describe("pager-typedefs", () => {
 

@@ -17,15 +17,15 @@ export interface SqlKnexDataSourceConfig {
 /**
  * Knex.js powered SQL DataSource
  */
-export class SqlKnexDataSource extends DataSourceBase<any, number | Date> {
+export class SqlKnexDataSource<NodeType extends {}, IdType = number | Date> extends DataSourceBase<NodeType, IdType> {
 
     knex: Knex;
     tableName: string;
     baseQuery: (originalArgs: ArgsForward | ArgsBackward) => Knex.QueryBuilder;
 
     //@ts-ignore
-    defaultBaseQuery(originalArgs: ArgsForward | ArgsBackward): Knex.QueryBuilder<any> {
-        return this.knex<any>(this.tableName);
+    defaultBaseQuery(originalArgs: ArgsForward | ArgsBackward): Knex.QueryBuilder<NodeType> {
+        return this.knex<NodeType>(this.tableName);
     }
 
     constructor(config: SqlKnexDataSourceConfig) {
@@ -35,7 +35,7 @@ export class SqlKnexDataSource extends DataSourceBase<any, number | Date> {
         this.baseQuery = config.baseQuery || this.defaultBaseQuery;
     }
 
-    async after(afterId: number | Date | undefined, size: number, originalArgs: ArgsForward): Promise<any[]> {
+    async after(afterId: IdType | undefined, size: number, originalArgs: ArgsForward): Promise<NodeType[]> {
         return this.baseQuery(originalArgs)
             .where(builder => {
                 if (afterId) builder.where(this.idFieldName, '>', afterId)
@@ -44,7 +44,7 @@ export class SqlKnexDataSource extends DataSourceBase<any, number | Date> {
             .limit(size);
     }
 
-    async before(beforeId: number | Date | undefined, size: number, originalArgs: ArgsBackward): Promise<any[]> {
+    async before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward): Promise<NodeType[]> {
         return this.baseQuery(originalArgs)
             .where(builder => {
                 if (beforeId) builder.where(this.idFieldName, '<', beforeId)

@@ -1,7 +1,13 @@
-import { ArrayDataSource, DataSourcePager } from "../src";
+import { ArrayDataSource, CursorPager, DataSourcePager } from "../src";
 
 const january = new Date("2022-01-01");
-const data = Array.from(Array(100)).map((e, i) => ({
+type Book = {
+    id: number
+    title: string
+    author: string
+    published: Date
+}
+const data: Array<Book> = Array.from(Array<Book>(100)).map((e, i) => ({
     id: i + 1,
     title: `Title ${i + 1}`,
     author: `Author ${(i + 1) % 10}`,
@@ -18,7 +24,7 @@ const validation = (args) => {
 }
 
 describe("array-ds-by-id", () => {
-    let pagerById: DataSourcePager;
+    let pagerById: CursorPager<Book, number>;
     beforeAll(() => {
         pagerById = new DataSourcePager({ dataSource: new ArrayDataSource(data) });
     });
@@ -93,7 +99,7 @@ describe("array-ds-by-id", () => {
 
 
 describe("array-ds-by-date", () => {
-    let pager: DataSourcePager;
+    let pager: DataSourcePager<Book, number>;
     beforeAll(() => {
         pager = new DataSourcePager({ dataSource: new ArrayDataSource(data, "published") });
     });
@@ -125,7 +131,7 @@ describe("array-ds-by-date", () => {
 });
 
 describe("array-ds-by-title", () => {
-    let pager: DataSourcePager;
+    let pager: DataSourcePager<Book, string>;
     beforeAll(() => {
         pager = new DataSourcePager({ dataSource: new ArrayDataSource(data, "title") });
     });
@@ -178,7 +184,7 @@ describe("array-ds-by-title", () => {
 });
 
 describe("array-ds-filter", () => {
-    let pager: DataSourcePager;
+    let pager: DataSourcePager<Book, number>;
 
     beforeAll(() => {
         pager = new DataSourcePager({
@@ -235,7 +241,7 @@ describe("array-ds-filter", () => {
 });
 
 describe("array-ds-validation", () => {
-    let pager: DataSourcePager;
+    let pager: DataSourcePager<Book, number>;
 
     beforeAll(() => {
         pager = new DataSourcePager({
@@ -282,8 +288,8 @@ describe("array-ds-validation", () => {
 });
 
 describe("array-ds-dynanic", () => {
-    const pagerNoDs = new DataSourcePager({});
-    const dataSource = new ArrayDataSource(data)
+    const pagerNoDs = new DataSourcePager<Book, number>({});
+    const dataSource = new ArrayDataSource<Book, number>(data)
 
     test("forward-totalCount", async () => {
         const connection = await pagerNoDs.forwardResolver({ "first": 10 }, dataSource);

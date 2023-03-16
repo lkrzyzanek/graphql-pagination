@@ -18,9 +18,9 @@ import { createConnectionTypeDef, createEdgeTypeDef, createPageInfoTypeDef } fro
 type validationArgFn = ((args: ArgsForward | any) => void);
 
 /** DataSourcePager Configuration */
-export interface DataSourcePagerConfig {
+export interface DataSourcePagerConfig<NodeType, IdType = string | number | Date> {
     /** DataSource. If not provided must be passed in resolver forward/backward functions */
-    dataSource?: PagerDataSource<any, any>
+    dataSource?: PagerDataSource<NodeType, IdType>
     /** Type Name. If not provided GraphQL typeDefs are not generated */
     typeName?: string
     typeDefDirectives?: {
@@ -29,7 +29,7 @@ export interface DataSourcePagerConfig {
         edge: string,
     }
     /** Cursor encoder/decoder. If not provided DefaultCursorEncoderDecoder used */
-    cursor?: CursorEncoderDecoder<string | number | Date>
+    cursor?: CursorEncoderDecoder<IdType>
     /** Validation forward args function(s) */
     validateForwardArgs?: validationArgFn | [validationArgFn];
     /** Validation backward args function(s) */
@@ -42,20 +42,20 @@ export interface DataSourcePagerConfig {
  * CursorPager implementation backed by DataSource. Wrapper of dataSourcePager function
  * @deprecated Use dataSourcePager function the same way
  */
-export class DataSourcePager implements CursorPager<any, string | number | Date> {
+export class DataSourcePager<NodeType, IdType = string | number | Date> implements CursorPager<NodeType, IdType> {
 
-    dataSource?: PagerDataSource<any, any>;
-    cursor: CursorEncoderDecoder<string | number | Date>;
+    dataSource?: PagerDataSource<NodeType, IdType>;
+    cursor: CursorEncoderDecoder<IdType>;
     typeDefs: string[] = [];
     typeDef: PagerTypeDef;
     resolvers: Record<string, any> = {};
-    forwardResolver: (args: any, dataSource?: PagerDataSource<any, string | number | Date> | undefined) => Promise<Connection>;
-    backwardResolver: (args: any, dataSource?: PagerDataSource<any, string | number | Date> | undefined) => Promise<Connection>;
+    forwardResolver: (args: ArgsForward | any, dataSource?: PagerDataSource<NodeType, IdType>) => Promise<Connection>;
+    backwardResolver: (args: ArgsBackward | any, dataSource?: PagerDataSource<NodeType, IdType>) => Promise<Connection>;
 
     pager;
 
-    constructor(config: DataSourcePagerConfig) {
-        this.pager = dataSourcePager(config);
+    constructor(config: DataSourcePagerConfig<NodeType, IdType>) {
+        this.pager = dataSourcePager<NodeType, IdType>(config);
         this.cursor = this.pager.cursor;
         this.typeDef = this.pager.typeDef();
         this.typeDefs = this.pager.typeDefs();
@@ -66,29 +66,30 @@ export class DataSourcePager implements CursorPager<any, string | number | Date>
 
 }
 
-const defaultCursor = new DefaultCursorEncoderDecoder();
 
 /**
  * CursorPager implementation backed by DataSource
  */
-export function dataSourcePager(config?: DataSourcePagerConfig): CursorPagerFn<any, string | number | Date> {
+export function dataSourcePager<NodeType, IdType = string | number | Date>(config?: DataSourcePagerConfig<NodeType, IdType>): CursorPagerFn<NodeType, IdType> {
+
+    const defaultCursor = new DefaultCursorEncoderDecoder<IdType>();
 
     const cursor = config?.cursor || defaultCursor;
     let fetchTotalCountInResolver = true;
     if (config?.fetchTotalCountInResolver !== undefined) fetchTotalCountInResolver = config.fetchTotalCountInResolver;
 
-    const getDataSource = (dataSource?: PagerDataSource<any, any>) => {
+    const getDataSource = (dataSource?: PagerDataSource<NodeType, IdType>) => {
         const ds = dataSource || config?.dataSource;
         if (!ds) throw Error("No DataSource defined");
         return ds;
     }
 
-    const forwardResolver = async (args: ArgsForward, dataSource?: PagerDataSource<any, any>): Promise<Connection> => {
+    async function forwardResolver(args: ArgsForward, dataSource?: PagerDataSource<NodeType, IdType>): Promise<Connection> {
         if (config?.validateForwardArgs) {
             if (Array.isArray(config.validateForwardArgs)) config.validateForwardArgs.forEach(validation => validation(args));
             else config.validateForwardArgs(args);
         }
-        let afterId;
+        let afterId: IdType | undefined;
         if (args.after) afterId = cursor.decode(args.after);
 
         const ds = getDataSource(dataSource);
@@ -103,12 +104,12 @@ export function dataSourcePager(config?: DataSourcePagerConfig): CursorPagerFn<a
         return PagerObject.connectionObject(resultPlusOne.slice(0, args.first), args, totalCount, hasNextPage, hasPreviousPage, ds, cursor);
     }
 
-    const backwardResolver = async (args: ArgsBackward, dataSource?: PagerDataSource<any, any>): Promise<Connection> => {
+    async function backwardResolver(args: ArgsBackward, dataSource?: PagerDataSource<NodeType, IdType>): Promise<Connection> {
         if (config?.validateBackwardArgs) {
             if (Array.isArray(config.validateBackwardArgs)) config.validateBackwardArgs.forEach(validation => validation(args));
             else config.validateBackwardArgs(args);
         }
-        let beforeId;
+        let beforeId: IdType | undefined;
         if (args.before) beforeId = cursor.decode(args.before);
 
         const ds = getDataSource(dataSource);
@@ -152,7 +153,7 @@ export function dataSourcePager(config?: DataSourcePagerConfig): CursorPagerFn<a
         typeDef,
         typeDefs,
 
-        resolvers: (dataSource?: PagerDataSource<any, any>): Record<string, any> => {
+        resolvers: (dataSource?: PagerDataSource<NodeType, IdType>): Record<string, any> => {
             if (!dataSource || !config?.typeName) return {};
             return {
                 [`${config?.typeName}Connection`]: {
@@ -166,8 +167,8 @@ export function dataSourcePager(config?: DataSourcePagerConfig): CursorPagerFn<a
 }
 
 export const PagerObject = {
-    connectionObject(nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number | undefined, hasNextPage: boolean, hasPreviousPage: boolean,
-        dataSource: PagerDataSource<any, any>, cursor: CursorEncoderDecoder<string | number | Date>): Connection {
+    connectionObject<NodeType, IdType>(nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number | undefined, hasNextPage: boolean, hasPreviousPage: boolean,
+        dataSource: PagerDataSource<NodeType, IdType>, cursor: CursorEncoderDecoder<IdType>): Connection {
         const edges = nodes.map(node => this.edgeObject(node, dataSource, cursor))
         const connection = {
             totalCount: totalCount,
@@ -181,7 +182,7 @@ export const PagerObject = {
         };
     },
 
-    edgeObject(node: any, dataSource: PagerDataSource<any, any>, cursor: CursorEncoderDecoder<string | number | Date>): Edge {
+    edgeObject<NodeType, IdType>(node: any, dataSource: PagerDataSource<NodeType, IdType>, cursor: CursorEncoderDecoder<IdType>): Edge {
         const plainId = dataSource.getId(node);
         return {
             cursor: cursor.encode(plainId),

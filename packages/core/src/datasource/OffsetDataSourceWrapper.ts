@@ -10,7 +10,7 @@ export class OffsetDataSourceWrapper<NodeType> extends DataSourceBase<NodeType, 
 
     ds;
 
-    constructor(ds: PagerDataSource<NodeType, any>, indexFieldName: string = "_index") {
+    constructor(ds: PagerDataSource<NodeType, number>, indexFieldName: string = "_index") {
         super(indexFieldName);
         this.ds = ds;
     }

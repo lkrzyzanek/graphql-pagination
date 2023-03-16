@@ -7,7 +7,7 @@ import type {ArgsBackward, ArgsForward} from "../CursorPagerSpec";
  * ID field can be either `number` or `Date` or `string`
  * transformNodesFn can be used to filter / transform the original nodes
  */
-export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number | Date | string> {
+export class ArrayDataSource<NodeType, IdType = number | Date | string> extends DataSourceBase<NodeType, IdType> {
 
     /**
      * Create new ArrayDataSource
@@ -34,19 +34,19 @@ export class ArrayDataSource<NodeType> extends DataSourceBase<NodeType, number |
         return this.getNodes(originalArgs).then(nodes => nodes.length);
     }
 
-    async after(afterId: number | Date | string | undefined, size: number, originalArgs: ArgsForward): Promise<NodeType[]> {
+    async after(afterId: IdType | undefined, size: number, originalArgs: ArgsForward): Promise<NodeType[]> {
         const result = await this.getNodes(originalArgs);
         return result
             .sort((a, b) => this.compareNodesId(a, b, true))
-            .filter(node => afterId === undefined ? true : this.getId(node) > afterId)
+            .filter(node => afterId === undefined || afterId === null ? true : this.getId(node) > afterId)
             .slice(0, size);
     }
 
-    async before(beforeId: number | Date | string | undefined, size: number, originalArgs: ArgsBackward): Promise<NodeType[]> {
+    async before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward): Promise<NodeType[]> {
         const result = await this.getNodes(originalArgs);
         return result
             .sort((a, b) => this.compareNodesId(a, b, false))
-            .filter(node => beforeId === undefined ? true : this.getId(node) < beforeId)
+            .filter(node => beforeId === undefined || beforeId === null ? true : this.getId(node) < beforeId)
             .slice(0, size);
     }
 

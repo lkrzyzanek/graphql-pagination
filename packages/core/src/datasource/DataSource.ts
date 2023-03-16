@@ -28,12 +28,13 @@ export abstract class DataSourceBase<NodeType, IdType> implements PagerDataSourc
 
     abstract totalCount(originalArgs: ArgsForward | ArgsBackward): Promise<number>;
 
-    abstract after(afterId: IdType | undefined, size: number, originalArgs: ArgsForward): Promise<any[]>;
+    abstract after(afterId: IdType | undefined, size: number, originalArgs: ArgsForward): Promise<NodeType[]>;
 
-    abstract before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward): Promise<any[]>;
+    abstract before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward): Promise<NodeType[]>;
 
-    getId(node: any): IdType {
-        const result = node[this.idFieldName];
+    getId(node: NodeType): IdType {
+        const n = node as Record<string, unknown>;
+        const result = n[this.idFieldName] as IdType;
         if (result == null) throw new Error(`No value for node's field '${this.idFieldName}'. Pager is probably not correctly configured.`);
         return result;
     }

@@ -1,4 +1,4 @@
-import type {CursorEncoderDecoder} from "./CursorPagerSpec";
+import type { CursorEncoderDecoder } from "./CursorPagerSpec";
 import { GraphQLError } from "graphql";
 
 /**

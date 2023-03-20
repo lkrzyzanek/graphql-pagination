@@ -3,22 +3,23 @@ import type {ArgsBackward, ArgsForward} from "../CursorPagerSpec";
 /**
  * DataSource Spec
  */
-export interface PagerDataSource<NodeType, IdType> {
+export interface PagerDataSource<NodeType, IdType, ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward> {
 
     getId: (node: NodeType) => IdType;
 
-    totalCount: (originalArgs: ArgsForward | ArgsBackward) => Promise<number>
+    totalCount: (originalArgs: ArgsForwardType | ArgsBackwardType) => Promise<number>
 
-    after: (afterId: IdType | undefined, size: number, originalArgs: ArgsForward) => Promise<NodeType[]>
+    after: (afterId: IdType | undefined, size: number, originalArgs: ArgsForwardType) => Promise<NodeType[]>
 
-    before: (beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward) => Promise<NodeType[]>
+    before: (beforeId: IdType | undefined, size: number, originalArgs: ArgsBackwardType) => Promise<NodeType[]>
 
 }
 
 /**
  * Simple DataSource Page implementing `getId` method based on defining the id field name
  */
-export abstract class DataSourceBase<NodeType, IdType> implements PagerDataSource<NodeType, IdType> {
+export abstract class DataSourceBase<NodeType, IdType, ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward>
+    implements PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType> {
 
     idFieldName: string;
 
@@ -26,11 +27,11 @@ export abstract class DataSourceBase<NodeType, IdType> implements PagerDataSourc
         this.idFieldName = idFieldName;
     }
 
-    abstract totalCount(originalArgs: ArgsForward | ArgsBackward): Promise<number>;
+    abstract totalCount(originalArgs: ArgsForwardType | ArgsBackwardType): Promise<number>;
 
-    abstract after(afterId: IdType | undefined, size: number, originalArgs: ArgsForward): Promise<NodeType[]>;
+    abstract after(afterId: IdType | undefined, size: number, originalArgs: ArgsForwardType): Promise<NodeType[]>;
 
-    abstract before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward): Promise<NodeType[]>;
+    abstract before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackwardType): Promise<NodeType[]>;
 
     getId(node: NodeType): IdType {
         const n = node as Record<string, unknown>;

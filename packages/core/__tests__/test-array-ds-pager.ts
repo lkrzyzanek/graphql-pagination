@@ -1,4 +1,4 @@
-import { ArrayDataSource, CursorPager, DataSourcePager } from "../src";
+import { ArgsBackward, ArgsForward, ArrayDataSource, CursorPager, DataSourcePager } from "../src";
 
 const january = new Date("2022-01-01");
 type Book = {
@@ -13,18 +13,22 @@ const data: Array<Book> = Array.from(Array<Book>(100)).map((e, i) => ({
     author: `Author ${(i + 1) % 10}`,
     published: new Date(january.setDate(i + 1)),
 }));
-const filter = (books, args) => {
+type FilterType = {
+    title?: string
+    author?: string
+}
+const filter = (books: Array<Book>, args: FilterType & (ArgsForward | ArgsBackward)) => {
     if (args.title) return books.filter(b => b.title === args.title);
     if (args.author) return books.filter(b => b.author === args.author);
     return books;
 };
-const validation = (args) => {
+const validation = (args: FilterType & (ArgsForward | ArgsBackward)) => {
     if (args.title && !data.find(b => b.title === args.title)) throw Error(`Title ${args.title} not exists`);
     if (args.author && !data.find(b => b.author === args.author)) throw Error(`Author ${args.author} not exists`);
 }
 
 describe("array-ds-by-id", () => {
-    let pagerById: CursorPager<Book, number>;
+    let pagerById: CursorPager<Book, number, ArgsForward & FilterType, ArgsBackward & FilterType>;
     beforeAll(() => {
         pagerById = new DataSourcePager({ dataSource: new ArrayDataSource(data) });
     });
@@ -99,7 +103,7 @@ describe("array-ds-by-id", () => {
 
 
 describe("array-ds-by-date", () => {
-    let pager: DataSourcePager<Book, number>;
+    let pager: DataSourcePager<Book, number, ArgsForward & FilterType, ArgsBackward & FilterType>;
     beforeAll(() => {
         pager = new DataSourcePager({ dataSource: new ArrayDataSource(data, "published") });
     });
@@ -131,7 +135,7 @@ describe("array-ds-by-date", () => {
 });
 
 describe("array-ds-by-title", () => {
-    let pager: DataSourcePager<Book, string>;
+    let pager: DataSourcePager<Book, string, ArgsForward & FilterType, ArgsBackward & FilterType>;
     beforeAll(() => {
         pager = new DataSourcePager({ dataSource: new ArrayDataSource(data, "title") });
     });
@@ -184,7 +188,7 @@ describe("array-ds-by-title", () => {
 });
 
 describe("array-ds-filter", () => {
-    let pager: DataSourcePager<Book, number>;
+    let pager: DataSourcePager<Book, number, ArgsForward & FilterType, ArgsBackward & FilterType>;
 
     beforeAll(() => {
         pager = new DataSourcePager({
@@ -241,7 +245,7 @@ describe("array-ds-filter", () => {
 });
 
 describe("array-ds-validation", () => {
-    let pager: DataSourcePager<Book, number>;
+    let pager: DataSourcePager<Book, number, ArgsForward & FilterType, ArgsBackward & FilterType>;
 
     beforeAll(() => {
         pager = new DataSourcePager({

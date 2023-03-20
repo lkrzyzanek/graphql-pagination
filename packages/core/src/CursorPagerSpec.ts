@@ -68,13 +68,13 @@ export interface PagerTypeDef {
 /**
  * Cursor Pager spec
  */
-export interface CursorPager<NodeType, IdType> {
+export interface CursorPager<NodeType, IdType, ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward> {
 
     // Main Resolvers
 
-    forwardResolver: (args: ArgsForward | any, dataSource?: PagerDataSource<NodeType, IdType>) => Promise<Connection>;
+    forwardResolver: (args: ArgsForward | any, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) => Promise<Connection>;
 
-    backwardResolver: (args: ArgsBackward | any, dataSource?: PagerDataSource<NodeType, IdType>) => Promise<Connection>;
+    backwardResolver: (args: ArgsBackward | any, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) => Promise<Connection>;
 
     // Cursor Helper
 
@@ -94,8 +94,10 @@ export interface CursorPager<NodeType, IdType> {
 
 }
 
-export interface CursorPagerFn<NodeType, IdType> extends Omit<CursorPager<NodeType, IdType>, "typeDefs" | "typeDef" | "resolvers"> {
+export interface CursorPagerFn<NodeType, IdType,
+    ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward>
+    extends Omit<CursorPager<NodeType, IdType, ArgsForwardType, ArgsBackwardType>, "typeDefs" | "typeDef" | "resolvers"> {
     typeDefs: () => string[]
     typeDef: () => PagerTypeDef
-    resolvers: (dataSource?: PagerDataSource<NodeType, IdType>) => Record<string, any>
+    resolvers: (dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) => Record<string, any>
 }

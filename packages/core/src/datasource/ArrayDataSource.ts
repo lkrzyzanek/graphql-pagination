@@ -1,5 +1,5 @@
-import {DataSourceBase} from "./DataSource";
-import type {ArgsBackward, ArgsForward} from "../CursorPagerSpec";
+import { DataSourceBase } from "./DataSource";
+import type { ArgsBackward, ArgsForward } from "../CursorPagerSpec";
 
 /**
  * Array backed DataSource.
@@ -7,7 +7,10 @@ import type {ArgsBackward, ArgsForward} from "../CursorPagerSpec";
  * ID field can be either `number` or `Date` or `string`
  * transformNodesFn can be used to filter / transform the original nodes
  */
-export class ArrayDataSource<NodeType, IdType = number | Date | string> extends DataSourceBase<NodeType, IdType> {
+export class ArrayDataSource<NodeType, IdType = number | Date | string,
+    ArgsForwardType extends ArgsForward = ArgsForward,
+    ArgsBackwardType extends ArgsBackward = ArgsBackward>
+    extends DataSourceBase<NodeType, IdType, ArgsForwardType, ArgsBackwardType> {
 
     /**
      * Create new ArrayDataSource
@@ -15,9 +18,9 @@ export class ArrayDataSource<NodeType, IdType = number | Date | string> extends 
      * @param idFieldName name of the field. Default is "id"
      * @param transformNodesFn additional transformation / filtration based on original arguments
      */
-    constructor(nodes: NodeType[] | ((originalArgs: ArgsForward | ArgsBackward) => Promise<NodeType[]>),
-                idFieldName: string = "id",
-                transformNodesFn?: (nodes: NodeType[], originalArgs: ArgsForward | ArgsBackward) => NodeType[]) {
+    constructor(nodes: NodeType[] | ((originalArgs: ArgsForwardType | ArgsBackwardType) => Promise<NodeType[]>),
+        idFieldName: string = "id",
+        transformNodesFn?: (nodes: NodeType[], originalArgs: ArgsForwardType | ArgsBackwardType) => NodeType[]) {
         super(idFieldName);
         if (Array.isArray(nodes)) {
             this.getNodes = (originalArgs) => Promise.resolve(nodes)
@@ -28,13 +31,13 @@ export class ArrayDataSource<NodeType, IdType = number | Date | string> extends 
         }
     }
 
-    getNodes: (originalArgs: ArgsForward | ArgsBackward) => Promise<NodeType[]>;
+    getNodes: (originalArgs: ArgsForwardType | ArgsBackwardType) => Promise<NodeType[]>;
 
-    async totalCount(originalArgs: ArgsForward | ArgsBackward): Promise<number> {
+    async totalCount(originalArgs: ArgsForwardType | ArgsBackwardType): Promise<number> {
         return this.getNodes(originalArgs).then(nodes => nodes.length);
     }
 
-    async after(afterId: IdType | undefined, size: number, originalArgs: ArgsForward): Promise<NodeType[]> {
+    async after(afterId: IdType | undefined, size: number, originalArgs: ArgsForwardType): Promise<NodeType[]> {
         const result = await this.getNodes(originalArgs);
         return result
             .sort((a, b) => this.compareNodesId(a, b, true))
@@ -42,7 +45,7 @@ export class ArrayDataSource<NodeType, IdType = number | Date | string> extends 
             .slice(0, size);
     }
 
-    async before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackward): Promise<NodeType[]> {
+    async before(beforeId: IdType | undefined, size: number, originalArgs: ArgsBackwardType): Promise<NodeType[]> {
         const result = await this.getNodes(originalArgs);
         return result
             .sort((a, b) => this.compareNodesId(a, b, false))

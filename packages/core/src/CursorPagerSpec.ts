@@ -84,20 +84,11 @@ export interface CursorPager<NodeType, IdType, ArgsForwardType extends ArgsForwa
     cursor: CursorEncoderDecoder<IdType>;
 
     /** GraphQL Type Defs - PageInfo, <TName>Connection, <TName>Edge, */
-    typeDefs: string[];
+    typeDefs: () => string[]
 
     /** Individual GraphQL TypeDefs */
-    typeDef: PagerTypeDef
+    typeDef: () => PagerTypeDef
 
     /** GraphQL Resolvers - <TName>Connection.totalCount */
-    resolvers: Record<string, any>;
-
-}
-
-export interface CursorPagerFn<NodeType, IdType,
-    ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward>
-    extends Omit<CursorPager<NodeType, IdType, ArgsForwardType, ArgsBackwardType>, "typeDefs" | "typeDef" | "resolvers"> {
-    typeDefs: () => string[]
-    typeDef: () => PagerTypeDef
     resolvers: (dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) => Record<string, any>
 }

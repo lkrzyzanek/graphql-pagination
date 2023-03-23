@@ -10,8 +10,7 @@ Core module of GraphQL Pagination providing spec and ready to use implementation
 6. [GraphQL Type Defs](src/TypeDefs.ts)
 
 Check additional modules:
-1. [@graphql-pagination/apollo-datasource](https://www.npmjs.com/package/@graphql-pagination/apollo-datasource) - tighter integration with Apollo
-2. [@graphql-pagination/sql-knex](https://www.npmjs.com/package/@graphql-pagination/sql-knex) - SQL (Knex.js) DataSource
+1. [@graphql-pagination/sql-knex](https://www.npmjs.com/package/@graphql-pagination/sql-knex) - SQL (Knex.js) DataSource
 
 ## DataSourcePager
 

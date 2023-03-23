@@ -2,9 +2,6 @@
 module.exports = {
     preset: "ts-jest",
     testEnvironment: "node",
-    testPathIgnorePatterns: [
-        "apollo-datasource"
-    ],
     collectCoverage: true,
     coverageDirectory: "coverage",
     reporters: [

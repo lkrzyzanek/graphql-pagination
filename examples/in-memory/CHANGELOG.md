@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/example-in-memory@1.4.11...@graphql-pagination/example-in-memory@1.5.0) (2023-03-23)
+
+
+### Features
+
+* Remove DataSourcePager class fixes [#104](https://github.com/lkrzyzanek/graphql-pagination/issues/104) ([7481282](https://github.com/lkrzyzanek/graphql-pagination/commit/7481282cb92ce11626e9e04d16430c227d8a1127))
+
+
+
+
+
 ## [1.4.11](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/example-in-memory@1.4.10...@graphql-pagination/example-in-memory@1.4.11) (2023-03-20)
 
 **Note:** Version bump only for package @graphql-pagination/example-in-memory

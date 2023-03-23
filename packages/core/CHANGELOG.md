@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.7.0...@graphql-pagination/core@1.8.0) (2023-03-23)
+
+
+### Features
+
+* Remove apollo-datasource package fixes [#105](https://github.com/lkrzyzanek/graphql-pagination/issues/105) ([5837a23](https://github.com/lkrzyzanek/graphql-pagination/commit/5837a2323cb25c446e9b05aec2c4bec6acf1147b))
+* Remove DataSourcePager class fixes [#104](https://github.com/lkrzyzanek/graphql-pagination/issues/104) ([7481282](https://github.com/lkrzyzanek/graphql-pagination/commit/7481282cb92ce11626e9e04d16430c227d8a1127))
+
+
+
+
+
 # [1.7.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.6.0...@graphql-pagination/core@1.7.0) (2023-03-20)
 
 

@@ -3,15 +3,15 @@ import { DataSourceBase } from "@graphql-pagination/core";
 import type { Knex } from "knex";
 
 
-export interface SqlKnexDataSourceConfig {
+export interface SqlKnexDataSourceConfig<NodeType extends {}, ArgsForwardType, ArgsBackwardType> {
     /** Knex instance */
-    knex: Knex;
+    knex: Knex<NodeType>;
     /** Table name */
     tableName: string;
     /** Column name acting as ID for cursor paging */
     idColumnName?: string;
     /** Override baseQuery. Useful for joins or additional filtration */
-    baseQuery?: (originalArgs: ArgsForward | ArgsBackward) => Knex.QueryBuilder;
+    baseQuery?: (originalArgs: ArgsForwardType | ArgsBackwardType) => Knex.QueryBuilder<NodeType>;
 }
 
 /**
@@ -22,15 +22,15 @@ export class SqlKnexDataSource<NodeType extends {}, IdType = number | Date,
     ArgsBackwardType extends ArgsBackward = ArgsBackward>
     extends DataSourceBase<NodeType, IdType, ArgsForwardType, ArgsBackwardType> {
 
-    knex: Knex;
+    knex: Knex<NodeType>;
     tableName: string;
-    baseQuery: (originalArgs: ArgsForwardType | ArgsBackwardType) => Knex.QueryBuilder;
+    baseQuery: (originalArgs: ArgsForwardType | ArgsBackwardType) => Knex.QueryBuilder<NodeType>;
 
     defaultBaseQuery(_originalArgs: ArgsForwardType | ArgsBackwardType): Knex.QueryBuilder<NodeType> {
         return this.knex<NodeType>(this.tableName);
     }
 
-    constructor(config: SqlKnexDataSourceConfig) {
+    constructor(config: SqlKnexDataSourceConfig<NodeType, ArgsForwardType, ArgsBackwardType>) {
         super(config.idColumnName);
         this.knex = config.knex;
         this.tableName = config.tableName;

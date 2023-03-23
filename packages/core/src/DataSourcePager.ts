@@ -39,6 +39,13 @@ export interface DataSourcePagerConfig<NodeType, IdType = string | number | Date
     fetchTotalCountInResolver?: boolean;
 }
 
+export type DataSourceCursorPager<NodeType, IdType,
+    ArgsForwardType extends ArgsForward = ArgsForward,
+    ArgsBackwardType extends ArgsBackward = ArgsBackward
+> = CursorPager<NodeType, IdType, ArgsForwardType, ArgsBackwardType> & {
+    totalCount(args: ArgsForwardType | ArgsBackwardType, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): Promise<number>
+}
+
 /**
  * CursorPager implementation backed by DataSource
  */
@@ -46,7 +53,8 @@ export function dataSourcePager<NodeType,
     IdType = string | number | Date,
     ArgsForwardType extends ArgsForward = ArgsForward,
     ArgsBackwardType extends ArgsBackward = ArgsBackward>
-    (config?: DataSourcePagerConfig<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): CursorPager<NodeType, IdType, ArgsForwardType, ArgsBackwardType> {
+    (config?: DataSourcePagerConfig<NodeType, IdType, ArgsForwardType, ArgsBackwardType>)
+    : DataSourceCursorPager<NodeType, IdType, ArgsForwardType, ArgsBackwardType> {
 
     const defaultCursor = new DefaultCursorEncoderDecoder<IdType>();
 
@@ -58,6 +66,11 @@ export function dataSourcePager<NodeType,
         const ds = dataSource || config?.dataSource;
         if (!ds) throw Error("No DataSource defined");
         return ds;
+    }
+
+    async function totalCount(args: ArgsForwardType | ArgsBackwardType, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) {
+        const ds = getDataSource(dataSource);
+        return await ds.totalCount(args);
     }
 
     async function forwardResolver(args: ArgsForwardType, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): Promise<Connection> {
@@ -74,10 +87,10 @@ export function dataSourcePager<NodeType,
         const hasNextPage = resultPlusOne?.length > args.first;
         const hasPreviousPage = !!args.after;
 
-        let totalCount;
-        if (fetchTotalCountInResolver) totalCount = await ds.totalCount(args);
+        let count;
+        if (fetchTotalCountInResolver) count = await totalCount(args, ds);
 
-        return PagerObject.connectionObject(resultPlusOne.slice(0, args.first), args, totalCount, hasNextPage, hasPreviousPage, ds, cursor);
+        return PagerObject.connectionObject(resultPlusOne.slice(0, args.first), args, count, hasNextPage, hasPreviousPage, ds, cursor);
     }
 
     async function backwardResolver(args: ArgsBackwardType, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): Promise<Connection> {
@@ -94,10 +107,10 @@ export function dataSourcePager<NodeType,
         const hasNextPage = resultPlusOne?.length > args.last;
         const hasPreviousPage = !!args.before;
 
-        let totalCount;
-        if (fetchTotalCountInResolver) totalCount = await ds.totalCount(args);
+        let count;
+        if (fetchTotalCountInResolver) count = await totalCount(args, ds);
 
-        return PagerObject.connectionObject(resultPlusOne.slice(0, args.last), args, totalCount, hasNextPage, hasPreviousPage, ds, cursor);
+        return PagerObject.connectionObject(resultPlusOne.slice(0, args.last), args, count, hasNextPage, hasPreviousPage, ds, cursor);
     }
 
     function typeDef(): PagerTypeDef {
@@ -125,6 +138,7 @@ export function dataSourcePager<NodeType,
     return {
         forwardResolver,
         backwardResolver,
+        totalCount,
 
         typeDef,
         typeDefs,

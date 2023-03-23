@@ -1,7 +1,5 @@
 /** @type {import("ts-jest/dist/types").InitialOptionsTsJest} */
 module.exports = {
-    preset: "ts-jest",
-    testEnvironment: "node",
     collectCoverage: true,
     coverageDirectory: "coverage",
     reporters: [
@@ -17,4 +15,27 @@ module.exports = {
         "node_modules",
         "dist",
     ],
+    transform: {
+        "^.+\\.ts$": [
+            "ts-jest",
+            {
+                tsconfig: {
+                    "types": ["node", "jest"],
+                    "target": "es2022",
+                    "module": "commonjs",
+                    "moduleResolution": "node",
+                    "esModuleInterop": true,
+                    "strict": true,
+                    "noImplicitAny": false,
+                    "noImplicitReturns": true,
+                    "noImplicitOverride": false,
+                    "noFallthroughCasesInSwitch": true,
+                    "noUnusedParameters": true,
+                    "noUnusedLocals": false,
+                    "lib": ["es2022"],
+                    noImplicitAny: false,
+                },
+            },
+        ],
+    }
 };

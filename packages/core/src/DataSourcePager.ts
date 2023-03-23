@@ -6,7 +6,6 @@ import type {
     Connection,
     CursorEncoderDecoder,
     CursorPager,
-    CursorPagerFn,
     Edge,
     PageInfo,
     PagerTypeDef
@@ -41,44 +40,13 @@ export interface DataSourcePagerConfig<NodeType, IdType = string | number | Date
 }
 
 /**
- * CursorPager implementation backed by DataSource. Wrapper of dataSourcePager function
- * @deprecated Use dataSourcePager function the same way
- */
-export class DataSourcePager<NodeType, IdType = string | number | Date,
-    ArgsForwardType extends ArgsForward = ArgsForward,
-    ArgsBackwardType extends ArgsBackward = ArgsBackward> implements CursorPager<NodeType, IdType, ArgsForwardType, ArgsBackwardType> {
-
-    dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>;
-    cursor: CursorEncoderDecoder<IdType>;
-    typeDefs: string[] = [];
-    typeDef: PagerTypeDef;
-    resolvers: Record<string, any> = {};
-    forwardResolver: (args: ArgsForward | any, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) => Promise<Connection>;
-    backwardResolver: (args: ArgsBackward | any, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) => Promise<Connection>;
-
-    pager;
-
-    constructor(config: DataSourcePagerConfig<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) {
-        this.pager = dataSourcePager<NodeType, IdType, ArgsForwardType, ArgsBackwardType>(config);
-        this.cursor = this.pager.cursor;
-        this.typeDef = this.pager.typeDef();
-        this.typeDefs = this.pager.typeDefs();
-        this.resolvers = this.pager.resolvers(config.dataSource);
-        this.forwardResolver = this.pager.forwardResolver;
-        this.backwardResolver = this.pager.backwardResolver;
-    }
-
-}
-
-
-/**
  * CursorPager implementation backed by DataSource
  */
 export function dataSourcePager<NodeType,
     IdType = string | number | Date,
     ArgsForwardType extends ArgsForward = ArgsForward,
     ArgsBackwardType extends ArgsBackward = ArgsBackward>
-    (config?: DataSourcePagerConfig<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): CursorPagerFn<NodeType, IdType, ArgsForwardType, ArgsBackwardType> {
+    (config?: DataSourcePagerConfig<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): CursorPager<NodeType, IdType, ArgsForwardType, ArgsBackwardType> {
 
     const defaultCursor = new DefaultCursorEncoderDecoder<IdType>();
 
@@ -162,10 +130,11 @@ export function dataSourcePager<NodeType,
         typeDefs,
 
         resolvers: (dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): Record<string, any> => {
-            if (!dataSource || !config?.typeName) return {};
+            const ds = getDataSource(dataSource);
+            if (!ds || !config?.typeName) return {};
             return {
                 [`${config?.typeName}Connection`]: {
-                    totalCount: (connection: Connection) => dataSource.totalCount(connection.args),
+                    totalCount: (connection: Connection) => ds.totalCount(connection.args),
                 }
             };
         },

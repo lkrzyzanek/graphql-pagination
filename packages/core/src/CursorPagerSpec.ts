@@ -72,9 +72,9 @@ export interface CursorPager<NodeType, IdType, ArgsForwardType extends ArgsForwa
 
     // Main Resolvers
 
-    forwardResolver: (args: ArgsForward | any, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) => Promise<Connection>;
+    forwardResolver: (args: ArgsForwardType, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) => Promise<Connection>;
 
-    backwardResolver: (args: ArgsBackward | any, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) => Promise<Connection>;
+    backwardResolver: (args: ArgsBackwardType, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>) => Promise<Connection>;
 
     // Cursor Helper
 

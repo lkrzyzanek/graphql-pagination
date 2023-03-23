@@ -7,7 +7,7 @@ type Book = {
     author: string
     published: Date
 }
-const data: Array<Book> = Array.from(Array<Book>(100)).map((e, i) => ({
+const data: Array<Book> = Array.from(Array<Book>(100)).map((_e, i) => ({
     id: i + 1,
     title: `Title ${i + 1}`,
     author: `Author ${(i + 1) % 10}`,
@@ -100,7 +100,7 @@ describe("array-ds-by-id", () => {
 
 
 describe("array-ds-by-date", () => {
-    const pager = dataSourcePager({ dataSource: new ArrayDataSource(data, "published") });
+    const pager = dataSourcePager<Book, number>({ dataSource: new ArrayDataSource(data, "published") });
 
     test("forward-totalCount", async () => {
         const connection = await pager.forwardResolver({ "first": 10 });
@@ -180,7 +180,7 @@ describe("array-ds-by-title", () => {
 });
 
 describe("array-ds-filter", () => {
-    const pager = dataSourcePager({
+    const pager = dataSourcePager<Book, number, ArgsForward & FilterType>({
         dataSource: new ArrayDataSource(data, "id", filter),
         validateForwardArgs: validation
     });
@@ -191,7 +191,7 @@ describe("array-ds-filter", () => {
         expect(connection.edges[0].node.id).toBe(5);
     });
     test("title-data-asyncfn", async () => {
-        const pager = dataSourcePager({
+        const pager = dataSourcePager<Book, number, ArgsForward & FilterType>({
             dataSource: new ArrayDataSource(async () => data, "id", filter),
             validateForwardArgs: validation
         });
@@ -234,14 +234,14 @@ describe("array-ds-filter", () => {
 });
 
 describe("array-ds-validation", () => {
-    const pager = dataSourcePager({
+    const pager = dataSourcePager<Book, number, ArgsForward & FilterType, ArgsBackward & FilterType>({
         dataSource: new ArrayDataSource(data, "id", filter),
         validateForwardArgs: validation,
         validateBackwardArgs: validation,
     });
 
     test("validation-disabled", async () => {
-        const pagerNoValidation = dataSourcePager({ dataSource: new ArrayDataSource(data, "id", filter) });
+        const pagerNoValidation = dataSourcePager<Book, number, ArgsForward & FilterType, ArgsBackward & FilterType>({ dataSource: new ArrayDataSource(data, "id", filter) });
         const connection = await pagerNoValidation.forwardResolver({ "first": 10, "title": "BAD-TITLE" });
         expect(connection.edges).toHaveLength(0);
         const connectionBack = await pagerNoValidation.backwardResolver({ "last": 10, "title": "BAD-TITLE" });
@@ -253,7 +253,7 @@ describe("array-ds-validation", () => {
         return expect(tested).rejects.toStrictEqual(new Error("Title BAD-TITLE not exists"));
     });
     test("validation-array-title", () => {
-        const pagerValidationArray = dataSourcePager({
+        const pagerValidationArray = dataSourcePager<Book, number, ArgsForward & FilterType, ArgsBackward & FilterType>({
             dataSource: new ArrayDataSource(data, "id", filter),
             validateForwardArgs: [validation],
             validateBackwardArgs: [validation]
@@ -262,7 +262,7 @@ describe("array-ds-validation", () => {
         return expect(tested).rejects.toStrictEqual(new Error("Title BAD-TITLE not exists"));
     });
     test("validation-array-title-back", () => {
-        const pagerValidationArray = dataSourcePager({
+        const pagerValidationArray = dataSourcePager<Book, number, ArgsForward & FilterType, ArgsBackward & FilterType>({
             dataSource: new ArrayDataSource(data, "id", filter),
             validateForwardArgs: [validation],
             validateBackwardArgs: [validation]

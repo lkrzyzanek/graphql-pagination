@@ -3,7 +3,7 @@ import { GraphQLError } from "graphql";
 
 describe("cursor", () => {
 
-    function validateInvalidCursor(e: Error) {
+    function validateInvalidCursor(e) {
         expect(e.message).toBe("Invalid cursor value");
         const ex = e as GraphQLError;
         expect(ex.extensions).toStrictEqual({ code: "BAD_USER_INPUT" });

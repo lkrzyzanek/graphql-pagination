@@ -1,6 +1,6 @@
 const { ApolloServer } = require("@apollo/server");
 const gql = require("graphql-tag");
-const { ArrayDataSource, dataSourcePager, OffsetDataSourceWrapper } = require("@graphql-pagination/core");
+const { ArrayDataSource, dataSourcePager, OffsetDataSourceWrapper, dataloaderPagerWrapper } = require("@graphql-pagination/core");
 const { typeDefs: scalarTypeDefs, resolvers: scalarResolvers } = require("graphql-scalars");
 const { GraphQLError } = require("graphql");
 
@@ -100,8 +100,8 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    booksAsc: (_, args) => pagerById.forwardResolver(args),
-    booksDesc: (_, args) => pagerById.backwardResolver(args),
+    booksAsc: (_, args) => dataloaderPagerWrapper(pagerById).forwardResolver(args),
+    booksDesc: (_, args) => dataloaderPagerWrapper(pagerById).backwardResolver(args),
     booksPublishedAsc: (_, args) => pagerPublished.forwardResolver(args),
     booksPublishedDesc: (_, args) => pagerPublished.backwardResolver(args),
     booksByTitle: (_, args) => pagerById.forwardResolver(args),

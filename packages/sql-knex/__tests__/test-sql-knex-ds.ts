@@ -1,7 +1,10 @@
-import {SqlKnexDataSource} from "../src/SqlKnexDataSource";
+import { ArgsForward } from "@graphql-pagination/core";
+import { ArgsBackward } from "@graphql-pagination/core/src";
+import { SqlKnexDataSource } from "../src/SqlKnexDataSource";
+import { Knex } from 'knex';
 
 describe("sql-knex-ds", () => {
-    
+
     type Book = {
         id: number
         title: string
@@ -10,14 +13,14 @@ describe("sql-knex-ds", () => {
     }
 
     const january = new Date("2022-01-01");
-    const data = Array.from(Array(100)).map((e, i) => ({
+    const data = Array.from(Array(100)).map((_e, i) => ({
         id: i + 1,
         title: `Title ${i + 1}`,
         author: `Author ${(i + 1) % 10}`,
         published: new Date(january.setDate(i + 1)),
     }));
 
-    let knex;
+    let knex: Knex<Book, Book[]>;
 
     jest.setTimeout(1000);
 
@@ -47,20 +50,20 @@ describe("sql-knex-ds", () => {
         let ds: SqlKnexDataSource<Book, number>;
 
         beforeAll(() => {
-            ds = new SqlKnexDataSource({tableName: "test", idColumnName: "id", knex: knex});
+            ds = new SqlKnexDataSource({ tableName: "test", idColumnName: "id", knex: knex });
         })
         test("totalCount", async () => {
-            return expect(ds.totalCount({"first": 10})).resolves.toBe(100);
+            return expect(ds.totalCount({ "first": 10 })).resolves.toBe(100);
         });
 
         test("after", async () => {
-            const result = await ds.after(5, 10, { first: 0});
+            const result = await ds.after(5, 10, { first: 0 });
             expect(result).toHaveLength(10);
             expect(result[0].id).toBe(6);
             expect(result[9].id).toBe(15);
         });
         test("after-from-begin", async () => {
-            const result = await ds.after(undefined, 5, { first: 0});
+            const result = await ds.after(undefined, 5, { first: 0 });
             expect(result).toHaveLength(5);
             expect(result[0].id).toBe(1);
             expect(result[4].id).toBe(5);
@@ -72,7 +75,7 @@ describe("sql-knex-ds", () => {
             expect(result[9].id).toBe(80);
         });
         test("before-from-begin", async () => {
-            const result = await ds.before(undefined, 5, { last: 0});
+            const result = await ds.before(undefined, 5, { last: 0 });
             expect(result).toHaveLength(5);
             expect(result[0].id).toBe(100);
             expect(result[4].id).toBe(96);
@@ -83,10 +86,10 @@ describe("sql-knex-ds", () => {
         let ds: SqlKnexDataSource<Book, Date>;
 
         beforeAll(() => {
-            ds = new SqlKnexDataSource({tableName: "test", idColumnName: "published", knex: knex});
+            ds = new SqlKnexDataSource({ tableName: "test", idColumnName: "published", knex: knex });
         })
         test("totalCount", async () => {
-            return expect(ds.totalCount({"first": 10})).resolves.toBe(100);
+            return expect(ds.totalCount({ "first": 10 })).resolves.toBe(100);
         });
 
         test("after", async () => {
@@ -104,9 +107,11 @@ describe("sql-knex-ds", () => {
     })
 
     describe("filter", () => {
-        let ds: SqlKnexDataSource<Book, number>;
+        type ArgsForwardType = ArgsForward & { author: string };
+        type ArgsBackwardType = ArgsBackward & { author: string };
+        let ds: SqlKnexDataSource<Book, number, ArgsForwardType, ArgsBackwardType>;
         const tableName = "test";
-        const baseQuery = (args) => {
+        const baseQuery = (args: ArgsForwardType | ArgsBackwardType) => {
             return knex(tableName)
                 .where(builder => {
                     if (args.author) builder.where("author", args.author);
@@ -114,18 +119,17 @@ describe("sql-knex-ds", () => {
         };
 
         beforeAll(() => {
-            ds = new SqlKnexDataSource({
-                    tableName: tableName,
-                    baseQuery: baseQuery,
-                    knex: knex
-                }
+            ds = new SqlKnexDataSource<Book, number, ArgsForwardType, ArgsBackwardType>({
+                tableName: tableName,
+                baseQuery: baseQuery,
+                knex: knex
+            }
             );
         })
 
         test("author", async () => {
             const desiredAuthor = "Author 4"
-            // @ts-ignore
-            const result = await ds.after(0, 2, {first: 0, "author": desiredAuthor});
+            const result = await ds.after(0, 2, { first: 0, "author": desiredAuthor });
             result.forEach(book => {
                 expect(book.author).toBe(desiredAuthor);
             });

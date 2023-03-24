@@ -100,8 +100,8 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    booksAsc: (_, args) => dataloaderPagerWrapper(pagerById).forwardResolver(args),
-    booksDesc: (_, args) => dataloaderPagerWrapper(pagerById).backwardResolver(args),
+    booksAsc: (_, args, { pagerDataloader }) => pagerDataloader.forwardResolver(args),
+    booksDesc: (_, args, { pagerDataloader }) => pagerDataloader.backwardResolver(args),
     booksPublishedAsc: (_, args) => pagerPublished.forwardResolver(args),
     booksPublishedDesc: (_, args) => pagerPublished.backwardResolver(args),
     booksByTitle: (_, args) => pagerById.forwardResolver(args),
@@ -131,4 +131,5 @@ const createApolloServer = () => {
 
 module.exports = {
   createApolloServer,
+  dataSource: ds,
 };

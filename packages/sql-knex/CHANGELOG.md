@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/sql-knex@1.3.0...@graphql-pagination/sql-knex@1.4.0) (2023-03-24)
+
+
+### Features
+
+* dataloader integration via dataloaderPagerWrapper & dataSourceLoaderPager fixes [#107](https://github.com/lkrzyzanek/graphql-pagination/issues/107) ([c3be565](https://github.com/lkrzyzanek/graphql-pagination/commit/c3be565d325e5686c9053dbe8fc8d8411f67e58e))
+
+
+
+
+
 # [1.3.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/sql-knex@1.2.0...@graphql-pagination/sql-knex@1.3.0) (2023-03-23)
 
 

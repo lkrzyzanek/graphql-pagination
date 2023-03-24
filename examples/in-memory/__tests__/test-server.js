@@ -1,8 +1,12 @@
-const { createApolloServer } = require("../server");
+const { createApolloServer, dataSource } = require("../server");
+const { dataSourceLoaderPager } = require("@graphql-pagination/core");
 
 describe("example-in-memory", () => {
 
   let testServer;
+  const contextValue = {
+    pagerDataloader: dataSourceLoaderPager({ dataSource }),
+  };
   beforeAll(() => {
     testServer = createApolloServer();
   });
@@ -25,7 +29,7 @@ describe("example-in-memory", () => {
             }
           }
         `,
-    });
+    }, { contextValue });
 
     expect(response.body.singleResult.errors).toBeUndefined();
     const books = response.body.singleResult.data.books;
@@ -45,7 +49,7 @@ describe("example-in-memory", () => {
             }
           }
         `,
-    });
+    }, { contextValue });
 
     expect(response.body.singleResult.errors[0].message).toBe("Invalid cursor value");
     expect(response.body.singleResult.errors[0].extensions.code).toBe("BAD_USER_INPUT");
@@ -58,7 +62,7 @@ describe("example-in-memory", () => {
             badquery
           }
         `,
-    });
+    }, { contextValue });
 
     expect(response.body.singleResult.errors[0].message).toBe("Cannot query field \"badquery\" on type \"Query\".");
   });
@@ -73,7 +77,7 @@ describe("example-in-memory", () => {
             }
           }
         `,
-    });
+    }, { contextValue });
 
     expect(response.body.singleResult.errors[0].message).toBe("Author bad name not exists");
   });
@@ -88,7 +92,7 @@ describe("example-in-memory", () => {
             }
           }
         `,
-    });
+    }, { contextValue });
 
     expect(response.body.singleResult.errors[0].message).toBe("Title bad name not exists");
   });
@@ -103,7 +107,7 @@ describe("example-in-memory", () => {
             }
           }
         `,
-    });
+    }, { contextValue });
 
     expect(response.body.singleResult.errors).toBeUndefined();
     expect(response.body.singleResult.data.books.totalCount).toBe(10);
@@ -119,7 +123,7 @@ describe("example-in-memory", () => {
             }
           }
         `,
-    });
+    }, { contextValue });
 
     expect(response.body.singleResult.errors).toBeUndefined();
     expect(response.body.singleResult.data.books.totalCount).toBe(10);
@@ -135,7 +139,7 @@ describe("example-in-memory", () => {
             }
           }
         `,
-    });
+    }, { contextValue });
 
     expect(response.body.singleResult.errors).toBeUndefined();
     expect(response.body.singleResult.data.books.totalCount).toBe(1);

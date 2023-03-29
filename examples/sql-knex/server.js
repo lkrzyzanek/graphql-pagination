@@ -7,38 +7,38 @@ const { SqlKnexDataSource } = require("@graphql-pagination/sql-knex");
 // generate 100 books { id : x, title: "Book x", published: "2022-01-01T14:17:11.929Z" }
 const january = new Date("2022-01-01");
 const createBook = (i) => {
-  return {
-    id: i + 1,
-    title: `Book ${i + 1}`,
-    author: `Author ${(i + 1) % 10}`,
-    published: new Date(january.setDate(i + 1)),
-  };
+    return {
+        id: i + 1,
+        title: `Book ${i + 1}`,
+        author: `Author ${(i + 1) % 10}`,
+        published: new Date(january.setDate(i + 1)),
+    };
 };
 const books = Array.from(Array(100)).map((e, i) => createBook(i));
 
 const knex = require("knex")({
-  client: "better-sqlite3",
-  connection: {
-    filename: ":memory:",
-  },
-  useNullAsDefault: true,
-  debug: true,
+    client: "better-sqlite3",
+    connection: {
+        filename: ":memory:",
+    },
+    useNullAsDefault: true,
+    debug: true,
 });
 
 const tableName = "book";
 
 async function initDb() {
-  await knex.schema.createTable(tableName, (table) => {
-    table.integer("id");
-    table.string("title");
-    table.string("author");
-    table.date("published");
-  });
-  await knex.batchInsert("book", books, 10);
+    await knex.schema.createTable(tableName, (table) => {
+        table.integer("id");
+        table.string("title");
+        table.string("author");
+        table.date("published");
+    });
+    await knex.batchInsert("book", books, 10);
 }
 
 async function knexDestroy() {
-  await knex.destroy();
+    await knex.destroy();
 }
 
 
@@ -58,48 +58,48 @@ const typeDefs = gql`
 
 
 const baseQueryFilter = (args) => {
-  return knex(tableName)
-    .where(builder => {
-      if (args.author) builder.where("author", args.author);
-    });
+    return knex(tableName)
+        .where(builder => {
+            if (args.author) builder.where("author", args.author);
+        });
 };
 
 const ds = new SqlKnexDataSource({
-  tableName: tableName,
-  idFieldName: "id",
-  knex: knex,
-  baseQuery: baseQueryFilter,
+    tableName: tableName,
+    idFieldName: "id",
+    knex: knex,
+    baseQuery: baseQueryFilter,
 });
 
 const pager = dataSourcePager({
-  dataSource: ds,
-  typeName: "Book",
+    dataSource: ds,
+    typeName: "Book",
 });
 
 const resolvers = {
-  Query: {
-    booksAsc: (_, args) => pager.forwardResolver(args),
-    booksDesc: (_, args) => pager.backwardResolver(args),
-  },
+    Query: {
+        booksAsc: (_, args) => pager.forwardResolver(args),
+        booksDesc: (_, args) => pager.backwardResolver(args),
+    },
 };
 
 
 const createApolloServer = () => {
-  return new ApolloServer({
-    typeDefs: [
-      typeDefs,
-      pager.typeDefs, // BookConnection, BookEdge, PageInfo typeDefs
-      scalarTypeDefs, // for DateTime
-    ],
-    resolvers: [
-      resolvers,
-      scalarResolvers, // for DateTime
-    ],
-  });
+    return new ApolloServer({
+        typeDefs: [
+            typeDefs,
+            pager.typeDefs, // BookConnection, BookEdge, PageInfo typeDefs
+            scalarTypeDefs, // for DateTime
+        ],
+        resolvers: [
+            resolvers,
+            scalarResolvers, // for DateTime
+        ],
+    });
 };
 
 module.exports = {
-  createApolloServer,
-  initDb,
-  knexDestroy,
+    createApolloServer,
+    initDb,
+    knexDestroy,
 };

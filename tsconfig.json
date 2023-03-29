@@ -6,6 +6,7 @@
   "include": [],
   "references": [
     { "path": "./packages/core" },
-    { "path": "./packages/sql-knex" }
+    { "path": "./packages/sql-knex" },
+    { "path": "./packages/mongodb" }
   ]
 }

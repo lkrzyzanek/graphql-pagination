@@ -8,14 +8,15 @@ Designed in modular and extendable way.
 
 ## Getting Started
 
-You can use built-in [`dataSourcePager`](packages/core/README.md#datasourcepager) which provides GraphQL Resolver for your Graph.
-By implementing / using DataSource you have full control how data are provided to the Pager.
+Use built-in [`dataSourcePager`](packages/core/README.md#datasourcepager) which provides GraphQL Resolver for your Graph.
+By implementing / using built-in `DataSource` you have full control how data is provided to the Pager.
 
 You can use one of these provided:
 
 1. [ArrayDataSource](packages/core/README.md) - bundled in [@graphql-pagination/core](https://www.npmjs.com/package/@graphql-pagination/core) module
 2. [OffsetDataSourceWrapper](packages/core/README.md) - bundled in [@graphql-pagination/core](https://www.npmjs.com/package/@graphql-pagination/core) module
 3. [SQL Knex](packages/sql-knex) - bundled in [sql-knex](https://www.npmjs.com/package/@graphql-pagination/sql-knex) module
+3. [MongoDb](packages/mongodb) - bundled in [mongodb](https://www.npmjs.com/package/@graphql-pagination/mongodb) module
 
 Or implement your own by implementing the [DataSource](packages/core/src/datasource/DataSource.ts) interface.
 

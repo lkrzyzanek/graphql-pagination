@@ -22,12 +22,12 @@ export class SqlKnexDataSource<NodeType extends {}, IdType = number | Date,
     ArgsBackwardType extends ArgsBackward = ArgsBackward>
     extends DataSourceBase<NodeType, IdType, ArgsForwardType, ArgsBackwardType> {
 
-    knex: Knex<NodeType>;
+    knex: Knex;
     tableName: string;
-    baseQuery: (originalArgs: ArgsForwardType | ArgsBackwardType) => Knex.QueryBuilder<NodeType>;
+    baseQuery: (originalArgs: ArgsForwardType | ArgsBackwardType) => Knex.QueryBuilder;
 
-    defaultBaseQuery(_originalArgs: ArgsForwardType | ArgsBackwardType): Knex.QueryBuilder<NodeType> {
-        return this.knex<NodeType>(this.tableName);
+    defaultBaseQuery(_originalArgs: ArgsForwardType | ArgsBackwardType): Knex.QueryBuilder {
+        return this.knex(this.tableName);
     }
 
     constructor(config: SqlKnexDataSourceConfig<NodeType, ArgsForwardType, ArgsBackwardType>) {

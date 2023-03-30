@@ -1,0 +1,36 @@
+{
+    "name": "@graphql-pagination/example-mongodb",
+    "private": true,
+    "description": "Example demonstrating how to use @graphql-pagination/core with an MonoDB datasource.",
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "engines": {
+        "node": ">=16.0.0"
+    },
+    "scripts": {
+        "build": "tsc",
+        "codegen": "graphql-codegen -r ts-node/register",
+        "start": "node dist/index.js",
+        "dev": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node src/index.ts\""
+    },
+    "dependencies": {
+        "@apollo/server": "^4.5.0",
+        "@graphql-pagination/mongodb": "^1.0.0",
+        "graphql": "^16.6.0",
+        "graphql-tag": "2.12.6",
+        "mongodb": "^5.1.0",
+        "mongodb-memory-server": "^8.12.1"
+    },
+    "devDependencies": {
+        "@graphql-codegen/cli": "^3.2.2",
+        "@graphql-codegen/typescript": "^3.0.2",
+        "@graphql-codegen/typescript-resolvers": "^3.1.1",
+        "@types/jest": "^29.4.0",
+        "@types/node": "^18.14.0",
+        "ts-jest": "^29.0.5",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.5"
+    }
+}

@@ -25,7 +25,7 @@ module.exports = {
                     "module": "commonjs",
                     "moduleResolution": "node",
                     "esModuleInterop": true,
-                    "strict": true,
+                    "strict": false,
                     "noImplicitAny": false,
                     "noImplicitReturns": true,
                     "noImplicitOverride": false,

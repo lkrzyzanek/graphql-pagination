@@ -1,6 +1,6 @@
-import type { ArgsBackward, ArgsForward } from "@graphql-pagination/core";
+import { ArgsBackward, ArgsForward, DefaultCursorEncoderDecoder } from "@graphql-pagination/core";
 import { DataSourceBase } from "@graphql-pagination/core";
-import type { Db, ObjectId, Document, Filter } from "mongodb";
+import { Db, ObjectId, Document, Filter } from "mongodb";
 
 
 export interface MongoDbDataSourceConfig<NodeType extends Document, ArgsForwardType, ArgsBackwardType> {
@@ -14,7 +14,16 @@ export interface MongoDbDataSourceConfig<NodeType extends Document, ArgsForwardT
     filters?: (args: ArgsForwardType | ArgsBackwardType) => Filter<NodeType>[] | undefined;
 }
 /**
- * DataSource for MongoDB
+ * DataSource for MongoDB.
+ * To use it over default `_id` as objectId it's needed to use cursor ObjectIdCursorEncoderDecoder.
+ * 
+ * Example:
+ * 
+ * ```ts
+ * const ds = new MongoDbDataSource<BookType>({ collectionName, mongoDb });
+ * const cursor = new ObjectIdCursorEncoderDecoder();
+ * const booksPager = dataSourceLoaderPager({ dataSource, cursor }), 
+ * ```
  */
 export class MongoDbDataSource<NodeType extends Document, IdType = ObjectId,
     ArgsForwardType extends ArgsForward = ArgsForward,
@@ -69,11 +78,25 @@ export class MongoDbDataSource<NodeType extends Document, IdType = ObjectId,
     }
 
     async totalCount(args: ArgsForwardType | ArgsBackwardType): Promise<number> {
-        const conditions = this.filters && this.filters(args);
-        const query = conditions ? {
+        const conditions = this.filters && this.filters(args) || new Array();
+        const query = conditions.length ? {
             "$and": conditions,
         } : {};
         return await this.collection().countDocuments(query);
     }
 
+}
+
+/**
+ * Cursor encoder/decoder for Mongo ObjectId
+ * @see https://www.mongodb.com/docs/manual/reference/method/ObjectId/
+ */
+export class ObjectIdCursorEncoderDecoder extends DefaultCursorEncoderDecoder<ObjectId | string> {
+    override decode(encodedCursor: string): ObjectId {
+        const decodedId = super.decode(encodedCursor) as string;  // is string
+        return new ObjectId(decodedId);
+    }
+    override encode(cursor: ObjectId): string {
+        return super.encode(cursor.toString());
+    }
 }

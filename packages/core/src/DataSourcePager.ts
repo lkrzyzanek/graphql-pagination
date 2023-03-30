@@ -195,12 +195,12 @@ export const PagerObject = {
     },
 
     startCursor(edges: any[]): string | undefined {
-        if (!edges || edges.length === 0) return;
+        if (!edges || edges.length === 0) return undefined;
         return edges[0].cursor;
     },
 
     endCursor(edges: any[]): string | undefined {
-        if (!edges || edges.length === 0) return;
+        if (!edges || edges.length === 0) return undefined;
         return edges[edges.length - 1].cursor;
     },
 }

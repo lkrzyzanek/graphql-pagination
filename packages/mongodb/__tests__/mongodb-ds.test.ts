@@ -46,7 +46,6 @@ describe("mongodb-ds", () => {
     afterAll(async () => {
         if (client) await client.close();
         if (mongod) await mongod.stop();
-        // await server.stop();
     });
 
     describe("by-id", () => {

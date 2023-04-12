@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.1](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.10.0...@graphql-pagination/core@1.10.1) (2023-04-12)
+
+
+### Bug Fixes
+
+* removed sourceRoot fixes [#114](https://github.com/lkrzyzanek/graphql-pagination/issues/114) ([71fb898](https://github.com/lkrzyzanek/graphql-pagination/commit/71fb898f46d9f7061f7bdaffad7790f31ce42ca1))
+
+
+
+
+
 # [1.10.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.9.0...@graphql-pagination/core@1.10.0) (2023-03-30)
 
 

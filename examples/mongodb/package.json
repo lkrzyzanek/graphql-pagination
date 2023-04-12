@@ -2,7 +2,7 @@
     "name": "@graphql-pagination/example-mongodb",
     "private": true,
     "description": "Example demonstrating how to use @graphql-pagination/core with an MonoDB datasource.",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "license": "MIT",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -17,7 +17,7 @@
     },
     "dependencies": {
         "@apollo/server": "^4.5.0",
-        "@graphql-pagination/mongodb": "^1.1.0",
+        "@graphql-pagination/mongodb": "^1.1.1",
         "graphql": "^16.6.0",
         "graphql-tag": "2.12.6",
         "mongodb": "^5.1.0",

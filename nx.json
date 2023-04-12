@@ -3,22 +3,9 @@
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "test"]
+        "cacheableOperations": ["build"]
       }
     }
   },
-  "namedInputs": {
-    "all": ["{projectRoot}/**/*"],
-    "nonTests": ["!{projectRoot}/__tests__/*.*"]
-  },
-  "targetDefaults": {
-    "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["nonTests", "^nonTests"]
-    },
-    "test": {
-      "dependsOn": ["build"],
-      "inputs": ["all", "^nonTests"]
-    }
-  }
+  "useDaemonProcess": false
 }

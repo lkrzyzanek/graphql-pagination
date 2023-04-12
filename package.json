@@ -10,13 +10,15 @@
   },
   "engines": {
     "node": ">=16",
-    "npm": "8.x"
+    "npm": ">=8"
   },
   "workspaces": [
     "packages/core",
     "packages/sql-knex",
     "packages/mongodb",
-    "examples/*"
+    "examples/in-memory",
+    "examples/sql-knex",
+    "examples/mongodb/"
   ],
   "devDependencies": {
     "@types/jest": "^29.5.0",

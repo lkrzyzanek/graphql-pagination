@@ -3,6 +3,7 @@
   "useWorkspaces": true,
   "npmClient": "npm",
   "version": "independent",
+  "useNx": false,
   "command": {
     "version": {
       "message": "Release",

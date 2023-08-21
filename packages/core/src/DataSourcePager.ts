@@ -13,6 +13,7 @@ import type {
 import type { PagerDataSource } from "./datasource/DataSource";
 import { DefaultCursorEncoderDecoder } from "./DefaultCursorEncoderDecoder";
 import { createConnectionTypeDef, createEdgeTypeDef, createPageInfoTypeDef } from "./TypeDefs";
+import { GraphQLError } from "graphql";
 
 type validationArgFn = ((args: ArgsForward | any) => void);
 
@@ -78,6 +79,8 @@ export function dataSourcePager<NodeType,
             if (Array.isArray(config.validateForwardArgs)) config.validateForwardArgs.forEach(validation => validation(args));
             else config.validateForwardArgs(args);
         }
+        if (args.first < 0) throw new GraphQLError("first argument has to be a non-negative number", { extensions: { code: "BAD_USER_INPUT" } });
+
         let afterId: IdType | undefined;
         if (args.after) afterId = cursor.decode(args.after);
 
@@ -98,6 +101,8 @@ export function dataSourcePager<NodeType,
             if (Array.isArray(config.validateBackwardArgs)) config.validateBackwardArgs.forEach(validation => validation(args));
             else config.validateBackwardArgs(args);
         }
+        if (args.last < 0) throw new GraphQLError("last argument has to be a non-negative number", { extensions: { code: "BAD_USER_INPUT" } });
+
         let beforeId: IdType | undefined;
         if (args.before) beforeId = cursor.decode(args.before);
 

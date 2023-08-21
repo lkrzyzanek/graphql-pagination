@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.3](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/example-in-memory@1.6.2...@graphql-pagination/example-in-memory@1.6.3) (2023-08-21)
+
+**Note:** Version bump only for package @graphql-pagination/example-in-memory
+
+
+
+
+
 ## [1.6.2](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/example-in-memory@1.6.1...@graphql-pagination/example-in-memory@1.6.2) (2023-04-12)
 
 **Note:** Version bump only for package @graphql-pagination/example-in-memory

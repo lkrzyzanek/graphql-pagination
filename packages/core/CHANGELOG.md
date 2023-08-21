@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.10.1...@graphql-pagination/core@1.11.0) (2023-08-21)
+
+
+### Bug Fixes
+
+* pager args first/last validation on non-negative number [#123](https://github.com/lkrzyzanek/graphql-pagination/issues/123) ([24c072a](https://github.com/lkrzyzanek/graphql-pagination/commit/24c072a33bc2a7af70fd903234b77a29cc58955d))
+
+
+### Features
+
+* typescript 5.0 release ([1ceb44a](https://github.com/lkrzyzanek/graphql-pagination/commit/1ceb44ae2e54ecbf7942c4f0dfc0b31d43b7f2c1))
+* typescript 5.0 release ([f771cef](https://github.com/lkrzyzanek/graphql-pagination/commit/f771cef8fc844ac587ce271592ff47fbb4b79abe))
+
+
+
+
+
 ## [1.10.1](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.10.0...@graphql-pagination/core@1.10.1) (2023-04-12)
 
 

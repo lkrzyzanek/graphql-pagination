@@ -88,7 +88,8 @@ export function dataSourcePager<NodeType,
         const resultPlusOne = await ds.after(afterId, args.first + 1, args);
 
         const hasNextPage = resultPlusOne?.length > args.first;
-        const hasPreviousPage = !!args.after;
+        let hasPreviousPage = !!args.after;
+        if (args.page) hasPreviousPage = args.page > 1;
 
         let count;
         if (fetchTotalCountInResolver) count = await totalCount(args, ds);
@@ -110,7 +111,8 @@ export function dataSourcePager<NodeType,
         const resultPlusOne = await ds.before(beforeId, args.last + 1, args);
 
         const hasNextPage = resultPlusOne?.length > args.last;
-        const hasPreviousPage = !!args.before;
+        let hasPreviousPage = !!args.before;
+        if (args.page) hasPreviousPage = args.page > 1;
 
         let count;
         if (fetchTotalCountInResolver) count = await totalCount(args, ds);

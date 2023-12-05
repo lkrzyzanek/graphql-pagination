@@ -19,12 +19,14 @@ export class OffsetDataSourceWrapper<NodeType,
     }
 
     async after(afterIndex: number | undefined, size: number, args: ArgsForwardType): Promise<NodeType[]> {
-        const start = afterIndex != null ? afterIndex + 1 : 0;
+        let start = afterIndex != null ? afterIndex + 1 : 0;
+        start = args.page && args.page > 1 ? ((args.page - 1) * (size - 1)) : start;
         return this.ds.after(start, size, args).then(data => this.addIndexField(start, data));
     }
 
     async before(beforeIndex: number | undefined, size: number, args: ArgsBackwardType): Promise<NodeType[]> {
-        const start = beforeIndex != null ? beforeIndex + 1 : 0;
+        let start = beforeIndex != null ? beforeIndex + 1 : 0;
+        start = args.page && args.page > 1 ? ((args.page - 1) * (size - 1)) : start;
         return this.ds.before(start, size, args).then(data => this.addIndexField(start, data));
     }
 

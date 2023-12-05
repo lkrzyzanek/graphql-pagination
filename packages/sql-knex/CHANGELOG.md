@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.5](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/sql-knex@1.5.4...@graphql-pagination/sql-knex@1.5.5) (2023-12-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency knex to v3 ([98c566f](https://github.com/lkrzyzanek/graphql-pagination/commit/98c566f739db866ff0cbbb85253b9e24f92d7931))
+
+
+
+
+
 ## [1.5.4](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/sql-knex@1.5.3...@graphql-pagination/sql-knex@1.5.4) (2023-12-05)
 
 **Note:** Version bump only for package @graphql-pagination/sql-knex

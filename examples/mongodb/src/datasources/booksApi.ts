@@ -8,6 +8,7 @@ const collectionName = "books";
 export async function createBooksDataSource(mongoDb: Db) {
     const ds = new MongoDbDataSource<BookType, ObjectId, QueryBooksArgs, QueryBooks_DescArgs>({
         collectionName,
+        //@ts-ignore
         mongoDb,
         filters: (args) => {
             const filters = [];

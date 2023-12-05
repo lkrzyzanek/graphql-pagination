@@ -39,6 +39,7 @@ export interface PageInfo {
 export interface ArgsForward {
     first: number
     after?: string
+    page?: number
 }
 
 /**
@@ -48,6 +49,7 @@ export interface ArgsForward {
 export interface ArgsBackward {
     last: number,
     before?: string
+    page?: number
 }
 
 

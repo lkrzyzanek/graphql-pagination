@@ -92,7 +92,7 @@ const typeDefs = gql`
         booksByTitle(first: Int = 10 after: String title: String): BookConnection
         booksByAuthor(first: Int = 10 after: String author: String): BookConnection
 
-        booksByOffset(first: Int = 10 after: String): BookConnection
+        booksByOffset(first: Int = 10, after: String, page: Int): BookConnection
 
         booksDynamic(first: Int = 10 after: String): BookConnection
     }

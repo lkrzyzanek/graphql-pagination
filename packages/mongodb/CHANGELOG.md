@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/mongodb@1.2.0...@graphql-pagination/mongodb@1.2.1) (2023-12-05)
+
+**Note:** Version bump only for package @graphql-pagination/mongodb
+
+
+
+
+
 # [1.2.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/mongodb@1.1.3...@graphql-pagination/mongodb@1.2.0) (2023-12-05)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.6](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/sql-knex@1.5.5...@graphql-pagination/sql-knex@1.5.6) (2024-04-15)
+
+
+### Bug Fixes
+
+* **deps:** devDep better-sqlite3 v9.5.0 ([33e6996](https://github.com/lkrzyzanek/graphql-pagination/commit/33e69967e68673ec80d2b0b6e6f4dfec627a8b76))
+
+
+
+
+
 ## [1.5.5](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/sql-knex@1.5.4...@graphql-pagination/sql-knex@1.5.5) (2023-12-05)
 
 

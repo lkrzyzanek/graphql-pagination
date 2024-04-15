@@ -1,6 +1,6 @@
 {
   "name": "@graphql-pagination/example-sql-knex",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "author": "Libor Krzyzanek",
   "license": "MIT",
   "private": true,
@@ -10,7 +10,7 @@
   "dependencies": {
     "@apollo/server": "^4.4.0",
     "@graphql-pagination/core": "^1.12.0",
-    "@graphql-pagination/sql-knex": "^1.5.5",
+    "@graphql-pagination/sql-knex": "^1.5.6",
     "better-sqlite3": "^9.5.0",
     "graphql": "^16.6.0",
     "graphql-scalars": "^1.19.0",

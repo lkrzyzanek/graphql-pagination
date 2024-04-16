@@ -1,7 +1,7 @@
-import { ArgsForward, ArgsBackward } from "@graphql-pagination/core";
+import { ArgsBackward, ArgsForward, OffsetDataSourceWrapper } from "@graphql-pagination/core";
 import { Db, MongoClient, ObjectId } from "mongodb";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { MongoDbDataSource } from "../src";
+import { MongoDbDataSource, MongoDbOffsetDataSource } from "../src";
 
 describe("mongodb-ds", () => {
 
@@ -144,6 +144,43 @@ describe("mongodb-ds", () => {
         test("count", async () => {
             const result = await ds.totalCount({ first: 0, "author": desiredAuthor });
             expect(result).toBe(10);
+        });
+    })
+
+    describe("offset-by-id", () => {
+        let ds: OffsetDataSourceWrapper<Book>;
+
+        beforeAll(() => {
+            const mongoDs = new MongoDbOffsetDataSource<Book>({ collectionName, mongoDb });
+            ds = new OffsetDataSourceWrapper(mongoDs)
+        })
+        test("totalCount", async () => {
+            return expect(ds.totalCount({ "first": 10 })).resolves.toBe(100);
+        });
+
+        test("after-page-2", async () => {
+            const result = await ds.after(undefined, 10, { first: 0, page: 2 });
+            expect(result).toHaveLength(10);
+            expect(result[0].id).toBe(9);
+            expect(result[9].id).toBe(18);
+        });
+        test("after-from-begin", async () => {
+            const result = await ds.after(undefined, 5, { first: 0 });
+            expect(result).toHaveLength(5);
+            expect(result[0].id).toBe(0);
+            expect(result[4].id).toBe(4);
+        });
+        test("before-page-2", async () => {
+            const result = await ds.before(2, 10, { last: 0, page: 2 });
+            expect(result).toHaveLength(10);
+            expect(result[0].id).toBe(90);
+            expect(result[9].id).toBe(81);
+        });
+        test("before-from-begin", async () => {
+            const result = await ds.before(undefined, 5, { last: 0 });
+            expect(result).toHaveLength(5);
+            expect(result[0].id).toBe(99);
+            expect(result[4].id).toBe(95);
         });
     })
 });

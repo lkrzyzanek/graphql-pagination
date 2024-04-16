@@ -1,8 +1,8 @@
 import { server } from "./server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { dataSourceLoaderPager, DefaultCursorEncoderDecoder } from "@graphql-pagination/core";
+import { dataSourceLoaderPager, dataSourcePager } from "@graphql-pagination/core";
 import { createInMemoryMongoDb, createMongoClient } from "./datasources/db";
-import { createBooksDataSource, insertTestData } from "./datasources/booksApi";
+import { createBooksDataSource, createBooksOffsetDataSource, insertTestData } from "./datasources/booksApi";
 import type { DataSourceContext } from "./types/DataSourceContext";
 import { ObjectIdCursorEncoderDecoder } from "@graphql-pagination/mongodb";
 
@@ -14,10 +14,12 @@ async function start() {
     const mongoDb = client.db("data");
     await insertTestData(mongoDb);
     const dataSource = await createBooksDataSource(mongoDb);
+    const offsetDataSource = createBooksOffsetDataSource(mongoDb);
 
     const { url } = await startStandaloneServer<DataSourceContext>(server, {
         context: async () => ({
             booksPager: dataSourceLoaderPager({ dataSource, cursor, fetchTotalCountInResolver: false }),
+            booksOffsetPager: dataSourcePager({ dataSource: offsetDataSource })
         }),
         listen: { port: 4000 }
     });

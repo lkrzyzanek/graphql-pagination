@@ -31,6 +31,22 @@ const schema = gql`
     Get all books in descending order by id
     """
     books_desc(last: Int! = 10, before: String, author: String): BookConnection
+
+    """
+    Get all books by offset (page) in ascending order by sortBy field
+    """
+    booksByOffset(first: Int! = 10, after: String, page: Int,  author: String, sortBy: SortBy = ID): BookConnection
+
+    """
+    Get all books by offset (page) in descendenting order by sortBy field
+    """
+    booksByOffset_desc(last: Int! = 10, before: String, page: Int,  author: String, sortBy: SortBy = ID): BookConnection
+  }
+  enum SortBy {
+    ID
+    TITLE
+    AUTHOR
+    PUBLISHED
   }
 `;
 

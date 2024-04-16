@@ -1,10 +1,10 @@
 import { server } from '../server';
 import { Query } from '../__generated__/resolversTypes';
-import { ArrayDataSource, dataSourcePager } from '@graphql-pagination/core';
+import { dataSourcePager, OffsetDataSourceWrapper } from '@graphql-pagination/core';
 import { createInMemoryMongoDb, createMongoClient } from "../datasources/db";
-import { createBooksDataSource, insertTestData } from "../datasources/booksApi";
+import { insertTestData, createBooksDataSource, createBooksOffsetDataSource } from "../datasources/booksApi";
 import { BookType } from '../types/Book';
-import { MongoDbDataSource, ObjectIdCursorEncoderDecoder } from '@graphql-pagination/mongodb';
+import { MongoDbDataSource, ObjectIdCursorEncoderDecoder, MongoDbOffsetDataSource } from '@graphql-pagination/mongodb';
 import assert from 'node:assert';
 import { MongoClient, Db } from 'mongodb';
 import { MongoMemoryServer } from 'mongodb-memory-server';
@@ -13,6 +13,7 @@ describe('Books GraphQL API', () => {
     jest.setTimeout(30_000);
 
     let dataSource: MongoDbDataSource<BookType>;
+    let dataSourceOffset: OffsetDataSourceWrapper<BookType>;
     const cursor = new ObjectIdCursorEncoderDecoder();
 
     let client: MongoClient;
@@ -24,6 +25,7 @@ describe('Books GraphQL API', () => {
         const mongoDb = client.db("data");
         await insertTestData(mongoDb);
         dataSource = await createBooksDataSource(mongoDb);
+        dataSourceOffset = createBooksOffsetDataSource(mongoDb);
     });
 
     afterAll(async () => {
@@ -50,6 +52,7 @@ describe('Books GraphQL API', () => {
         const response = await server.executeOperation<Query>({ query }, {
             contextValue: {
                 booksPager: dataSourcePager({ dataSource, cursor }),
+                booksOffsetPager: dataSourcePager({ dataSource: dataSourceOffset }),
             },
         });
         assert(response.body.kind === "single");
@@ -77,6 +80,7 @@ describe('Books GraphQL API', () => {
         const response = await server.executeOperation<Query>({ query }, {
             contextValue: {
                 booksPager: dataSourcePager({ dataSource, cursor }),
+                booksOffsetPager: dataSourcePager({ dataSource: dataSourceOffset }),
             },
         });
         assert(response.body.kind === "single");
@@ -105,6 +109,7 @@ describe('Books GraphQL API', () => {
         const response = await server.executeOperation<Query>({ query }, {
             contextValue: {
                 booksPager: dataSourcePager({ dataSource, cursor }),
+                booksOffsetPager: dataSourcePager({ dataSource: dataSourceOffset }),
             },
         });
         assert(response.body.kind === "single");
@@ -143,6 +148,7 @@ describe('Books GraphQL API', () => {
         const response = await server.executeOperation<Query>({ query }, {
             contextValue: {
                 booksPager: dataSourcePager({ dataSource, cursor }),
+                booksOffsetPager: dataSourcePager({ dataSource: dataSourceOffset }),
             },
         });
         assert(response.body.kind === "single");
@@ -169,6 +175,7 @@ describe('Books GraphQL API', () => {
         const response = await server.executeOperation<Query>({ query }, {
             contextValue: {
                 booksPager: dataSourcePager({ dataSource, cursor }),
+                booksOffsetPager: dataSourcePager({ dataSource: dataSourceOffset }),
             },
         });
         assert(response.body.kind === "single");
@@ -196,6 +203,7 @@ describe('Books GraphQL API', () => {
         const response = await server.executeOperation<Query>({ query }, {
             contextValue: {
                 booksPager: dataSourcePager({ dataSource, cursor }),
+                booksOffsetPager: dataSourcePager({ dataSource: dataSourceOffset }),
             },
         });
         assert(response.body.kind === "single");
@@ -213,5 +221,107 @@ describe('Books GraphQL API', () => {
         expect(edge1?.node.author).toBe("Author 1");
 
         expect(result.data?.books_desc?.totalCount).toBe(10);
+    });
+
+    it('Query.booksByOffset.totalCount', async () => {
+        const query = /* GraphQL */ `
+            query {
+                booksByOffset {
+                    totalCount
+                }
+            }
+        `;
+        const response = await server.executeOperation<Query>({ query }, {
+            contextValue: {
+                booksPager: dataSourcePager({ dataSource, cursor }),
+                booksOffsetPager: dataSourcePager({ dataSource: dataSourceOffset }),
+            },
+        });
+        assert(response.body.kind === "single");
+        const result = response.body.singleResult;
+
+        expect(result.errors).toBeUndefined();
+
+        expect(result.data?.booksByOffset?.totalCount).toBe(100);
+    });
+    it('Query.booksByOffset.page2', async () => {
+        const query = /* GraphQL */ `
+            query {
+                booksByOffset(page: 2) {
+                    edges {
+                        node {
+                            id
+                        }
+                    }
+                }
+            }
+        `;
+        const response = await server.executeOperation<Query>({ query }, {
+            contextValue: {
+                booksPager: dataSourcePager({ dataSource, cursor }),
+                booksOffsetPager: dataSourcePager({ dataSource: dataSourceOffset }),
+            },
+        });
+        assert(response.body.kind === "single");
+        const result = response.body.singleResult;
+
+        expect(result.errors).toBeUndefined();
+
+        expect(result.data?.booksByOffset?.edges?.[0].node.id).toBe("10");
+    });
+    it('Query.booksByOffset_desc.page2', async () => {
+        const query = /* GraphQL */ `
+            query {
+                booksByOffset_desc(page: 2) {
+                    edges {
+                        node {
+                            id
+                        }
+                    }
+                }
+            }
+        `;
+        const response = await server.executeOperation<Query>({ query }, {
+            contextValue: {
+                booksPager: dataSourcePager({ dataSource, cursor }),
+                booksOffsetPager: dataSourcePager({ dataSource: dataSourceOffset }),
+            },
+        });
+        assert(response.body.kind === "single");
+        const result = response.body.singleResult;
+
+        expect(result.errors).toBeUndefined();
+
+        expect(result.data?.booksByOffset_desc?.edges?.[0].node.id).toBe("89");
+    });
+    it('Query.booksByOffset.sortByTitle', async () => {
+        const query = /* GraphQL */ `
+            query {
+                booksByOffset(sortBy: TITLE) {
+                    edges {
+                        node {
+                            id
+                            title
+                        }
+                    }
+                }
+            }
+        `;
+        const response = await server.executeOperation<Query>({ query }, {
+            contextValue: {
+                booksPager: dataSourcePager({ dataSource, cursor }),
+                booksOffsetPager: dataSourcePager({ dataSource: dataSourceOffset }),
+            },
+        });
+        assert(response.body.kind === "single");
+        const result = response.body.singleResult;
+
+        expect(result.errors).toBeUndefined();
+
+        const edges = result.data?.booksByOffset?.edges;
+        expect(edges?.[0].node.title).toBe("Title 0");
+        expect(edges?.[1].node.title).toBe("Title 1");
+        expect(edges?.[2].node.title).toBe("Title 10");
+        expect(edges?.[3].node.title).toBe("Title 11");
     });
 });

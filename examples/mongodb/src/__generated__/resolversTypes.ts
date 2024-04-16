@@ -22,6 +22,8 @@ export type Scalars = {
   DID: any;
   Date: any;
   DateTime: any;
+  DateTimeISO: any;
+  DeweyDecimal: any;
   Duration: any;
   EmailAddress: any;
   GUID: any;
@@ -31,6 +33,7 @@ export type Scalars = {
   Hexadecimal: any;
   IBAN: any;
   IP: any;
+  IPCPatent: any;
   IPv4: any;
   IPv6: any;
   ISBN: any;
@@ -38,8 +41,10 @@ export type Scalars = {
   JSON: any;
   JSONObject: any;
   JWT: any;
+  LCCSubclass: any;
   Latitude: any;
   LocalDate: any;
+  LocalDateTime: any;
   LocalEndTime: any;
   LocalTime: any;
   Locale: any;
@@ -62,6 +67,7 @@ export type Scalars = {
   RGB: any;
   RGBA: any;
   RoutingNumber: any;
+  SESSN: any;
   SafeInt: any;
   SemVer: any;
   Time: any;
@@ -119,6 +125,10 @@ export type Query = {
   __typename?: 'Query';
   /** Get all books in ascending order by id */
   books?: Maybe<BookConnection>;
+  /** Get all books by offset (page) in ascending order by sortBy field */
+  booksByOffset?: Maybe<BookConnection>;
+  /** Get all books by offset (page) in descendenting order by sortBy field */
+  booksByOffset_desc?: Maybe<BookConnection>;
   /** Get all books in descending order by id */
   books_desc?: Maybe<BookConnection>;
 };
@@ -131,11 +141,36 @@ export type QueryBooksArgs = {
 };
 
 
+export type QueryBooksByOffsetArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  author?: InputMaybe<Scalars['String']>;
+  first: Scalars['Int'];
+  page?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<SortBy>;
+};
+
+
+export type QueryBooksByOffset_DescArgs = {
+  author?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  last: Scalars['Int'];
+  page?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<SortBy>;
+};
+
+
 export type QueryBooks_DescArgs = {
   author?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   last: Scalars['Int'];
 };
+
+export enum SortBy {
+  Author = 'AUTHOR',
+  Id = 'ID',
+  Published = 'PUBLISHED',
+  Title = 'TITLE'
+}
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -206,6 +241,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 ) => TResult | Promise<TResult>;
 
 
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   AccountNumber: ResolverTypeWrapper<Scalars['AccountNumber']>;
@@ -224,6 +260,8 @@ export type ResolversTypes = ResolversObject<{
   DID: ResolverTypeWrapper<Scalars['DID']>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
+  DateTimeISO: ResolverTypeWrapper<Scalars['DateTimeISO']>;
+  DeweyDecimal: ResolverTypeWrapper<Scalars['DeweyDecimal']>;
   Duration: ResolverTypeWrapper<Scalars['Duration']>;
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
   GUID: ResolverTypeWrapper<Scalars['GUID']>;
@@ -233,6 +271,7 @@ export type ResolversTypes = ResolversObject<{
   Hexadecimal: ResolverTypeWrapper<Scalars['Hexadecimal']>;
   IBAN: ResolverTypeWrapper<Scalars['IBAN']>;
   IP: ResolverTypeWrapper<Scalars['IP']>;
+  IPCPatent: ResolverTypeWrapper<Scalars['IPCPatent']>;
   IPv4: ResolverTypeWrapper<Scalars['IPv4']>;
   IPv6: ResolverTypeWrapper<Scalars['IPv6']>;
   ISBN: ResolverTypeWrapper<Scalars['ISBN']>;
@@ -240,8 +279,10 @@ export type ResolversTypes = ResolversObject<{
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
   JWT: ResolverTypeWrapper<Scalars['JWT']>;
+  LCCSubclass: ResolverTypeWrapper<Scalars['LCCSubclass']>;
   Latitude: ResolverTypeWrapper<Scalars['Latitude']>;
   LocalDate: ResolverTypeWrapper<Scalars['LocalDate']>;
+  LocalDateTime: ResolverTypeWrapper<Scalars['LocalDateTime']>;
   LocalEndTime: ResolverTypeWrapper<Scalars['LocalEndTime']>;
   LocalTime: ResolverTypeWrapper<Scalars['LocalTime']>;
   Locale: ResolverTypeWrapper<Scalars['Locale']>;
@@ -267,8 +308,10 @@ export type ResolversTypes = ResolversObject<{
   RGB: ResolverTypeWrapper<Scalars['RGB']>;
   RGBA: ResolverTypeWrapper<Scalars['RGBA']>;
   RoutingNumber: ResolverTypeWrapper<Scalars['RoutingNumber']>;
+  SESSN: ResolverTypeWrapper<Scalars['SESSN']>;
   SafeInt: ResolverTypeWrapper<Scalars['SafeInt']>;
   SemVer: ResolverTypeWrapper<Scalars['SemVer']>;
+  SortBy: SortBy;
   Time: ResolverTypeWrapper<Scalars['Time']>;
   TimeZone: ResolverTypeWrapper<Scalars['TimeZone']>;
   Timestamp: ResolverTypeWrapper<Scalars['Timestamp']>;
@@ -298,6 +341,8 @@ export type ResolversParentTypes = ResolversObject<{
   DID: Scalars['DID'];
   Date: Scalars['Date'];
   DateTime: Scalars['DateTime'];
+  DateTimeISO: Scalars['DateTimeISO'];
+  DeweyDecimal: Scalars['DeweyDecimal'];
   Duration: Scalars['Duration'];
   EmailAddress: Scalars['EmailAddress'];
   GUID: Scalars['GUID'];
@@ -307,6 +352,7 @@ export type ResolversParentTypes = ResolversObject<{
   Hexadecimal: Scalars['Hexadecimal'];
   IBAN: Scalars['IBAN'];
   IP: Scalars['IP'];
+  IPCPatent: Scalars['IPCPatent'];
   IPv4: Scalars['IPv4'];
   IPv6: Scalars['IPv6'];
   ISBN: Scalars['ISBN'];
@@ -314,8 +360,10 @@ export type ResolversParentTypes = ResolversObject<{
   JSON: Scalars['JSON'];
   JSONObject: Scalars['JSONObject'];
   JWT: Scalars['JWT'];
+  LCCSubclass: Scalars['LCCSubclass'];
   Latitude: Scalars['Latitude'];
   LocalDate: Scalars['LocalDate'];
+  LocalDateTime: Scalars['LocalDateTime'];
   LocalEndTime: Scalars['LocalEndTime'];
   LocalTime: Scalars['LocalTime'];
   Locale: Scalars['Locale'];
@@ -341,6 +389,7 @@ export type ResolversParentTypes = ResolversObject<{
   RGB: Scalars['RGB'];
   RGBA: Scalars['RGBA'];
   RoutingNumber: Scalars['RoutingNumber'];
+  SESSN: Scalars['SESSN'];
   SafeInt: Scalars['SafeInt'];
   SemVer: Scalars['SemVer'];
   Time: Scalars['Time'];
@@ -420,6 +469,14 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export interface DateTimeIsoScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTimeISO'], any> {
+  name: 'DateTimeISO';
+}
+
+export interface DeweyDecimalScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DeweyDecimal'], any> {
+  name: 'DeweyDecimal';
+}
+
 export interface DurationScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Duration'], any> {
   name: 'Duration';
 }
@@ -456,6 +513,10 @@ export interface IpScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['
   name: 'IP';
 }
 
+export interface IpcPatentScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['IPCPatent'], any> {
+  name: 'IPCPatent';
+}
+
 export interface IPv4ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['IPv4'], any> {
   name: 'IPv4';
 }
@@ -484,12 +545,20 @@ export interface JwtScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
   name: 'JWT';
 }
 
+export interface LccSubclassScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['LCCSubclass'], any> {
+  name: 'LCCSubclass';
+}
+
 export interface LatitudeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Latitude'], any> {
   name: 'Latitude';
 }
 
 export interface LocalDateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['LocalDate'], any> {
   name: 'LocalDate';
+}
+
+export interface LocalDateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['LocalDateTime'], any> {
+  name: 'LocalDateTime';
 }
 
 export interface LocalEndTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['LocalEndTime'], any> {
@@ -578,6 +647,8 @@ export interface PostalCodeScalarConfig extends GraphQLScalarTypeConfig<Resolver
 
 export type QueryResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   books?: Resolver<Maybe<ResolversTypes['BookConnection']>, ParentType, ContextType, RequireFields<QueryBooksArgs, 'first'>>;
+  booksByOffset?: Resolver<Maybe<ResolversTypes['BookConnection']>, ParentType, ContextType, RequireFields<QueryBooksByOffsetArgs, 'first' | 'sortBy'>>;
+  booksByOffset_desc?: Resolver<Maybe<ResolversTypes['BookConnection']>, ParentType, ContextType, RequireFields<QueryBooksByOffset_DescArgs, 'last' | 'sortBy'>>;
   books_desc?: Resolver<Maybe<ResolversTypes['BookConnection']>, ParentType, ContextType, RequireFields<QueryBooks_DescArgs, 'last'>>;
 }>;
 
@@ -591,6 +662,10 @@ export interface RgbaScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export interface RoutingNumberScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['RoutingNumber'], any> {
   name: 'RoutingNumber';
+}
+
+export interface SessnScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['SESSN'], any> {
+  name: 'SESSN';
 }
 
 export interface SafeIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['SafeInt'], any> {
@@ -654,6 +729,8 @@ export type Resolvers<ContextType = DataSourceContext> = ResolversObject<{
   DID?: GraphQLScalarType;
   Date?: GraphQLScalarType;
   DateTime?: GraphQLScalarType;
+  DateTimeISO?: GraphQLScalarType;
+  DeweyDecimal?: GraphQLScalarType;
   Duration?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
   GUID?: GraphQLScalarType;
@@ -663,6 +740,7 @@ export type Resolvers<ContextType = DataSourceContext> = ResolversObject<{
   Hexadecimal?: GraphQLScalarType;
   IBAN?: GraphQLScalarType;
   IP?: GraphQLScalarType;
+  IPCPatent?: GraphQLScalarType;
   IPv4?: GraphQLScalarType;
   IPv6?: GraphQLScalarType;
   ISBN?: GraphQLScalarType;
@@ -670,8 +748,10 @@ export type Resolvers<ContextType = DataSourceContext> = ResolversObject<{
   JSON?: GraphQLScalarType;
   JSONObject?: GraphQLScalarType;
   JWT?: GraphQLScalarType;
+  LCCSubclass?: GraphQLScalarType;
   Latitude?: GraphQLScalarType;
   LocalDate?: GraphQLScalarType;
+  LocalDateTime?: GraphQLScalarType;
   LocalEndTime?: GraphQLScalarType;
   LocalTime?: GraphQLScalarType;
   Locale?: GraphQLScalarType;
@@ -696,6 +776,7 @@ export type Resolvers<ContextType = DataSourceContext> = ResolversObject<{
   RGB?: GraphQLScalarType;
   RGBA?: GraphQLScalarType;
   RoutingNumber?: GraphQLScalarType;
+  SESSN?: GraphQLScalarType;
   SafeInt?: GraphQLScalarType;
   SemVer?: GraphQLScalarType;
   Time?: GraphQLScalarType;

@@ -38,4 +38,36 @@ const booksPager = dataSourceLoaderPager({
 }),
 ```
 
+### Offset Pagination
+
+If you want to use MongoDb's skip (offset) pagination, you can use `MongoDbOffsetDataSource` instead of `MongoDbDataSource`.
+Implementation also provides sortBy feature.
+
+For offset translation to cursor, it's needed to use `OffsetDataSourceWrapper` to wrap `MongoDbOffsetDataSource`.
+
+```ts
+import { MongoDbOffsetDataSource } from "@graphql-pagination/mongodb";
+
+const mongoDb = mongoClient.db("data");
+const ds = new MongoDbOffsetDataSource<BookType, QueryBooksArgs, QueryBooks_DescArgs>({
+    collectionName: "book",
+    mongoDb,
+    filters: (args) => {
+        const filters = [];
+        if (args.author) filters.push({ "author": { $eq: args.author } });
+        return filters;
+    },
+});
+// Always wrap DS with OffsetDataSourceWrapper
+const dataSource = new OffsetDataSourceWrapper(ds);
+
+// Create pager ideally `dataSourceLoaderPager` within context creation to get benefit of memoization.
+// For long lived pager use `dataSourcePager`.
+const booksOffsetPager = dataSourceLoaderPager({ 
+    dataSource, 
+    fetchTotalCountInResolver: false 
+    typeName: "Book",
+}),
+```
+
 See fully working example in [examples/mongodb](../../examples/mongodb).

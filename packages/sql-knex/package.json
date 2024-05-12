@@ -46,6 +46,6 @@
     "knex": "^3.0.0"
   },
   "devDependencies": {
-    "better-sqlite3": "^9.5.0"
+    "better-sqlite3": "^10.0.0"
   }
 }

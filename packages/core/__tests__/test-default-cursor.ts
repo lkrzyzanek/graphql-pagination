@@ -34,6 +34,12 @@ describe("cursor", () => {
         expect(encoded).toBe(Buffer.from("n_123").toString("base64"));
     });
 
+    test("encode-object", () => {
+        const o = { test: "test" };
+        const encoded = new DefaultCursorEncoderDecoder<Record<string, any>>().encode(o);
+        expect(encoded).toBe(Buffer.from("o_" + JSON.stringify(o)).toString("base64"));
+    });
+
     test("decode-string", () => {
         const decoded = new DefaultCursorEncoderDecoder<string>().decode(Buffer.from("c_test-string").toString("base64"));
         expect(decoded).toBe("test-string");
@@ -55,6 +61,21 @@ describe("cursor", () => {
         const decoded = new DefaultCursorEncoderDecoder<number>().decode(Buffer.from("n_123").toString("base64"));
         expect(decoded).toBe(123);
     });
+
+    test("decode-object", () => {
+        const o = { test: "test" };
+        const decoded = new DefaultCursorEncoderDecoder<Record<string, any>>().decode(Buffer.from("o_" + JSON.stringify(o)).toString("base64"));
+        expect(decoded).toStrictEqual(o);
+    });
+
+    test("decode-object-invalid-json", () => {
+        try {
+            new DefaultCursorEncoderDecoder<number>().decode(Buffer.from("o_xx").toString("base64"));
+        } catch (e) {
+            validateInvalidCursor(e);
+        }
+    });
+    
     test("decode-string-empty", () => {
         try {
             new DefaultCursorEncoderDecoder<number>().decode(Buffer.from("n_").toString("base64"));

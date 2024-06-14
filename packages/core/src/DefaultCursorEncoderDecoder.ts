@@ -10,7 +10,8 @@ export class DefaultCursorEncoderDecoder<IdType = string | number | Date> implem
     encode(plainCursor: IdType): string {
         let id = "c_" + plainCursor;
         if (plainCursor instanceof Date) id = "d_" + plainCursor.getTime();
-        if (typeof plainCursor === "number") id = "n_" + plainCursor;
+        else if (typeof plainCursor === "number") id = "n_" + plainCursor;
+        else if (typeof plainCursor === "object") id = "o_" + JSON.stringify(plainCursor);
         return Buffer.from(id).toString("base64");
     }
 
@@ -23,8 +24,13 @@ export class DefaultCursorEncoderDecoder<IdType = string | number | Date> implem
         if (id.startsWith("n_")) return Number(value) as IdType;
         if (id.startsWith("c_")) return value as IdType;
 
+        try {
+            if (id.startsWith("o_")) return JSON.parse(value) as IdType;
+        } catch (e) {
+            // ignore json parsing errors and continue to exception
+        }
+
         throw new GraphQLError("Invalid cursor value", { extensions: { code: "BAD_USER_INPUT" } });
     }
 
 }
-

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.1](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.12.0...@graphql-pagination/core@1.12.1) (2024-06-14)
+
+**Note:** Version bump only for package @graphql-pagination/core
+
+
+
+
+
 # [1.12.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.11.0...@graphql-pagination/core@1.12.0) (2023-12-05)
 
 

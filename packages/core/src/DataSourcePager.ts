@@ -74,7 +74,7 @@ export function dataSourcePager<NodeType,
         return await ds.totalCount(args);
     }
 
-    async function forwardResolver(args: ArgsForwardType, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): Promise<Connection> {
+    async function forwardResolver(args: ArgsForwardType, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): Promise<Connection<NodeType>> {
         if (config?.validateForwardArgs) {
             if (Array.isArray(config.validateForwardArgs)) config.validateForwardArgs.forEach(validation => validation(args));
             else config.validateForwardArgs(args);
@@ -97,7 +97,7 @@ export function dataSourcePager<NodeType,
         return PagerObject.connectionObject(resultPlusOne.slice(0, args.first), args, count, hasNextPage, hasPreviousPage, ds, cursor);
     }
 
-    async function backwardResolver(args: ArgsBackwardType, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): Promise<Connection> {
+    async function backwardResolver(args: ArgsBackwardType, dataSource?: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>): Promise<Connection<NodeType>> {
         if (config?.validateBackwardArgs) {
             if (Array.isArray(config.validateBackwardArgs)) config.validateBackwardArgs.forEach(validation => validation(args));
             else config.validateBackwardArgs(args);
@@ -155,7 +155,7 @@ export function dataSourcePager<NodeType,
             if (!ds || !config?.typeName) return {};
             return {
                 [`${config?.typeName}Connection`]: {
-                    totalCount: (connection: Connection) => ds.totalCount(connection.args),
+                    totalCount: (connection: Connection<NodeType>) => ds.totalCount(connection.args),
                 }
             };
         },
@@ -167,7 +167,7 @@ export function dataSourcePager<NodeType,
 export const PagerObject = {
     connectionObject<NodeType, IdType, ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward>(
         nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number | undefined, hasNextPage: boolean, hasPreviousPage: boolean,
-        dataSource: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>, cursor: CursorEncoderDecoder<IdType>): Connection {
+        dataSource: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>, cursor: CursorEncoderDecoder<IdType>): Connection<NodeType> {
         const edges = nodes.map(node => this.edgeObject(node, dataSource, cursor))
         const connection = {
             totalCount: totalCount,
@@ -182,7 +182,7 @@ export const PagerObject = {
     },
 
     edgeObject<NodeType, IdType, ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward>(node: any,
-        dataSource: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>, cursor: CursorEncoderDecoder<IdType>): Edge {
+        dataSource: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>, cursor: CursorEncoderDecoder<IdType>): Edge<NodeType> {
         const plainId = dataSource.getId(node);
         return {
             cursor: cursor.encode(plainId),
@@ -190,7 +190,7 @@ export const PagerObject = {
         };
     },
 
-    pageInfoObject(connection: Omit<Connection, "pageInfo">, hasNextPage: boolean, hasPreviousPage: boolean): PageInfo {
+    pageInfoObject<NodeType = any>(connection: Omit<Connection<NodeType>, "pageInfo">, hasNextPage: boolean, hasPreviousPage: boolean): PageInfo {
         const startCursor = this.startCursor(connection.edges);
         const endCursor = this.endCursor(connection.edges);
         return {

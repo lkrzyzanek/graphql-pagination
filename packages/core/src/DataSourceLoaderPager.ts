@@ -3,9 +3,9 @@ import { DataSourceCursorPager, dataSourcePager, DataSourcePagerConfig } from ".
 import Dataloader from "dataloader";
 
 
-export type DataLoaderConfig<ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward> = {
-    forward?: Dataloader.Options<ArgsForwardType, Connection, string>
-    backward?: Dataloader.Options<ArgsBackwardType, Connection, string>
+export type DataLoaderConfig<ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward, NodeType = any> = {
+    forward?: Dataloader.Options<ArgsForwardType, Connection<NodeType>, string>
+    backward?: Dataloader.Options<ArgsBackwardType, Connection<NodeType>, string>
     count?: Dataloader.Options<ArgsForwardType | ArgsBackwardType, number, string>
 };
 
@@ -46,13 +46,13 @@ export function dataloaderPagerWrapper<NodeType,
         config?: DataLoaderConfig<ArgsForwardType, ArgsBackwardType>
     ): DataSourceCursorPager<NodeType, IdType, ArgsForwardType, ArgsBackwardType> {
 
-    const forwardLoader = new Dataloader<ArgsForwardType, Connection, string>(async (args) => {
+    const forwardLoader = new Dataloader<ArgsForwardType, Connection<NodeType>, string>(async (args) => {
         return Promise.all(args.map(arg => pager.forwardResolver(arg)));
     }, {
         ...config?.forward,
         cacheKeyFn: (key) => JSON.stringify(key)
     });
-    const backwardLoader = new Dataloader<ArgsBackwardType, Connection, string>(async (args) => {
+    const backwardLoader = new Dataloader<ArgsBackwardType, Connection<NodeType>, string>(async (args) => {
         return Promise.all(args.map(arg => pager.backwardResolver(arg)));
     }, {
         ...config?.backward,

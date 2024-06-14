@@ -52,6 +52,7 @@ export interface ArgsBackward {
     page?: number
 }
 
+
 export interface CursorEncoderDecoder<IdType> {
     encode: (plainCursor: IdType) => string;
     decode: (encodedCursor: string) => IdType;

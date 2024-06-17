@@ -1,6 +1,6 @@
 {
   "name": "@graphql-pagination/mongodb",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "GraphQL Pagination - MongoDB",
   "author": "Libor Krzyzanek",
   "license": "MIT",
@@ -42,7 +42,7 @@
     }
   },
   "dependencies": {
-    "@graphql-pagination/core": "^1.13.0"
+    "@graphql-pagination/core": "^1.14.0"
   },
   "peerDependencies": {
     "mongodb": "*"

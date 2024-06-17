@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.14.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.13.0...@graphql-pagination/core@1.14.0) (2024-06-17)
+
+
+### Features
+
+* validation on page argument - has to be positive number if present. fixes [#153](https://github.com/lkrzyzanek/graphql-pagination/issues/153) ([9a48e9d](https://github.com/lkrzyzanek/graphql-pagination/commit/9a48e9db4ba50b63db34eac1e067ffa0075b4434))
+
+
+
+
+
 # [1.13.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.12.1...@graphql-pagination/core@1.13.0) (2024-06-17)
 
 

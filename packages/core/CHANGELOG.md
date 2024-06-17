@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.12.1...@graphql-pagination/core@1.13.0) (2024-06-17)
+
+
+### Features
+
+* encode and decode object IdType ([f25372e](https://github.com/lkrzyzanek/graphql-pagination/commit/f25372e9128ad956d718e280e36affe15c5fed6b))
+
+
+
+
+
 ## [1.12.1](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/core@1.12.0...@graphql-pagination/core@1.12.1) (2024-06-14)
 
 **Note:** Version bump only for package @graphql-pagination/core

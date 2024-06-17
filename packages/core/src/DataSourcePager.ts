@@ -80,6 +80,7 @@ export function dataSourcePager<NodeType,
             else config.validateForwardArgs(args);
         }
         if (args.first < 0) throw new GraphQLError("first argument has to be a non-negative number", { extensions: { code: "BAD_USER_INPUT" } });
+        if (args.page != undefined && args.page <= 0) throw new GraphQLError("page argument has to be a positive number", { extensions: { code: "BAD_USER_INPUT" } });
 
         let afterId: IdType | undefined;
         if (args.after) afterId = cursor.decode(args.after);
@@ -103,6 +104,7 @@ export function dataSourcePager<NodeType,
             else config.validateBackwardArgs(args);
         }
         if (args.last < 0) throw new GraphQLError("last argument has to be a non-negative number", { extensions: { code: "BAD_USER_INPUT" } });
+        if (args.page != undefined && args.page <= 0) throw new GraphQLError("page argument has to be a positive number", { extensions: { code: "BAD_USER_INPUT" } });
 
         let beforeId: IdType | undefined;
         if (args.before) beforeId = cursor.decode(args.before);

@@ -170,7 +170,7 @@ export const PagerObject = {
     connectionObject<NodeType, IdType, ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward>(
         nodes: any[], args: ArgsForward | ArgsBackward | any, totalCount: number | undefined, hasNextPage: boolean, hasPreviousPage: boolean,
         dataSource: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>, cursor: CursorEncoderDecoder<IdType>): Connection<NodeType> {
-        const edges = nodes.map(node => this.edgeObject(node, dataSource, cursor))
+        const edges = nodes.map(node => this.edgeObject(node, dataSource, cursor, args))
         const connection = {
             totalCount: totalCount,
             edges,
@@ -184,8 +184,8 @@ export const PagerObject = {
     },
 
     edgeObject<NodeType, IdType, ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward>(node: any,
-        dataSource: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>, cursor: CursorEncoderDecoder<IdType>): Edge<NodeType> {
-        const plainId = dataSource.getId(node);
+        dataSource: PagerDataSource<NodeType, IdType, ArgsForwardType, ArgsBackwardType>, cursor: CursorEncoderDecoder<IdType>, args?: ArgsForwardType | ArgsBackwardType): Edge<NodeType> {
+        const plainId = dataSource.getId(node, args);
         return {
             cursor: cursor.encode(plainId),
             node

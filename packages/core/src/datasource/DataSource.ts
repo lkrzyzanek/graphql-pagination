@@ -5,7 +5,7 @@ import type {ArgsBackward, ArgsForward} from "../CursorPagerSpec";
  */
 export interface PagerDataSource<NodeType, IdType, ArgsForwardType extends ArgsForward, ArgsBackwardType extends ArgsBackward> {
 
-    getId: (node: NodeType) => IdType;
+    getId: (node: NodeType, args?: ArgsForwardType | ArgsBackwardType) => IdType;
 
     totalCount: (originalArgs: ArgsForwardType | ArgsBackwardType) => Promise<number>
 

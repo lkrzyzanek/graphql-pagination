@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/mongodb@1.2.5...@graphql-pagination/mongodb@1.3.0) (2024-11-19)
+
+
+### Features
+
+* **chores:** docs for using MongoDbOffsetDataSource ([e61eab2](https://github.com/lkrzyzanek/graphql-pagination/commit/e61eab22cf248b79c4c4f698ecb37d097219786d))
+
+
+
+
+
 ## [1.2.5](https://github.com/lkrzyzanek/graphql-pagination/compare/@graphql-pagination/mongodb@1.2.4...@graphql-pagination/mongodb@1.2.5) (2024-06-17)
 
 **Note:** Version bump only for package @graphql-pagination/mongodb

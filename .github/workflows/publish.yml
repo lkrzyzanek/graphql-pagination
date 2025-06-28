@@ -19,7 +19,7 @@ jobs:
       - name: "Use NodeJS 18"
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '22.x'
 
       # Build and test
       - run: npm -v

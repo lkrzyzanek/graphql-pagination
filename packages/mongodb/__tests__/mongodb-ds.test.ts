@@ -6,6 +6,7 @@ import { MongoDbDataSource, MongoDbOffsetDataSource } from "../src";
 describe("mongodb-ds", () => {
 
     jest.setTimeout(30_000);
+    const mongoMemoryVersion = process.env.MONGOMS_VERSION ?? "6.0.14";
 
     type Book = {
         _id: ObjectId
@@ -32,7 +33,7 @@ describe("mongodb-ds", () => {
     beforeAll(async () => {
         mongod = await MongoMemoryServer.create({
             binary: {
-                version: "6.0.3",
+                version: mongoMemoryVersion,
             },
         });
         const uri = mongod.getUri();

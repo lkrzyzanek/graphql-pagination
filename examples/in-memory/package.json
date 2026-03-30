@@ -8,9 +8,9 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@apollo/server": "^4.4.0",
+    "@apollo/server": "^5.5.0",
     "@graphql-pagination/core": "^1.15.0",
-    "graphql": "^16.6.0",
+    "graphql": "^16.11.0",
     "graphql-scalars": "^1.20.1",
     "graphql-tag": "^2.12.6"
   },

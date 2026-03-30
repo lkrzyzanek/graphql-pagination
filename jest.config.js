@@ -1,4 +1,4 @@
-/** @type {import("ts-jest/dist/types").InitialOptionsTsJest} */
+/** @type {import("jest").Config} */
 module.exports = {
     collectCoverage: true,
     coverageDirectory: "coverage",
@@ -17,25 +17,19 @@ module.exports = {
     ],
     transform: {
         "^.+\\.ts$": [
-            "ts-jest",
+            "@swc/jest",
             {
-                tsconfig: {
-                    "types": ["node", "jest"],
-                    "target": "es2022",
-                    "module": "commonjs",
-                    "moduleResolution": "node",
-                    "esModuleInterop": true,
-                    "strict": false,
-                    "noImplicitAny": false,
-                    "noImplicitReturns": true,
-                    "noImplicitOverride": false,
-                    "noFallthroughCasesInSwitch": true,
-                    "noUnusedParameters": true,
-                    "noUnusedLocals": false,
-                    "lib": ["es2022"],
-                    noImplicitAny: false,
+                jsc: {
+                    target: "es2022",
+                    parser: {
+                        syntax: "typescript",
+                        decorators: true
+                    }
                 },
-            },
+                module: {
+                    type: "commonjs"
+                }
+            }
         ],
     }
 };

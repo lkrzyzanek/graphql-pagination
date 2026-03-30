@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "Node16",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": true,
@@ -16,6 +16,7 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "forceConsistentCasingInFileNames": true,
+    "types": ["node"],
     "lib": ["es2019"]
   }
 }

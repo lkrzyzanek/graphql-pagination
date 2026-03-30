@@ -21,6 +21,8 @@
     "examples/mongodb/"
   ],
   "devDependencies": {
+    "@swc/core": "^1.13.5",
+    "@swc/jest": "^0.2.39",
     "@types/jest": "^30.0.0",
     "eslint": "^8.57.1",
     "eslint-config-standard": "^17.0.0",
@@ -32,8 +34,8 @@
     "jest": "^30.0.0",
     "jest-config": "^30.0.0",
     "jest-junit": "^16.0.0",
-    "lerna": "8.2.4",
-    "ts-jest": "^29.4.4",
-    "typescript": "^5.9.3"
-  }
+    "lerna": "^9.0.0",
+    "typescript": "^6.0.0"
+  },
+  "packageManager": "npm@11.4.1"
 }

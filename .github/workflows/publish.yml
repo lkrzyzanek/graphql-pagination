@@ -15,7 +15,7 @@ jobs:
       MONGOMS_VERSION: "6.0.14"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0 # Checkout all branches and tags
       - name: "Use NodeJS 20"

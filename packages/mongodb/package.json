@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.130",
-    "mongodb": "^6.21.0",
+    "mongodb": "^7.0.0",
     "mongodb-memory-server": "^11.0.0"
   }
 }

@@ -31,7 +31,7 @@
     "graphql": "^16.11.0",
     "jest": "^30.0.0",
     "jest-config": "^30.0.0",
-    "jest-junit": "^16.0.0",
+    "jest-junit": "^17.0.0",
     "lerna": "9.0.7",
     "ts-jest": "^29.4.4",
     "typescript": "^5.9.3"
